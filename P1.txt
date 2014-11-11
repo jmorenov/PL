@@ -19,7 +19,7 @@ sub_prog ::= header_subprogram block;
 
 local_var_dec ::= LIMIT_INI local_var LIMIT_END | ;
 
-header_program ::= MAIN;
+header_program ::= MAIN; //No estoy seguro de que sea así.
 
 start_block ::= BEGIN;
 
@@ -37,43 +37,45 @@ sentences ::= sentences sentence |
             sentence;
 
 sentence ::= block | 
-            sentence_alloc | 
-            sentence_if | 
-            sentence_else | 
+            sentence_assign | 
+            sentence_if-then-else | 
             sentence_while | 
             sentence_input | 
             sentence_output | 
             sentence_return | 
             sentence_do_until | 
-            sentence_forward | 
-            sentence_back | 
-            sentence_start_cursor;
+            sentence_list_forward_back |
+            sentence_list_start_cursor;
 
-sentence_alloc ::= id ALLOC expr SEMICOLON;
+sentence_assign ::= id ASSIGN expr SEMICOLON;
 
-sentence_if ::= IF PL expr PR sentence | 
-            IF PL expr PR sentence sentence_else;
+/*sentence_if-then-else ::= IF PL expr PR sentence | 
+            IF PL expr PR sentence ELSE sentence;*/
 
-sentence_else ::= ELSE sentence;
+sentence_if-then-else ::= IF expr sentence | 
+            IF expr sentence ELSE sentence;
 
-sentence_while ::= WHILE PL expr PR sentence;
+/*sentence_while ::= WHILE PL expr PR sentence;*/
 
-sentence_input ::= INPUT input_list SEMICOLON;
+sentence_while ::= WHILE expr sentence;
 
-sentence_output ::= OUTPUT exprs_cad SEMICOLON;
+/*sentence_input ::= INPUT input_list SEMICOLON;*/
+
+sentence_input ::= INPUT list_id SEMICOLON;
+
+/*sentence_output ::= OUTPUT exprs_cad SEMICOLON;*/
+
+sentence_output ::= OUTPUT expr_cad SEMICOLON;
 
 sentence_return ::= RETURN expr SEMICOLON;
 
-sentence_do_until ::= DO sentence UNTIL PL expr PR SEMICOLON;
+/*sentence_do_until ::= DO sentence UNTIL PL expr PR SEMICOLON;*/
 
-sentence_forward ::= expr OP_LIST;
+sentence_do_until ::= DO sentence UNTIL expr SEMICOLON;
 
-sentence_back ::= expr OP_LIST;
+sentence_list_forward_back ::= expr OP_LIST;
 
-sentence_start_cursor ::= OP_START_CURSOR expr;
-
-exprs ::= exprs COMMA expr | 
-            expr;
+sentence_list_start_cursor ::= OP_LIST_START_CURSOR expr;
 
 expr ::= PL expr PR | 
           OP_UNIT expr | 
@@ -84,10 +86,14 @@ expr ::= PL expr PR |
           function_call | 
           const_list;
 
-exprs_cad ::= exprs_cad COMMA expr_cad | 
+/*exprs_cad ::= exprs_cad COMMA expr_cad | 
             expr_cad;
 
 expr_cad ::= expr | 
+            cad;*/
+            
+expr_cad ::= expr_cad COMMA expr_cad | 
+            expr |
             cad;
 
 /**
@@ -100,17 +106,19 @@ parameters ::= parameters COMMA type id |
 list_id ::= list_id COMMA id | 
             id;
 
-input_list ::= input_list COMMA id | 
-            id;
+/*input_list ::= input_list COMMA id | 
+            id;*/
 
-function_call ::= id PL exprs PR;
+exprs ::= exprs COMMA expr | expr; //No estoy seguro de su uso.
+
+function_call ::= id PL exprs PR; //Creo que hay que cambiarla.
 
 const_list ::= BEGIN_LIST elements_list END_LIST;
 
 elements_list ::= elements_list COMMA const | 
             const;
 
-ALLOC ::= '=' ;
+ASSIGN ::= '=' ;
 
 cad ::= cad letter | 
             cad digit | 
@@ -178,4 +186,6 @@ OP_BIN ::= / | % | > | < | >= | <= | == | != | || | && | ^ | + | - | * | ** | @ 
 
 OP_UNIT ::= ! | + | - | # | ? | ++ | -- ;
 
-OP_LIST ::= << | >> | $;
+OP_LIST ::= << | >>;
+
+OP_LIST_START_CURSOR ::= $;
