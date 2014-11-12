@@ -1,0 +1,185 @@
+/**
+ * Práctica 1: Definición del lenguaje: BBAAD
+ * Grupo 7
+ * Francisco Javier Moreno Vega
+ * Alberto Quesada Aranda
+ * 11/10/2014
+ */
+
+/**
+ * Definiciones básicas.
+ */
+<program> ::= <header_program block>
+
+<block> ::= <start_block> <local_var_dec> <sub_progs> <sentences end_block>
+
+<sub_progs> ::= <sub_progs> <sub_prog> |
+
+<sub_prog> ::= <header_subprogram block>
+
+<local_var_dec> ::= LIMIT_INI <local_var> LIMIT_END |
+
+<header_program> ::= <type> MAIN  //No estoy seguro de que sea así.
+
+<start_block> ::= BEGIN
+
+<end_block> ::= END
+
+<local_var> ::= <local_var> <var_body> | <var_body>
+
+<var_body> ::= <type> <list_id> SEMICOLON
+
+<header_subprogram> ::= <type> <id> PL <parameters> PR
+
+<parameters> ::= <parameters> COMMA <type> <id> | <type> <id> |  // Vacio necesario para funciones sin parámetros.
+
+<sentences> ::= <sentences> <sentence> | <sentence>
+
+<sentence> ::= <block> | 
+            <sentence_assign> | 
+            <sentence_if-then-else> | 
+            <sentence_while> | 
+            <sentence_input> | 
+            <sentence_output> | 
+            <sentence_return> | 
+            <sentence_do_until> | 
+            <sentence_list_forward_back> |
+            <sentence_list_start_cursor>
+
+<sentence_assign> ::= <id> ASSIGN <expr> SEMICOLON
+
+<sentence_if-then-else> ::= IF <expr> <sentence> | IF <expr> <sentence> ELSE <sentence>
+
+<sentence_while> ::= WHILE <expr> <sentence>
+
+<sentence_input> ::= INPUT <list_id> SEMICOLON
+
+<sentence_output> ::= OUTPUT <list_expr> SEMICOLON
+
+<sentence_return> ::= RETURN <expr> SEMICOLON
+
+<sentence_do_until> ::= DO <sentence> UNTIL <expr> SEMICOLON
+
+<sentence_list_forward_back> ::= <expr> OP_LIST
+
+<sentence_list_start_cursor> ::= OP_LIST_START_CURSOR <expr>
+
+<expr> ::= PL <expr> PR | 
+          <op_unit> <expr> | 
+          <expr> <op_bin> <expr> | 
+          <id> | 
+          <const> |  // Pudiendo ser una constante de tipo lista.
+          <function_call> |
+          <string> | LIMIT_STRING <string> LIMIT_STRING // Si hay que limitar la cadena de caracteres. ""
+
+<list_id> ::= <list_id> COMMA <id> | <id>
+
+<list_expr> ::= <list_expr> COMMA <expr> | <expr>  // Tal vez se podría añadir directamente a <expr> y eliminar esta regla.
+
+<function_call> ::= <id> PL <list_expr> PR
+
+<type> ::= INT | 
+            FLOAT | 
+            CHAR | 
+            BOOL | 
+            LIST <type>;
+
+<const> ::= <int> | 
+            <float> | 
+            LIMIT_CHAR <char> LIMIT_CHAR | 
+            <bool> | 
+            BEGIN_LIST <list> END_LIST
+
+<list> ::= <list> COMMA <const> | <const>
+
+<id> ::= <letter> | <id> <letter> | <id> <digit>
+
+// Si char no son solo caracteres
+<string> ::= <string> <char> | <char>
+// si no..
+<string> ::= <string> <char> | <string> SPACE | // ¿Puede ser un string vacío? ""
+
+// Si char no son solo caracteres
+<char> ::= <digit> | <letter> | <symbol> | //¿Puede ser un char vacío? ''
+// si no...
+<char> ::= LIMIT_CHAR <letter> LIMIT_CHAR | LIMIT_CHAR LIMIT_CHAR // ¿Puede ser un char vacío? ''
+// y cambiar en <const> a la regla de char.
+
+<float> ::= <int> POINT <digit> | <int>
+
+<int> ::= MINUS <digit> | <digit> | <int> <digit>
+
+<bool> ::= 'true' | 'false'
+
+<letter> ::= 'a' | 'b' | 'c' | ... | 'z' | 'A' | 'B' | ... | 'Z'
+
+<digit> ::= '0' | '1' | '2' | '3' | '4' | ... | '9'
+
+<symbol> ::=  '+' | '-' | ' ' | '\' | '_' | ... | '$' 
+
+<op_bin> ::= '/' | '/=' | '%' | '%=' | '>' | '<' | '>=' | '<=' | '!=' | '==' | '||' 
+            | '|' | '&&' | '^' | '^=' | '~' | '+' | '+=' | '-' | '-=' | '*' | '*=' | '@' | '**'
+
+<op_unit> ::= '!' | '+' | '-' | '#' | '?' | '++' | '--'
+
+<op_list> ::= '<<' | '>>'
+
+<op_list_start_cursor> ::= '$'
+
+MINUS ::= '-'
+
+PL ::= '('
+
+PR ::= ')'
+
+COMMA ::= ','
+
+SEMICOLON ::= ';'
+
+POINT ::= '.'
+
+SPACE ::= ' '
+
+ASSIGN ::= '='
+
+LIMIT_STRING ::= '"'
+
+LIMIT_CHAR ::= '''
+
+BEGIN ::= '{'
+
+END ::= '}'
+
+BEGIN_LIST ::= '['
+
+END_LIST ::= ']'
+
+INT ::= 'int'
+
+FLOAT ::= 'float'
+
+BOOL ::= 'bool'
+
+CHAR ::= 'char'
+
+LIST ::= 'list of'
+
+IF ::= 'if'
+
+ELSE ::= 'else'
+
+WHILE ::= 'while'
+
+DO ::= 'do'
+
+INPUT ::= 'in'
+
+OUTPUT ::=  'out'
+
+RETURN ::= 'return'
+
+MAIN ::= 'main'
+
+LIMIT_INI ::= 
+
+LIMIT_END ::= 
