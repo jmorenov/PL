@@ -17,7 +17,7 @@
 
 <sub_prog> ::= <header_subprogram block>
 
-<local_var_dec> ::= LIMIT_INI <local_var> LIMIT_END |
+<local_var_dec> ::= START_VAR_DEC <local_var> END_VAR_DEC |
 
 <header_program> ::= <type> MAIN  //No estoy seguro de que sea así.
 
@@ -180,6 +180,6 @@ RETURN ::= 'return'
 
 MAIN ::= 'main'
 
-LIMIT_INI ::= 
+START_VAR_DEC ::= 
 
-LIMIT_END ::= 
+END_VAR_DEC ::= 
