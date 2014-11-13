@@ -1,0 +1,49 @@
+procedimiento principal() {
+	ini_variables
+		entero a,b;
+	fin_variables
+
+	procedimiento prueba(entero c, entero d) {
+		ini_variables
+			entero l;
+			real otroReal;
+			caracter unChar;
+		fin_variables
+
+
+		procedimiento mas(real r, caracter c) {
+			ini_variables
+				entero k, l, m;
+				real pi, alfa, beta, gamma;
+			fin_variables
+
+			procedimiento chorrada() {
+				escribir "Este es una chorrada";
+				}
+
+			prueba(l * m + m * m / l, l - m);
+			escribir pi, alfa;
+			chorrada();
+			leer k;
+			leer l;
+			}
+
+			
+		escribir c;
+		l = 4;
+		leer c;
+		}
+
+	procedimiento otro() {
+		escribir "sin argumentos";
+		}
+
+	prueba(a,23);
+
+	otro();
+
+	leer a;
+
+	escribir b;
+	}
+

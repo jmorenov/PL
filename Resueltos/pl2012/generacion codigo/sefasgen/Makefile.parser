@@ -1,0 +1,13 @@
+scanner : trad.lex trad.y genMsjs
+	byacc -d -t -v trad.y
+	flex -oscanner.c trad.lex
+	cat y.output | ./genMsjs | cat > msj.err
+	sed -nf tradMsjs.sed y.tab.c
+	mv y.tab.copia y.tab.c
+	gcc -c scanner.c
+	gcc -c y.tab.c
+
+genMsjs : mes.l
+	flex mes.l
+	gcc -o genMsjs lex.yy.c
+

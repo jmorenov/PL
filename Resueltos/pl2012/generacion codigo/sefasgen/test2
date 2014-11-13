@@ -1,0 +1,18 @@
+procedimiento principal() {
+	ini_variables
+		entero a,b;
+	fin_variables
+
+
+	si ( 25 <= 45 ) {
+		a = 25;
+		b = 35;
+	} sino {
+		si ( 12 != 20 ) {
+			a = 35;
+			b = 25;
+			}
+		}
+
+	}
+

@@ -1,0 +1,19 @@
+procedimiento principal() {
+	ini_variables
+		entero a, b, c;
+		real unreal;
+		caracter unChar;
+	fin_variables
+
+	leer a, b, c;
+	leer unreal;
+	leer unChar;
+
+	a = 4;
+	b = 24 + 48 * (12+12);
+
+	escribir a;
+	escribir a,b,c;
+	escribir "Probamos las cadenas ", unChar, " ummm!";
+	}
+

@@ -1,0 +1,87 @@
+principal()
+{
+	beg
+      entero ve;
+      real vf;
+      caracter vc;
+      boolean vl;
+		entero e[10], e2[10,10], e5[5,10],e10[10,5];
+		re·al r[10], r2[10,10];
+		caracter c[10], c2[10,10];
+		boolean b[10];
+ 
+	end
+	procedimiento funcionA(entero a1, real a2, caracter a3)
+	{
+		beg
+			entero x1,a1, x2 ;
+		end
+		procedimiento funcionB (caracter b1, boolean b2)
+		{
+				beg
+					real xf, x2 ;
+				end
+	
+			procedimiento funcionC(boolean c1, entero c2)
+			{
+				beg
+					real  x1 ;
+				end
+				x1= 1.3 ;
+
+				si (c2<10)
+					c2 =  1 + c2;
+				sino
+					x1= 3.1 ;
+				funcionA(2*5,2.5*3.5,'a');
+				funcionB(2,2,'a');
+			}
+			mientras (x2 - xf < 10.0)
+				x2= x2 * xf;
+			hacer
+				x2= x2 * xf;
+			hasta (x2-xf < 2);
+		}
+		procedimiento funcionD(real d1, real d2)
+		{
+			beg
+				caracter dato ;
+				entero valor ;
+			end
+
+			procedimiento funcionE (caracter e1, caracter e2)
+			{
+				entrada e1, e2 ;
+			}
+
+			entrada valor ;
+	
+			si ((d1>0.0)*2)
+			{
+				beg
+					entero dato ;
+				end
+	
+				dato= 2;
+				dato= valor*20/dato ;
+			}
+			sino {
+				valor= valor * 2 ;
+				d1= d1/1000.0 ;
+			}
+		}
+
+		e[0]= 10 ;
+		
+	}	
+		funcionA(1,1,' ');
+		r[0]= 1 ;
+		c[0]= '#' ;
+		e2 = e5**e10;
+		e2 = e10**e5;
+		e2 = e2*ve;
+		e2 = e2*vf;
+		e[0]= e[0] + 1 ;
+		b[0] = verdad;
+}
+

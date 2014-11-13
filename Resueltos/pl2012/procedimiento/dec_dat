@@ -1,0 +1,15 @@
+void operacion_matriz_matriz(m1,m2,dim1,dim2,tam11,tam12,tam21,tam22,r){
+
+
+}
+
+void operacion_matriz_escalar(m,dim,tam11,tam12,escalar,r){
+
+
+}
+
+void operacion_escalar_matriz(m,dim,tam11,tam12,escalar,r){
+
+
+}
+

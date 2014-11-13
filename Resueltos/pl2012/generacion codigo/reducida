@@ -1,0 +1,27 @@
+principal()
+{
+	procedimiento funcionD(real d1, real d2)
+	{
+			beg
+				caracter dato ;
+				entero valor ;
+			end
+
+		procedimiento funcionE (caracter e1, caracter e2)
+		{	beg
+					caracter sd;
+			end
+			entrada e1, e2 ;
+		}
+			si (e1 > 2)
+			{	entrada e2;
+			}
+			sino
+			{	entrada d1;
+			}
+		entrada d1;
+	}
+	
+	salida " ";
+}
+

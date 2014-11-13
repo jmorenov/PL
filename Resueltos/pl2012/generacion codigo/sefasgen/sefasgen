@@ -1,0 +1,40 @@
+[FUENTES]
+fuenteCodigo="babelfish [macromedia],120,medium,regular"
+fuenteTabla="babelfish [macromedia],90,medium,regular"
+fuenteLog="bitstream vera serif [bitstream],90,medium,regular"
+fuenteGramatica="babelfish [macromedia],100,medium,regular"
+fuenteGenerado="courier [urw],120,medium,regular"
+
+[COLORES]
+gramaticaBG=Gray100
+simboloFG=Green
+gramaticaFG=Black
+codigoFG=None
+generadoFG=#0000d0
+codigoBG=None
+gramaticaActBG=Red
+paramFG=Cyan
+procFG=Blue
+gramaticaActFG=Gray100
+codigoSelFG=Gray100
+generadoBG=Gray100
+codigoSelBG=Blue
+eliminarFG=Magenta
+tablaFG=Black
+nuevoFG=Red
+tablaBG=Gray100
+
+[SETTINGS]
+activecolorpane=0
+
+[REGLAS]
+nReglas=2
+patron0="^\\[INF\\]"
+patron1="^\\[ERR\\]"
+colorBG0=Gray100
+colorBG1=Gray100
+regla0=info
+regla1=error
+colorFG1=Red
+colorFG0=#00e600
+

@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int n;
+int curr;
+FILE * fi,* f;
+
+int main(){
+	f = fopen("dec_fun","w");
+	fputs("#include <stdio.h>\n",f);
+	fi = f;
+	fputs("#include <stdio.h>\n",fi);
+	f = fi;
+	fputs("#include <stdio.h>\n",f);
+	fi = f;
+	fputs("#include <stdio.h>\n",fi);
+	close(fi);
+}
+
+

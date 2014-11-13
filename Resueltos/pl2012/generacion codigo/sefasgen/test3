@@ -1,0 +1,43 @@
+procedimiento principal() {
+	ini_variables
+		real unreal;
+		caracter unChar;
+	fin_variables
+
+	procedimiento tt(entero a, real b) {
+		ini_variables
+			caracter otroChar;
+		fin_variables
+
+		procedimiento uu(real z, real y) {
+			ini_variables
+				caracter ww;
+				caracter xx;
+			fin_variables
+
+			escribir xx, ww, y, z;
+			escribir otroChar, a, b;
+			escribir unreal, unChar;
+			}
+
+		procedimiento mismoNivel(real z, real y) {
+			ini_variables
+				caracter ww;
+				caracter xx;
+			fin_variables
+
+			escribir xx, ww, y, z;
+			escribir otroChar, a, b;
+			escribir unreal, unChar;
+			}
+
+		escribir z, ww, xx, y;
+		escribir otroChar, a, b;
+		escribir unreal, unChar;
+		}
+
+	escribir z, y, ww, xx;
+	escribir a, b, otroChar;
+	escribir unChar, unreal;
+	}
+

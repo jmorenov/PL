@@ -1,0 +1,29 @@
+
+principal (){
+	beg
+		entero n, curr ;
+	end
+
+	salida "introduce numero : ";
+	entrada n;
+	salida n;
+	salida " == ";
+	curr = 2 ;
+
+	mientras( curr <= n )
+	{	beg
+			entero d;
+		end
+
+		d = n/curr ;
+		si ( d*curr == n )
+		{	salida "* ";
+			salida curr;
+			n = n/curr ;
+		}
+		sino
+			curr = curr+1 ;
+	}
+	salida "\n";
+}
+

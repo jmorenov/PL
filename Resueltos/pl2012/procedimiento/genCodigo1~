@@ -1,0 +1,61 @@
+
+principal (){
+
+	procedimiento impresion()
+	{
+		beg
+			entero  n ;
+			entero sum;
+			entero mul;
+		end
+			procedimiento fibo(entero n1)
+			{	beg
+					entero suma;
+					entero ant;
+					entero sig;
+					entero mul2;
+					
+					entero i;
+				end
+				sum = 1;
+				mul = 1;
+				i = 2;
+				suma = 0;
+				ant = 0;
+				sig = 1;
+				salida "0";
+				salida " 10 ";
+				mientras(i <= n1){
+					suma = ant + sig;
+					ant = sig;
+					sig = suma;
+					sum = suma + sum;
+					mul = mul * suma;
+					mul2 = suma * 10;
+					salida "prod: ";
+					salida mul2;
+					salida "\n suma: ";
+					salida suma;
+					salida "\n";
+					i = i + 1;
+				}
+				salida "\n numero fibonacci = ";
+				salida suma;
+				salida "\n";
+			}
+			
+			salida "Introduce un numero: ";
+			entrada n;
+			salida "producto de cada elemento * 10 es: \n";
+			fibo(n);
+			salida "\n";
+			salida "suma total de elementos = ";
+			salida sum;
+			salida "\n";
+			salida "producto total de elemtos = ";
+			salida mul;
+			salida "\n";
+	}
+	impresion();
+}
+

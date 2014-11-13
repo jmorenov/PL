@@ -1,0 +1,67 @@
+#include <stdio.h>
+void impresion(){
+int n;
+int sum;
+int mul;
+void fibo(int n1){
+int suma;
+int ant;
+int sig;
+int mul2;
+int i;
+sum = 1 ;
+mul = 1 ;
+i = 2 ;
+suma = 0 ;
+ant = 0 ;
+sig = 1 ;
+printf("0");
+printf(" 10 ");
+etiqueta_0:
+{
+int temp0;
+temp0 = i <= n1;
+if(!temp0) goto etiqueta_1;
+int temp1;
+temp1 = ant + sig;
+suma = temp1 ;
+ant = sig ;
+sig = suma ;
+int temp2;
+temp2 = suma + sum;
+sum = temp2 ;
+int temp3;
+temp3 = mul * suma;
+mul = temp3 ;
+int temp4;
+temp4 = suma * 10;
+mul2 = temp4 ;
+printf("prod: ");
+printf("%d",mul2);
+printf("\n suma: ");
+printf("%d",suma);
+printf("\n");
+int temp5;
+temp5 = i + 1;
+i = temp5 ;
+}
+goto etiqueta_0;
+etiqueta_1:
+{}
+printf("\n numero fibonacci = ");
+printf("%d",suma);
+printf("\n");
+
+}
+printf("Introduce un numero: ");
+scanf("%d",&n);
+fibo(n);
+printf("\n");
+printf("suma total de elementos = ");
+printf("%d",sum);
+printf("\n");
+printf("producto total de elemtos = ");
+printf("%d",mul);
+printf("\n");
+
+}

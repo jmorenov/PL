@@ -1,0 +1,209 @@
+%{
+/*********************************************************
+**
+** Fichero: PRUEBA.Y
+** Función: Pruebas de YACC para practicas de PL
+**
+********************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+/**
+***
+	La siguiente declaracion permite que ’yyerror’ se pueda invocar desde el
+	fuente de lex
+**/
+void yyerror( char * msg ) ;
+/**
+	La siguiente variable se usará para conocer el numero de la línea
+	que se esta leyendo en cada momento. También es posible usar la variable
+	’yylineno’ que también nos muestra la línea actual. Para ello es necesario
+	invocar a flex con la opción ’-l’ (compatibilidad con lex).
+**/
+
+int linea_actual = 1 ;
+%}
+/**
+Para uso de mensajes de error sintáctico con BISON.
+La siguiente declaración provoca que ’bison’, ante un error sintáctico,
+visualice mensajes de error con indicación de los tokens que se esperaban
+en el lugar en el que produjo el error (SÓLO FUNCIONA CON BISON=2.1).
+Para Bison2.1 es mediante
+ YYERROR_VERBOSE
+En caso de usar mensajes de error mediante ’mes’ y ’mes2’ (ver apéndice D)
+nada de lo anterior debe tenerse en cuenta.
+
+**/
+%error-verbose
+/**
+A continuación declaramos los nombres simbólicos de los tokens.
+byacc se encarga de asociar a cada uno un código
+**/
+
+
+%token PRINCIPAL
+%token PROCEDIMIENTO
+%token TIPO
+%token CONST	
+%token ASIG	
+%token MASMENOS
+%token OPUNARIO
+%token PARIZQ
+%token PARDER
+%token INIBLQ
+%token FINBLQ
+%token BEG
+%token END
+%token COMA
+%token PYC
+%token SI
+%token SINO	
+%token MIENTRAS
+%token HACER
+%token HASTA
+%token ENT
+%token SAL
+%token IDENT
+%token CORCHETEIZQ
+%token CORCHETEDER
+%token CADENA
+%token ANDLOG
+%token ORLOG
+%token OREXCL
+%token OPIG
+%token OPREL
+%token OPMUL
+
+%left ORLOG
+%left ANDLOG
+%left OREXCL
+%left OPIG
+%left OPREL
+%left MASMENOS
+%left OPMUL
+%right OPUNARIO
+%%
+/**
+Sección de producciones que definen la gramática.
+**/
+
+Programa : Cabecera_programa bloque;
+Cabecera_programa : PRINCIPAL PARIZQ PARDER;
+bloque :	INIBLQ Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ 
+		| INIBLQ Declar_de_variables_locales Sentencias	FINBLQ
+		| INIBLQ Declar_de_subprogs Sentencias FINBLQ
+		| INIBLQ Sentencias FINBLQ
+		| INIBLQ FINBLQ
+		;
+Declar_de_subprogs : Declar_de_subprogs Declar_de_subprog 
+							| Declar_de_subprog;
+Declar_de_subprog : Cabecera_subprog bloque;
+Cabecera_subprog : 	PROCEDIMIENTO IDENT PARIZQ parametros PARDER 
+			| PROCEDIMIENTO IDENT PARIZQ PARDER
+			;
+parametros:	parametros COMA TIPO IDENT 
+		| TIPO IDENT
+		| error;
+
+Declar_de_variables_locales : BEG Variables_locales END;
+
+Variables_locales :	Variables_locales Cuerpo_declar_variables 
+			| Cuerpo_declar_variables
+			;
+
+Cuerpo_declar_variables : TIPO lista_nombres PYC;
+
+lista_nombres:	lista_nombres COMA id_array
+		| id_array
+		| error;
+
+id_array:	IDENT
+		| array;
+
+array:	IDENT CORCHETEIZQ CONST CORCHETEDER
+	| IDENT CORCHETEIZQ CONST COMA CONST CORCHETEDER;
+
+Sentencias : Sentencias Sentencia | Sentencia;
+
+Sentencia :	bloque
+		| sentencia_asignacion
+		| sentencia_if
+		| sentencia_while
+		| sentencia_entrada
+		| sentencia_salida
+		| sentencia_hacer_hasta
+		| llamada_procedimiento
+		| error;
+
+sentencia_asignacion : IDENT ASIG expresion PYC;
+
+sentencia_if :	SI PARIZQ expresion PARDER Sentencia 
+		| SI PARIZQ expresion PARDER Sentencia sentencia_else;
+
+sentencia_else : SINO Sentencia;
+
+sentencia_while : MIENTRAS PARIZQ expresion PARDER Sentencia;
+
+sentencia_entrada : ENT lista_nombres PYC;
+
+sentencia_salida : SAL exp_cadenas PYC;
+
+sentencia_hacer_hasta : HACER Sentencia HASTA expresion PYC;
+
+llamada_procedimiento : IDENT PARIZQ expresiones PARDER PYC 
+			| IDENT PARIZQ PARDER PYC;
+
+expresiones : expresiones COMA expresion | expresion;
+
+expresion :   PARIZQ expresion PARDER 
+			| OPUNARIO expresion
+			| expresion OPREL expresion
+			| expresion OPMUL expresion
+			| expresion ANDLOG expresion
+			| expresion ORLOG expresion
+			| expresion OPIG expresion
+			| expresion OREXCL expresion
+			| MASMENOS %prec OPUNARIO expresion
+			| expresion MASMENOS expresion
+			| id_posArray
+			| CONST
+			| agregado
+			| error;
+
+exp_cadenas:	exp_cadenas COMA exp_cadena | exp_cadena;
+
+id_posArray: 	IDENT
+		| IDENT CORCHETEIZQ expresion CORCHETEDER 
+		| IDENT CORCHETEIZQ expresion COMA expresion CORCHETEDER;
+
+exp_cadena: expresion | CADENA;
+
+lista_constantes : lista_constantes coma_pyc CONST | CONST;
+
+agregado: CORCHETEIZQ lista_constantes CORCHETEDER;
+
+coma_pyc: COMA | PYC;
+
+
+/** esto representa la cadena vacía **/ ;
+%%
+/** aqui incluimos el fichero generado por el ’lex’
+*** que implementa la función ’yylex’
+**/
+#ifdef DOSWINDOWS
+#include "lexyy.c"
+#else
+#include "lex.yy.c"
+#endif
+/**
+Variable de entorno que indica la plataforma
+se debe implementar la función yyerror. En este caso
+simplemente escribimos el mensaje de error en pantalla
+**/
+
+void yyerror( char *msg )
+{
+	fprintf(stderr,"[Linea %d]: %s\n", linea_actual, msg) ;
+}
+
+

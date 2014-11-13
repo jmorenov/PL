@@ -1,0 +1,1957 @@
+Estado 127 conflictos: 1 desplazamiento(s)/reducción(ones)
+
+
+Gramática
+
+    0 $accept: Programa $end
+
+    1 Programa: Cabecera_programa bloque
+
+    2 Cabecera_programa: PRINCIPAL PARIZQ PARDER
+
+    3 $@1: /* vacío */
+
+    4 bloque: INIBLQ $@1 Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ
+
+    5 Declar_de_subprogs: Declar_de_subprogs Declar_de_subprog
+    6                   | /* vacío */
+
+    7 $@2: /* vacío */
+
+    8 Declar_de_subprog: Cabecera_subprog $@2 bloque
+
+    9 $@3: /* vacío */
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ $@3 parametros PARDER
+   11                 | PROCEDIMIENTO IDENT PARIZQ PARDER
+
+   12 parametros: parametros COMA TIPO IDENT
+   13           | TIPO IDENT
+   14           | error
+
+   15 $@4: /* vacío */
+
+   16 Declar_de_variables_locales: BEG $@4 Variables_locales END
+   17                            | /* vacío */
+
+   18 Variables_locales: Variables_locales Cuerpo_declar_variables
+   19                  | Cuerpo_declar_variables
+
+   20 $@5: /* vacío */
+
+   21 Cuerpo_declar_variables: TIPO $@5 lista_nombres PYC
+   22                        | error
+
+   23 lista_nombres: lista_nombres COMA id_array
+   24              | id_array
+   25              | error
+
+   26 id_array: IDENT
+   27         | array
+
+   28 array: IDENT CORCHETEIZQ CONST CORCHETEDER
+   29      | IDENT CORCHETEIZQ CONST COMA CONST CORCHETEDER
+
+   30 Sentencias: Sentencias Sentencia
+   31           | Sentencia
+
+   32 Sentencia: bloque
+   33          | sentencia_asignacion
+   34          | sentencia_if
+   35          | sentencia_while
+   36          | sentencia_entrada
+   37          | sentencia_salida
+   38          | sentencia_hacer_hasta
+   39          | llamada_procedimiento
+   40          | error
+
+   41 sentencia_asignacion: id_posArray ASIG expresion PYC
+
+   42 sentencia_if: SI PARIZQ expresion PARDER Sentencia
+   43             | SI PARIZQ expresion PARDER Sentencia sentencia_else
+
+   44 sentencia_else: SINO Sentencia
+
+   45 sentencia_while: MIENTRAS PARIZQ expresion PARDER Sentencia
+
+   46 sentencia_entrada: ENT lista_nombres PYC
+
+   47 sentencia_salida: SAL exp_cadenas PYC
+
+   48 sentencia_hacer_hasta: HACER Sentencia HASTA expresion PYC
+
+   49 $@6: /* vacío */
+
+   50 llamada_procedimiento: IDENT PARIZQ $@6 expresiones PARDER PYC
+
+   51 $@7: /* vacío */
+
+   52 llamada_procedimiento: IDENT PARIZQ $@7 PARDER PYC
+
+   53 expresiones: expresiones COMA expresion
+   54            | expresion
+
+   55 expresion: PARIZQ expresion PARDER
+   56          | OPUNARIO expresion
+   57          | expresion OPREL expresion
+   58          | expresion OPMUL expresion
+   59          | expresion ANDLOG expresion
+   60          | expresion ORLOG expresion
+   61          | expresion OPIG expresion
+   62          | expresion OREXCL expresion
+   63          | MASMENOS expresion
+   64          | expresion MASMENOS expresion
+   65          | id_posArray
+   66          | CONST
+   67          | agregado
+   68          | error
+
+   69 exp_cadenas: exp_cadenas COMA exp_cadena
+   70            | exp_cadena
+
+   71 id_posArray: IDENT
+   72            | IDENT CORCHETEIZQ expresion CORCHETEDER
+   73            | IDENT CORCHETEIZQ expresion COMA expresion CORCHETEDER
+
+   74 exp_cadena: expresion
+   75           | CADENA
+
+   76 lista_constantes: lista_constantes coma_pyc CONST
+   77                 | CONST
+
+   78 agregado: CORCHETEIZQ lista_constantes CORCHETEDER
+
+   79 coma_pyc: COMA
+   80         | PYC
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256) 14 22 25 40 68
+PRINCIPAL (258) 2
+PROCEDIMIENTO (259) 10 11
+TIPO (260) 12 13 21
+CONST (261) 28 29 66 76 77
+ASIG (262) 41
+MASMENOS (263) 63 64
+OPUNARIO (264) 56
+PARIZQ (265) 2 10 11 42 43 45 50 52 55
+PARDER (266) 2 10 11 42 43 45 50 52 55
+INIBLQ (267) 4
+FINBLQ (268) 4
+BEG (269) 16
+END (270) 16
+COMA (271) 12 23 29 53 69 73 79
+PYC (272) 21 41 46 47 48 50 52 80
+SI (273) 42 43
+SINO (274) 44
+MIENTRAS (275) 45
+HACER (276) 48
+HASTA (277) 48
+ENT (278) 46
+SAL (279) 47
+IDENT (280) 10 11 12 13 26 28 29 50 52 71 72 73
+CORCHETEIZQ (281) 28 29 72 73 78
+CORCHETEDER (282) 28 29 72 73 78
+CADENA (283) 75
+ANDLOG (284) 59
+ORLOG (285) 60
+OREXCL (286) 62
+OPIG (287) 61
+OPREL (288) 57
+OPMUL (289) 58
+
+
+No terminales con las reglas donde aparecen
+
+$accept (35)
+    en la izquierda: 0
+Programa (36)
+    en la izquierda: 1, en la derecha: 0
+Cabecera_programa (37)
+    en la izquierda: 2, en la derecha: 1
+bloque (38)
+    en la izquierda: 4, en la derecha: 1 8 32
+$@1 (39)
+    en la izquierda: 3, en la derecha: 4
+Declar_de_subprogs (40)
+    en la izquierda: 5 6, en la derecha: 4 5
+Declar_de_subprog (41)
+    en la izquierda: 8, en la derecha: 5
+$@2 (42)
+    en la izquierda: 7, en la derecha: 8
+Cabecera_subprog (43)
+    en la izquierda: 10 11, en la derecha: 8
+$@3 (44)
+    en la izquierda: 9, en la derecha: 10
+parametros (45)
+    en la izquierda: 12 13 14, en la derecha: 10 12
+Declar_de_variables_locales (46)
+    en la izquierda: 16 17, en la derecha: 4
+$@4 (47)
+    en la izquierda: 15, en la derecha: 16
+Variables_locales (48)
+    en la izquierda: 18 19, en la derecha: 16 18
+Cuerpo_declar_variables (49)
+    en la izquierda: 21 22, en la derecha: 18 19
+$@5 (50)
+    en la izquierda: 20, en la derecha: 21
+lista_nombres (51)
+    en la izquierda: 23 24 25, en la derecha: 21 23 46
+id_array (52)
+    en la izquierda: 26 27, en la derecha: 23 24
+array (53)
+    en la izquierda: 28 29, en la derecha: 27
+Sentencias (54)
+    en la izquierda: 30 31, en la derecha: 4 30
+Sentencia (55)
+    en la izquierda: 32 33 34 35 36 37 38 39 40, en la derecha: 30
+    31 42 43 44 45 48
+sentencia_asignacion (56)
+    en la izquierda: 41, en la derecha: 33
+sentencia_if (57)
+    en la izquierda: 42 43, en la derecha: 34
+sentencia_else (58)
+    en la izquierda: 44, en la derecha: 43
+sentencia_while (59)
+    en la izquierda: 45, en la derecha: 35
+sentencia_entrada (60)
+    en la izquierda: 46, en la derecha: 36
+sentencia_salida (61)
+    en la izquierda: 47, en la derecha: 37
+sentencia_hacer_hasta (62)
+    en la izquierda: 48, en la derecha: 38
+llamada_procedimiento (63)
+    en la izquierda: 50 52, en la derecha: 39
+$@6 (64)
+    en la izquierda: 49, en la derecha: 50
+$@7 (65)
+    en la izquierda: 51, en la derecha: 52
+expresiones (66)
+    en la izquierda: 53 54, en la derecha: 50 53
+expresion (67)
+    en la izquierda: 55 56 57 58 59 60 61 62 63 64 65 66 67 68, en la derecha:
+    41 42 43 45 48 53 54 55 56 57 58 59 60 61 62 63 64 72 73 74
+exp_cadenas (68)
+    en la izquierda: 69 70, en la derecha: 47 69
+id_posArray (69)
+    en la izquierda: 71 72 73, en la derecha: 41 65
+exp_cadena (70)
+    en la izquierda: 74 75, en la derecha: 69 70
+lista_constantes (71)
+    en la izquierda: 76 77, en la derecha: 76 78
+agregado (72)
+    en la izquierda: 78, en la derecha: 67
+coma_pyc (73)
+    en la izquierda: 79 80, en la derecha: 76
+
+
+estado 0
+
+    0 $accept: . Programa $end
+
+    PRINCIPAL  desplazar e ir al estado 1
+
+    Programa           ir al estado 2
+    Cabecera_programa  ir al estado 3
+
+
+estado 1
+
+    2 Cabecera_programa: PRINCIPAL . PARIZQ PARDER
+
+    PARIZQ  desplazar e ir al estado 4
+
+
+estado 2
+
+    0 $accept: Programa . $end
+
+    $end  desplazar e ir al estado 5
+
+
+estado 3
+
+    1 Programa: Cabecera_programa . bloque
+
+    INIBLQ  desplazar e ir al estado 6
+
+    bloque  ir al estado 7
+
+
+estado 4
+
+    2 Cabecera_programa: PRINCIPAL PARIZQ . PARDER
+
+    PARDER  desplazar e ir al estado 8
+
+
+estado 5
+
+    0 $accept: Programa $end .
+
+    $default  aceptar
+
+
+estado 6
+
+    4 bloque: INIBLQ . $@1 Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ
+
+    $default  reduce usando la regla 3 ($@1)
+
+    $@1  ir al estado 9
+
+
+estado 7
+
+    1 Programa: Cabecera_programa bloque .
+
+    $default  reduce usando la regla 1 (Programa)
+
+
+estado 8
+
+    2 Cabecera_programa: PRINCIPAL PARIZQ PARDER .
+
+    $default  reduce usando la regla 2 (Cabecera_programa)
+
+
+estado 9
+
+    4 bloque: INIBLQ $@1 . Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ
+
+    BEG  desplazar e ir al estado 10
+
+    $default  reduce usando la regla 17 (Declar_de_variables_locales)
+
+    Declar_de_variables_locales  ir al estado 11
+
+
+estado 10
+
+   16 Declar_de_variables_locales: BEG . $@4 Variables_locales END
+
+    $default  reduce usando la regla 15 ($@4)
+
+    $@4  ir al estado 12
+
+
+estado 11
+
+    4 bloque: INIBLQ $@1 Declar_de_variables_locales . Declar_de_subprogs Sentencias FINBLQ
+
+    $default  reduce usando la regla 6 (Declar_de_subprogs)
+
+    Declar_de_subprogs  ir al estado 13
+
+
+estado 12
+
+   16 Declar_de_variables_locales: BEG $@4 . Variables_locales END
+
+    error  desplazar e ir al estado 14
+    TIPO   desplazar e ir al estado 15
+
+    Variables_locales        ir al estado 16
+    Cuerpo_declar_variables  ir al estado 17
+
+
+estado 13
+
+    4 bloque: INIBLQ $@1 Declar_de_variables_locales Declar_de_subprogs . Sentencias FINBLQ
+    5 Declar_de_subprogs: Declar_de_subprogs . Declar_de_subprog
+
+    error          desplazar e ir al estado 18
+    PROCEDIMIENTO  desplazar e ir al estado 19
+    INIBLQ         desplazar e ir al estado 6
+    SI             desplazar e ir al estado 20
+    MIENTRAS       desplazar e ir al estado 21
+    HACER          desplazar e ir al estado 22
+    ENT            desplazar e ir al estado 23
+    SAL            desplazar e ir al estado 24
+    IDENT          desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Declar_de_subprog      ir al estado 27
+    Cabecera_subprog       ir al estado 28
+    Sentencias             ir al estado 29
+    Sentencia              ir al estado 30
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 14
+
+   22 Cuerpo_declar_variables: error .
+
+    $default  reduce usando la regla 22 (Cuerpo_declar_variables)
+
+
+estado 15
+
+   21 Cuerpo_declar_variables: TIPO . $@5 lista_nombres PYC
+
+    $default  reduce usando la regla 20 ($@5)
+
+    $@5  ir al estado 39
+
+
+estado 16
+
+   16 Declar_de_variables_locales: BEG $@4 Variables_locales . END
+   18 Variables_locales: Variables_locales . Cuerpo_declar_variables
+
+    error  desplazar e ir al estado 14
+    TIPO   desplazar e ir al estado 15
+    END    desplazar e ir al estado 40
+
+    Cuerpo_declar_variables  ir al estado 41
+
+
+estado 17
+
+   19 Variables_locales: Cuerpo_declar_variables .
+
+    $default  reduce usando la regla 19 (Variables_locales)
+
+
+estado 18
+
+   40 Sentencia: error .
+
+    $default  reduce usando la regla 40 (Sentencia)
+
+
+estado 19
+
+   10 Cabecera_subprog: PROCEDIMIENTO . IDENT PARIZQ $@3 parametros PARDER
+   11                 | PROCEDIMIENTO . IDENT PARIZQ PARDER
+
+    IDENT  desplazar e ir al estado 42
+
+
+estado 20
+
+   42 sentencia_if: SI . PARIZQ expresion PARDER Sentencia
+   43             | SI . PARIZQ expresion PARDER Sentencia sentencia_else
+
+    PARIZQ  desplazar e ir al estado 43
+
+
+estado 21
+
+   45 sentencia_while: MIENTRAS . PARIZQ expresion PARDER Sentencia
+
+    PARIZQ  desplazar e ir al estado 44
+
+
+estado 22
+
+   48 sentencia_hacer_hasta: HACER . Sentencia HASTA expresion PYC
+
+    error     desplazar e ir al estado 18
+    INIBLQ    desplazar e ir al estado 6
+    SI        desplazar e ir al estado 20
+    MIENTRAS  desplazar e ir al estado 21
+    HACER     desplazar e ir al estado 22
+    ENT       desplazar e ir al estado 23
+    SAL       desplazar e ir al estado 24
+    IDENT     desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Sentencia              ir al estado 45
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 23
+
+   46 sentencia_entrada: ENT . lista_nombres PYC
+
+    error  desplazar e ir al estado 46
+    IDENT  desplazar e ir al estado 47
+
+    lista_nombres  ir al estado 48
+    id_array       ir al estado 49
+    array          ir al estado 50
+
+
+estado 24
+
+   47 sentencia_salida: SAL . exp_cadenas PYC
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+    CADENA       desplazar e ir al estado 58
+
+    expresion    ir al estado 59
+    exp_cadenas  ir al estado 60
+    id_posArray  ir al estado 61
+    exp_cadena   ir al estado 62
+    agregado     ir al estado 63
+
+
+estado 25
+
+   50 llamada_procedimiento: IDENT . PARIZQ $@6 expresiones PARDER PYC
+   52                      | IDENT . PARIZQ $@7 PARDER PYC
+   71 id_posArray: IDENT .
+   72            | IDENT . CORCHETEIZQ expresion CORCHETEDER
+   73            | IDENT . CORCHETEIZQ expresion COMA expresion CORCHETEDER
+
+    PARIZQ       desplazar e ir al estado 64
+    CORCHETEIZQ  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 71 (id_posArray)
+
+
+estado 26
+
+   32 Sentencia: bloque .
+
+    $default  reduce usando la regla 32 (Sentencia)
+
+
+estado 27
+
+    5 Declar_de_subprogs: Declar_de_subprogs Declar_de_subprog .
+
+    $default  reduce usando la regla 5 (Declar_de_subprogs)
+
+
+estado 28
+
+    8 Declar_de_subprog: Cabecera_subprog . $@2 bloque
+
+    $default  reduce usando la regla 7 ($@2)
+
+    $@2  ir al estado 66
+
+
+estado 29
+
+    4 bloque: INIBLQ $@1 Declar_de_variables_locales Declar_de_subprogs Sentencias . FINBLQ
+   30 Sentencias: Sentencias . Sentencia
+
+    error     desplazar e ir al estado 18
+    INIBLQ    desplazar e ir al estado 6
+    FINBLQ    desplazar e ir al estado 67
+    SI        desplazar e ir al estado 20
+    MIENTRAS  desplazar e ir al estado 21
+    HACER     desplazar e ir al estado 22
+    ENT       desplazar e ir al estado 23
+    SAL       desplazar e ir al estado 24
+    IDENT     desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Sentencia              ir al estado 68
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 30
+
+   31 Sentencias: Sentencia .
+
+    $default  reduce usando la regla 31 (Sentencias)
+
+
+estado 31
+
+   33 Sentencia: sentencia_asignacion .
+
+    $default  reduce usando la regla 33 (Sentencia)
+
+
+estado 32
+
+   34 Sentencia: sentencia_if .
+
+    $default  reduce usando la regla 34 (Sentencia)
+
+
+estado 33
+
+   35 Sentencia: sentencia_while .
+
+    $default  reduce usando la regla 35 (Sentencia)
+
+
+estado 34
+
+   36 Sentencia: sentencia_entrada .
+
+    $default  reduce usando la regla 36 (Sentencia)
+
+
+estado 35
+
+   37 Sentencia: sentencia_salida .
+
+    $default  reduce usando la regla 37 (Sentencia)
+
+
+estado 36
+
+   38 Sentencia: sentencia_hacer_hasta .
+
+    $default  reduce usando la regla 38 (Sentencia)
+
+
+estado 37
+
+   39 Sentencia: llamada_procedimiento .
+
+    $default  reduce usando la regla 39 (Sentencia)
+
+
+estado 38
+
+   41 sentencia_asignacion: id_posArray . ASIG expresion PYC
+
+    ASIG  desplazar e ir al estado 69
+
+
+estado 39
+
+   21 Cuerpo_declar_variables: TIPO $@5 . lista_nombres PYC
+
+    error  desplazar e ir al estado 46
+    IDENT  desplazar e ir al estado 47
+
+    lista_nombres  ir al estado 70
+    id_array       ir al estado 49
+    array          ir al estado 50
+
+
+estado 40
+
+   16 Declar_de_variables_locales: BEG $@4 Variables_locales END .
+
+    $default  reduce usando la regla 16 (Declar_de_variables_locales)
+
+
+estado 41
+
+   18 Variables_locales: Variables_locales Cuerpo_declar_variables .
+
+    $default  reduce usando la regla 18 (Variables_locales)
+
+
+estado 42
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT . PARIZQ $@3 parametros PARDER
+   11                 | PROCEDIMIENTO IDENT . PARIZQ PARDER
+
+    PARIZQ  desplazar e ir al estado 71
+
+
+estado 43
+
+   42 sentencia_if: SI PARIZQ . expresion PARDER Sentencia
+   43             | SI PARIZQ . expresion PARDER Sentencia sentencia_else
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 72
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 44
+
+   45 sentencia_while: MIENTRAS PARIZQ . expresion PARDER Sentencia
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 73
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 45
+
+   48 sentencia_hacer_hasta: HACER Sentencia . HASTA expresion PYC
+
+    HASTA  desplazar e ir al estado 74
+
+
+estado 46
+
+   25 lista_nombres: error .
+
+    $default  reduce usando la regla 25 (lista_nombres)
+
+
+estado 47
+
+   26 id_array: IDENT .
+   28 array: IDENT . CORCHETEIZQ CONST CORCHETEDER
+   29      | IDENT . CORCHETEIZQ CONST COMA CONST CORCHETEDER
+
+    CORCHETEIZQ  desplazar e ir al estado 75
+
+    $default  reduce usando la regla 26 (id_array)
+
+
+estado 48
+
+   23 lista_nombres: lista_nombres . COMA id_array
+   46 sentencia_entrada: ENT lista_nombres . PYC
+
+    COMA  desplazar e ir al estado 76
+    PYC   desplazar e ir al estado 77
+
+
+estado 49
+
+   24 lista_nombres: id_array .
+
+    $default  reduce usando la regla 24 (lista_nombres)
+
+
+estado 50
+
+   27 id_array: array .
+
+    $default  reduce usando la regla 27 (id_array)
+
+
+estado 51
+
+   68 expresion: error .
+
+    $default  reduce usando la regla 68 (expresion)
+
+
+estado 52
+
+   66 expresion: CONST .
+
+    $default  reduce usando la regla 66 (expresion)
+
+
+estado 53
+
+   63 expresion: MASMENOS . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 78
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 54
+
+   56 expresion: OPUNARIO . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 79
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 55
+
+   55 expresion: PARIZQ . expresion PARDER
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 80
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 56
+
+   71 id_posArray: IDENT .
+   72            | IDENT . CORCHETEIZQ expresion CORCHETEDER
+   73            | IDENT . CORCHETEIZQ expresion COMA expresion CORCHETEDER
+
+    CORCHETEIZQ  desplazar e ir al estado 65
+
+    $default  reduce usando la regla 71 (id_posArray)
+
+
+estado 57
+
+   78 agregado: CORCHETEIZQ . lista_constantes CORCHETEDER
+
+    CONST  desplazar e ir al estado 81
+
+    lista_constantes  ir al estado 82
+
+
+estado 58
+
+   75 exp_cadena: CADENA .
+
+    $default  reduce usando la regla 75 (exp_cadena)
+
+
+estado 59
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+   74 exp_cadena: expresion .
+
+    MASMENOS  desplazar e ir al estado 83
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 74 (exp_cadena)
+
+
+estado 60
+
+   47 sentencia_salida: SAL exp_cadenas . PYC
+   69 exp_cadenas: exp_cadenas . COMA exp_cadena
+
+    COMA  desplazar e ir al estado 90
+    PYC   desplazar e ir al estado 91
+
+
+estado 61
+
+   65 expresion: id_posArray .
+
+    $default  reduce usando la regla 65 (expresion)
+
+
+estado 62
+
+   70 exp_cadenas: exp_cadena .
+
+    $default  reduce usando la regla 70 (exp_cadenas)
+
+
+estado 63
+
+   67 expresion: agregado .
+
+    $default  reduce usando la regla 67 (expresion)
+
+
+estado 64
+
+   50 llamada_procedimiento: IDENT PARIZQ . $@6 expresiones PARDER PYC
+   52                      | IDENT PARIZQ . $@7 PARDER PYC
+
+    PARDER    reduce usando la regla 51 ($@7)
+    $default  reduce usando la regla 49 ($@6)
+
+    $@6  ir al estado 92
+    $@7  ir al estado 93
+
+
+estado 65
+
+   72 id_posArray: IDENT CORCHETEIZQ . expresion CORCHETEDER
+   73            | IDENT CORCHETEIZQ . expresion COMA expresion CORCHETEDER
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 94
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 66
+
+    8 Declar_de_subprog: Cabecera_subprog $@2 . bloque
+
+    INIBLQ  desplazar e ir al estado 6
+
+    bloque  ir al estado 95
+
+
+estado 67
+
+    4 bloque: INIBLQ $@1 Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ .
+
+    $default  reduce usando la regla 4 (bloque)
+
+
+estado 68
+
+   30 Sentencias: Sentencias Sentencia .
+
+    $default  reduce usando la regla 30 (Sentencias)
+
+
+estado 69
+
+   41 sentencia_asignacion: id_posArray ASIG . expresion PYC
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 96
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 70
+
+   21 Cuerpo_declar_variables: TIPO $@5 lista_nombres . PYC
+   23 lista_nombres: lista_nombres . COMA id_array
+
+    COMA  desplazar e ir al estado 76
+    PYC   desplazar e ir al estado 97
+
+
+estado 71
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ . $@3 parametros PARDER
+   11                 | PROCEDIMIENTO IDENT PARIZQ . PARDER
+
+    PARDER  desplazar e ir al estado 98
+
+    $default  reduce usando la regla 9 ($@3)
+
+    $@3  ir al estado 99
+
+
+estado 72
+
+   42 sentencia_if: SI PARIZQ expresion . PARDER Sentencia
+   43             | SI PARIZQ expresion . PARDER Sentencia sentencia_else
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    PARDER    desplazar e ir al estado 100
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+
+estado 73
+
+   45 sentencia_while: MIENTRAS PARIZQ expresion . PARDER Sentencia
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    PARDER    desplazar e ir al estado 101
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+
+estado 74
+
+   48 sentencia_hacer_hasta: HACER Sentencia HASTA . expresion PYC
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 102
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 75
+
+   28 array: IDENT CORCHETEIZQ . CONST CORCHETEDER
+   29      | IDENT CORCHETEIZQ . CONST COMA CONST CORCHETEDER
+
+    CONST  desplazar e ir al estado 103
+
+
+estado 76
+
+   23 lista_nombres: lista_nombres COMA . id_array
+
+    IDENT  desplazar e ir al estado 47
+
+    id_array  ir al estado 104
+    array     ir al estado 50
+
+
+estado 77
+
+   46 sentencia_entrada: ENT lista_nombres PYC .
+
+    $default  reduce usando la regla 46 (sentencia_entrada)
+
+
+estado 78
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   63          | MASMENOS expresion .
+   64          | expresion . MASMENOS expresion
+
+    $default  reduce usando la regla 63 (expresion)
+
+
+estado 79
+
+   56 expresion: OPUNARIO expresion .
+   57          | expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    $default  reduce usando la regla 56 (expresion)
+
+
+estado 80
+
+   55 expresion: PARIZQ expresion . PARDER
+   57          | expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    PARDER    desplazar e ir al estado 105
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+
+estado 81
+
+   77 lista_constantes: CONST .
+
+    $default  reduce usando la regla 77 (lista_constantes)
+
+
+estado 82
+
+   76 lista_constantes: lista_constantes . coma_pyc CONST
+   78 agregado: CORCHETEIZQ lista_constantes . CORCHETEDER
+
+    COMA         desplazar e ir al estado 106
+    PYC          desplazar e ir al estado 107
+    CORCHETEDER  desplazar e ir al estado 108
+
+    coma_pyc  ir al estado 109
+
+
+estado 83
+
+   64 expresion: expresion MASMENOS . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 110
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 84
+
+   59 expresion: expresion ANDLOG . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 111
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 85
+
+   60 expresion: expresion ORLOG . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 112
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 86
+
+   62 expresion: expresion OREXCL . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 113
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 87
+
+   61 expresion: expresion OPIG . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 114
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 88
+
+   57 expresion: expresion OPREL . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 115
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 89
+
+   58 expresion: expresion OPMUL . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 116
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 90
+
+   69 exp_cadenas: exp_cadenas COMA . exp_cadena
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+    CADENA       desplazar e ir al estado 58
+
+    expresion    ir al estado 59
+    id_posArray  ir al estado 61
+    exp_cadena   ir al estado 117
+    agregado     ir al estado 63
+
+
+estado 91
+
+   47 sentencia_salida: SAL exp_cadenas PYC .
+
+    $default  reduce usando la regla 47 (sentencia_salida)
+
+
+estado 92
+
+   50 llamada_procedimiento: IDENT PARIZQ $@6 . expresiones PARDER PYC
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresiones  ir al estado 118
+    expresion    ir al estado 119
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 93
+
+   52 llamada_procedimiento: IDENT PARIZQ $@7 . PARDER PYC
+
+    PARDER  desplazar e ir al estado 120
+
+
+estado 94
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+   72 id_posArray: IDENT CORCHETEIZQ expresion . CORCHETEDER
+   73            | IDENT CORCHETEIZQ expresion . COMA expresion CORCHETEDER
+
+    MASMENOS     desplazar e ir al estado 83
+    COMA         desplazar e ir al estado 121
+    CORCHETEDER  desplazar e ir al estado 122
+    ANDLOG       desplazar e ir al estado 84
+    ORLOG        desplazar e ir al estado 85
+    OREXCL       desplazar e ir al estado 86
+    OPIG         desplazar e ir al estado 87
+    OPREL        desplazar e ir al estado 88
+    OPMUL        desplazar e ir al estado 89
+
+
+estado 95
+
+    8 Declar_de_subprog: Cabecera_subprog $@2 bloque .
+
+    $default  reduce usando la regla 8 (Declar_de_subprog)
+
+
+estado 96
+
+   41 sentencia_asignacion: id_posArray ASIG expresion . PYC
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    PYC       desplazar e ir al estado 123
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+
+estado 97
+
+   21 Cuerpo_declar_variables: TIPO $@5 lista_nombres PYC .
+
+    $default  reduce usando la regla 21 (Cuerpo_declar_variables)
+
+
+estado 98
+
+   11 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ PARDER .
+
+    $default  reduce usando la regla 11 (Cabecera_subprog)
+
+
+estado 99
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ $@3 . parametros PARDER
+
+    error  desplazar e ir al estado 124
+    TIPO   desplazar e ir al estado 125
+
+    parametros  ir al estado 126
+
+
+estado 100
+
+   42 sentencia_if: SI PARIZQ expresion PARDER . Sentencia
+   43             | SI PARIZQ expresion PARDER . Sentencia sentencia_else
+
+    error     desplazar e ir al estado 18
+    INIBLQ    desplazar e ir al estado 6
+    SI        desplazar e ir al estado 20
+    MIENTRAS  desplazar e ir al estado 21
+    HACER     desplazar e ir al estado 22
+    ENT       desplazar e ir al estado 23
+    SAL       desplazar e ir al estado 24
+    IDENT     desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Sentencia              ir al estado 127
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 101
+
+   45 sentencia_while: MIENTRAS PARIZQ expresion PARDER . Sentencia
+
+    error     desplazar e ir al estado 18
+    INIBLQ    desplazar e ir al estado 6
+    SI        desplazar e ir al estado 20
+    MIENTRAS  desplazar e ir al estado 21
+    HACER     desplazar e ir al estado 22
+    ENT       desplazar e ir al estado 23
+    SAL       desplazar e ir al estado 24
+    IDENT     desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Sentencia              ir al estado 128
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 102
+
+   48 sentencia_hacer_hasta: HACER Sentencia HASTA expresion . PYC
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    PYC       desplazar e ir al estado 129
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+
+estado 103
+
+   28 array: IDENT CORCHETEIZQ CONST . CORCHETEDER
+   29      | IDENT CORCHETEIZQ CONST . COMA CONST CORCHETEDER
+
+    COMA         desplazar e ir al estado 130
+    CORCHETEDER  desplazar e ir al estado 131
+
+
+estado 104
+
+   23 lista_nombres: lista_nombres COMA id_array .
+
+    $default  reduce usando la regla 23 (lista_nombres)
+
+
+estado 105
+
+   55 expresion: PARIZQ expresion PARDER .
+
+    $default  reduce usando la regla 55 (expresion)
+
+
+estado 106
+
+   79 coma_pyc: COMA .
+
+    $default  reduce usando la regla 79 (coma_pyc)
+
+
+estado 107
+
+   80 coma_pyc: PYC .
+
+    $default  reduce usando la regla 80 (coma_pyc)
+
+
+estado 108
+
+   78 agregado: CORCHETEIZQ lista_constantes CORCHETEDER .
+
+    $default  reduce usando la regla 78 (agregado)
+
+
+estado 109
+
+   76 lista_constantes: lista_constantes coma_pyc . CONST
+
+    CONST  desplazar e ir al estado 132
+
+
+estado 110
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+   64          | expresion MASMENOS expresion .
+
+    OPMUL  desplazar e ir al estado 89
+
+    $default  reduce usando la regla 64 (expresion)
+
+
+estado 111
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   59          | expresion ANDLOG expresion .
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 59 (expresion)
+
+
+estado 112
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   60          | expresion ORLOG expresion .
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    ANDLOG    desplazar e ir al estado 84
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 60 (expresion)
+
+
+estado 113
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   62          | expresion OREXCL expresion .
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 62 (expresion)
+
+
+estado 114
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   61          | expresion OPIG expresion .
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 61 (expresion)
+
+
+estado 115
+
+   57 expresion: expresion . OPREL expresion
+   57          | expresion OPREL expresion .
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 57 (expresion)
+
+
+estado 116
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   58          | expresion OPMUL expresion .
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    $default  reduce usando la regla 58 (expresion)
+
+
+estado 117
+
+   69 exp_cadenas: exp_cadenas COMA exp_cadena .
+
+    $default  reduce usando la regla 69 (exp_cadenas)
+
+
+estado 118
+
+   50 llamada_procedimiento: IDENT PARIZQ $@6 expresiones . PARDER PYC
+   53 expresiones: expresiones . COMA expresion
+
+    PARDER  desplazar e ir al estado 133
+    COMA    desplazar e ir al estado 134
+
+
+estado 119
+
+   54 expresiones: expresion .
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 54 (expresiones)
+
+
+estado 120
+
+   52 llamada_procedimiento: IDENT PARIZQ $@7 PARDER . PYC
+
+    PYC  desplazar e ir al estado 135
+
+
+estado 121
+
+   73 id_posArray: IDENT CORCHETEIZQ expresion COMA . expresion CORCHETEDER
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 136
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 122
+
+   72 id_posArray: IDENT CORCHETEIZQ expresion CORCHETEDER .
+
+    $default  reduce usando la regla 72 (id_posArray)
+
+
+estado 123
+
+   41 sentencia_asignacion: id_posArray ASIG expresion PYC .
+
+    $default  reduce usando la regla 41 (sentencia_asignacion)
+
+
+estado 124
+
+   14 parametros: error .
+
+    $default  reduce usando la regla 14 (parametros)
+
+
+estado 125
+
+   13 parametros: TIPO . IDENT
+
+    IDENT  desplazar e ir al estado 137
+
+
+estado 126
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ $@3 parametros . PARDER
+   12 parametros: parametros . COMA TIPO IDENT
+
+    PARDER  desplazar e ir al estado 138
+    COMA    desplazar e ir al estado 139
+
+
+estado 127
+
+   42 sentencia_if: SI PARIZQ expresion PARDER Sentencia .
+   43             | SI PARIZQ expresion PARDER Sentencia . sentencia_else
+
+    SINO  desplazar e ir al estado 140
+
+    SINO      [reduce usando la regla 42 (sentencia_if)]
+    $default  reduce usando la regla 42 (sentencia_if)
+
+    sentencia_else  ir al estado 141
+
+
+estado 128
+
+   45 sentencia_while: MIENTRAS PARIZQ expresion PARDER Sentencia .
+
+    $default  reduce usando la regla 45 (sentencia_while)
+
+
+estado 129
+
+   48 sentencia_hacer_hasta: HACER Sentencia HASTA expresion PYC .
+
+    $default  reduce usando la regla 48 (sentencia_hacer_hasta)
+
+
+estado 130
+
+   29 array: IDENT CORCHETEIZQ CONST COMA . CONST CORCHETEDER
+
+    CONST  desplazar e ir al estado 142
+
+
+estado 131
+
+   28 array: IDENT CORCHETEIZQ CONST CORCHETEDER .
+
+    $default  reduce usando la regla 28 (array)
+
+
+estado 132
+
+   76 lista_constantes: lista_constantes coma_pyc CONST .
+
+    $default  reduce usando la regla 76 (lista_constantes)
+
+
+estado 133
+
+   50 llamada_procedimiento: IDENT PARIZQ $@6 expresiones PARDER . PYC
+
+    PYC  desplazar e ir al estado 143
+
+
+estado 134
+
+   53 expresiones: expresiones COMA . expresion
+
+    error        desplazar e ir al estado 51
+    CONST        desplazar e ir al estado 52
+    MASMENOS     desplazar e ir al estado 53
+    OPUNARIO     desplazar e ir al estado 54
+    PARIZQ       desplazar e ir al estado 55
+    IDENT        desplazar e ir al estado 56
+    CORCHETEIZQ  desplazar e ir al estado 57
+
+    expresion    ir al estado 144
+    id_posArray  ir al estado 61
+    agregado     ir al estado 63
+
+
+estado 135
+
+   52 llamada_procedimiento: IDENT PARIZQ $@7 PARDER PYC .
+
+    $default  reduce usando la regla 52 (llamada_procedimiento)
+
+
+estado 136
+
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+   73 id_posArray: IDENT CORCHETEIZQ expresion COMA expresion . CORCHETEDER
+
+    MASMENOS     desplazar e ir al estado 83
+    CORCHETEDER  desplazar e ir al estado 145
+    ANDLOG       desplazar e ir al estado 84
+    ORLOG        desplazar e ir al estado 85
+    OREXCL       desplazar e ir al estado 86
+    OPIG         desplazar e ir al estado 87
+    OPREL        desplazar e ir al estado 88
+    OPMUL        desplazar e ir al estado 89
+
+
+estado 137
+
+   13 parametros: TIPO IDENT .
+
+    $default  reduce usando la regla 13 (parametros)
+
+
+estado 138
+
+   10 Cabecera_subprog: PROCEDIMIENTO IDENT PARIZQ $@3 parametros PARDER .
+
+    $default  reduce usando la regla 10 (Cabecera_subprog)
+
+
+estado 139
+
+   12 parametros: parametros COMA . TIPO IDENT
+
+    TIPO  desplazar e ir al estado 146
+
+
+estado 140
+
+   44 sentencia_else: SINO . Sentencia
+
+    error     desplazar e ir al estado 18
+    INIBLQ    desplazar e ir al estado 6
+    SI        desplazar e ir al estado 20
+    MIENTRAS  desplazar e ir al estado 21
+    HACER     desplazar e ir al estado 22
+    ENT       desplazar e ir al estado 23
+    SAL       desplazar e ir al estado 24
+    IDENT     desplazar e ir al estado 25
+
+    bloque                 ir al estado 26
+    Sentencia              ir al estado 147
+    sentencia_asignacion   ir al estado 31
+    sentencia_if           ir al estado 32
+    sentencia_while        ir al estado 33
+    sentencia_entrada      ir al estado 34
+    sentencia_salida       ir al estado 35
+    sentencia_hacer_hasta  ir al estado 36
+    llamada_procedimiento  ir al estado 37
+    id_posArray            ir al estado 38
+
+
+estado 141
+
+   43 sentencia_if: SI PARIZQ expresion PARDER Sentencia sentencia_else .
+
+    $default  reduce usando la regla 43 (sentencia_if)
+
+
+estado 142
+
+   29 array: IDENT CORCHETEIZQ CONST COMA CONST . CORCHETEDER
+
+    CORCHETEDER  desplazar e ir al estado 148
+
+
+estado 143
+
+   50 llamada_procedimiento: IDENT PARIZQ $@6 expresiones PARDER PYC .
+
+    $default  reduce usando la regla 50 (llamada_procedimiento)
+
+
+estado 144
+
+   53 expresiones: expresiones COMA expresion .
+   57 expresion: expresion . OPREL expresion
+   58          | expresion . OPMUL expresion
+   59          | expresion . ANDLOG expresion
+   60          | expresion . ORLOG expresion
+   61          | expresion . OPIG expresion
+   62          | expresion . OREXCL expresion
+   64          | expresion . MASMENOS expresion
+
+    MASMENOS  desplazar e ir al estado 83
+    ANDLOG    desplazar e ir al estado 84
+    ORLOG     desplazar e ir al estado 85
+    OREXCL    desplazar e ir al estado 86
+    OPIG      desplazar e ir al estado 87
+    OPREL     desplazar e ir al estado 88
+    OPMUL     desplazar e ir al estado 89
+
+    $default  reduce usando la regla 53 (expresiones)
+
+
+estado 145
+
+   73 id_posArray: IDENT CORCHETEIZQ expresion COMA expresion CORCHETEDER .
+
+    $default  reduce usando la regla 73 (id_posArray)
+
+
+estado 146
+
+   12 parametros: parametros COMA TIPO . IDENT
+
+    IDENT  desplazar e ir al estado 149
+
+
+estado 147
+
+   44 sentencia_else: SINO Sentencia .
+
+    $default  reduce usando la regla 44 (sentencia_else)
+
+
+estado 148
+
+   29 array: IDENT CORCHETEIZQ CONST COMA CONST CORCHETEDER .
+
+    $default  reduce usando la regla 29 (array)
+
+
+estado 149
+
+   12 parametros: parametros COMA TIPO IDENT .
+
+    $default  reduce usando la regla 12 (parametros)

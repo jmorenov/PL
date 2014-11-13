@@ -1,0 +1,78 @@
+%{
+#define MAXLONBUFFER 200
+char buffer[MAXLONBUFFER];
+%}
+
+letra	[a-zA-Z]
+digito	[0-9]
+alphanum [a-zA-Z0-9_]
+blanco	[ \t]
+finLinea [\n]
+caracter [^\"\""]
+otros .
+
+%option noyywrap
+
+%%
+
+"principal"	{ return PRINCIPAL;}
+"entero"	{yylval.tipo = entero; return TIPO;}
+"real"	{yylval.tipo = real; return TIPO;}
+"caracter"	{yylval.tipo = caracter; return TIPO;}
+"boolean"	{yylval.tipo = booleano; return TIPO;}
+"["	{ return CORCHETEIZQ;}
+"]"	{ return CORCHETEDER;}
+"="	{ return ASIG;}
+"-"	{yylval.atrib = MASMENOS;yylval.tipo = entero; return MASMENOS;}
+"+"	{yylval.atrib = MASMENOS;yylval.tipo = entero; return MASMENOS;}
+"*"	{yylval.atrib = OPMUL;yylval.tipo = entero; return OPMUL;}
+"/"	{yylval.atrib = OPMUL;yylval.tipo = entero; return OPMUL;}
+"%"	{yylval.atrib = OPMUL;yylval.tipo = entero; return OPMUL;}
+">"	{yylval.atrib = OPREL;yylval.tipo = booleano; return OPREL;}
+"<"	{yylval.atrib = OPREL;yylval.tipo = booleano; return OPREL;}
+">="	{yylval.atrib = OPREL;yylval.tipo = booleano; return OPREL;}
+"<="	{yylval.atrib = OPREL;yylval.tipo = booleano; return OPREL;}
+"=="	{yylval.atrib = OPIG;yylval.tipo = booleano; return OPIG;}
+"!="	{yylval.atrib = OPIG;yylval.tipo = booleano; return OPIG;}
+"||"	{yylval.atrib = ORLOG;yylval.tipo = booleano; return ORLOG;}
+"&&"	{yylval.atrib = ANDLOG;yylval.tipo = booleano; return ANDLOG;}
+"^"	{yylval.atrib = OREXCL;yylval.tipo = entero; return OREXCL;}
+"!"	{yylval.atrib = OPUNARIO;yylval.tipo = booleano; return OPUNARIO;}
+"**"	{yylval.atrib = OPMUL;yylval.tipo = array; return OPMUL;}
+"("	{ return PARIZQ;}
+")"	{ return PARDER;}
+"{"	{ return INIBLQ;}
+"}"	{ return FINBLQ;}
+"beg"	{ return BEG;}
+"end"	{ return	END;}
+","	{ return COMA;}
+";"	{ return PYC;}
+"si"	{ linea_si = linea_actual; return SI;}
+"sino"	{ return SINO;}
+"mientras"	{ linea_si = linea_actual; return MIENTRAS;}
+"hacer"	{ return HACER ;}
+"hasta"	{ linea_si = linea_actual; return HASTA;}
+"entrada"	{ return ENT;}
+"salida"	{ return SAL;}
+"verdad"	{yylval.lexema = strdup (yytext); yylval.atrib = CONST;
+				yylval.tipo = booleano; return CONST;}
+"falso"	{yylval.lexema = strdup (yytext); yylval.atrib = CONST;
+				yylval.tipo = booleano; return CONST;}
+"procedimiento" {yylval.atrib = PROCEDIMIENTO; return	PROCEDIMIENTO;}
+{digito}+	{yylval.lexema = strdup (yytext); yylval.atrib = CONST;
+					yylval.tipo = entero; return CONST;}
+{digito}+\.{digito}+	{yylval.lexema = strdup (yytext);yylval.atrib = CONST;
+								yylval.tipo = real; return CONST;}
+"\'"{caracter}"\'"	{yylval.lexema = strdup (yytext);yylval.atrib = CONST;
+								yylval.tipo = caracter; return CONST;}
+"\""{caracter}+"\""	{yylval.lexema = strdup (yytext);yylval.atrib = CONST;
+								return CADENA;}
+{letra}{alphanum}* {yylval.atrib = IDENT;yylval.lexema = strdup (yytext); return  IDENT;}
+{blanco}+ {}
+{finLinea} {linea_actual++;}
+
+{otros} {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);
+	yyerror(buffer);}
+%%
+
+

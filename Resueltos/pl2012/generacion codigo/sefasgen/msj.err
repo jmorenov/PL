@@ -1,0 +1,17 @@
+char *msjerror[]={ 
+ 	 " Error (0) esperaba REGLA ", 
+ 	 " Error (1) esperaba ID ", 
+ 	 " Error (2) esperaba FIN_DE_PROGRAMA REGLA ", 
+ 	 " Error (3) esperaba ", 
+ 	 " Error (4) esperaba ", 
+ 	 " Error (5) esperaba shift/reduce shift/reduce shift/reduce shift/reduce shift/reduce ", 
+ 	 " Error (6) esperaba STRING VAR CAD TIPO CAD_OPC FIN_REGLA ", 
+ 	 " Error (7) esperaba ", 
+ 	 " Error (8) esperaba ", 
+ 	 " Error (9) esperaba ", 
+ 	 " Error (10) esperaba ", 
+ 	 " Error (11) esperaba shift/reduce shift/reduce shift/reduce shift/reduce shift/reduce shift/reduce ", 
+ 	 " Error (12) esperaba STRING VAR CAD TIPO CAD_OPC FIN_REGLA ", 
+ 	 " Error (13) esperaba ", 
+ 	 " Error (14) esperaba ", 
+ 	 " Error (15) esperaba shift/reduce shift/reduce " };

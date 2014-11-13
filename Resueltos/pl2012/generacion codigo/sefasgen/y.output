@@ -1,0 +1,163 @@
+   0  $accept : ESQUEMA $end
+
+   1  ESQUEMA : ESQUEMA DEC_REGLA
+   2          | DEC_REGLA
+
+   3  $$1 :
+
+   4  DEC_REGLA : REGLA ID $$1 LISTA_CAMPOS FIN_REGLA
+
+   5  LISTA_CAMPOS : LISTA_CAMPOS TIPO_CAMPO
+   6               | TIPO_CAMPO
+
+   7  TIPO_CAMPO : CAD
+   8             | TIPO
+   9             | VAR
+  10             | CAD_OPC
+  11             | STRING
+  12             |
+
+state 0
+	$accept : . ESQUEMA $end  (0)
+
+	REGLA  shift 1
+	.  error
+
+	ESQUEMA  goto 2
+	DEC_REGLA  goto 3
+
+
+state 1
+	DEC_REGLA : REGLA . ID $$1 LISTA_CAMPOS FIN_REGLA  (4)
+
+	ID  shift 4
+	.  error
+
+
+state 2
+	$accept : ESQUEMA . $end  (0)
+	ESQUEMA : ESQUEMA . DEC_REGLA  (1)
+
+	$end  accept
+	REGLA  shift 1
+	.  error
+
+	DEC_REGLA  goto 5
+
+
+state 3
+	ESQUEMA : DEC_REGLA .  (2)
+
+	.  reduce 2
+
+
+state 4
+	DEC_REGLA : REGLA ID . $$1 LISTA_CAMPOS FIN_REGLA  (4)
+	$$1 : .  (3)
+
+	.  reduce 3
+
+	$$1  goto 6
+
+
+state 5
+	ESQUEMA : ESQUEMA DEC_REGLA .  (1)
+
+	.  reduce 1
+
+
+6: shift/reduce conflict (shift 7, reduce 12) on STRING
+6: shift/reduce conflict (shift 8, reduce 12) on VAR
+6: shift/reduce conflict (shift 9, reduce 12) on CAD
+6: shift/reduce conflict (shift 10, reduce 12) on TIPO
+6: shift/reduce conflict (shift 11, reduce 12) on CAD_OPC
+state 6
+	DEC_REGLA : REGLA ID $$1 . LISTA_CAMPOS FIN_REGLA  (4)
+	TIPO_CAMPO : .  (12)
+
+	STRING  shift 7
+	VAR  shift 8
+	CAD  shift 9
+	TIPO  shift 10
+	CAD_OPC  shift 11
+	FIN_REGLA  reduce 12
+
+	LISTA_CAMPOS  goto 12
+	TIPO_CAMPO  goto 13
+
+
+state 7
+	TIPO_CAMPO : STRING .  (11)
+
+	.  reduce 11
+
+
+state 8
+	TIPO_CAMPO : VAR .  (9)
+
+	.  reduce 9
+
+
+state 9
+	TIPO_CAMPO : CAD .  (7)
+
+	.  reduce 7
+
+
+state 10
+	TIPO_CAMPO : TIPO .  (8)
+
+	.  reduce 8
+
+
+state 11
+	TIPO_CAMPO : CAD_OPC .  (10)
+
+	.  reduce 10
+
+
+12: shift/reduce conflict (shift 7, reduce 12) on STRING
+12: shift/reduce conflict (shift 8, reduce 12) on VAR
+12: shift/reduce conflict (shift 9, reduce 12) on CAD
+12: shift/reduce conflict (shift 10, reduce 12) on TIPO
+12: shift/reduce conflict (shift 11, reduce 12) on CAD_OPC
+12: shift/reduce conflict (shift 14, reduce 12) on FIN_REGLA
+state 12
+	DEC_REGLA : REGLA ID $$1 LISTA_CAMPOS . FIN_REGLA  (4)
+	LISTA_CAMPOS : LISTA_CAMPOS . TIPO_CAMPO  (5)
+	TIPO_CAMPO : .  (12)
+
+	STRING  shift 7
+	VAR  shift 8
+	CAD  shift 9
+	TIPO  shift 10
+	CAD_OPC  shift 11
+	FIN_REGLA  shift 14
+
+	TIPO_CAMPO  goto 15
+
+
+state 13
+	LISTA_CAMPOS : TIPO_CAMPO .  (6)
+
+	.  reduce 6
+
+
+state 14
+	DEC_REGLA : REGLA ID $$1 LISTA_CAMPOS FIN_REGLA .  (4)
+
+	.  reduce 4
+
+
+state 15
+	LISTA_CAMPOS : LISTA_CAMPOS TIPO_CAMPO .  (5)
+
+	.  reduce 5
+
+
+State 6 contains 5 shift/reduce conflicts.
+State 12 contains 6 shift/reduce conflicts.
+
+
+10 terminals, 6 nonterminals
+13 grammar rules, 16 states

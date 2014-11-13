@@ -1,0 +1,23 @@
+procedimiento principal() {
+	ini_variables
+		entero a, b;
+	fin_variables
+
+	procedimiento prueba(entero a) {
+		escribir a;
+		}
+
+	procedimiento otro() {
+		escribir "sin parametros\n";
+		}
+
+	si ( 4 > 5 ) {
+		a = 4 + 5 + 6;
+		b = -1;
+	} sino {
+		b = 32 * 98;
+		a = -1;
+		}
+
+	}
+
