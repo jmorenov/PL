@@ -10,8 +10,8 @@
 "]"	{ return 	END_LIST;}
 "="	{ return 	ASSIGN;}
 
-"-"	{ return 	OP_BIN;}
-"+"	{ return 	OP_BIN;}
+"-"	{ return 	OP_PM;}
+"+"	{ return 	OP_PM;}
 "*"	{ return 	OP_BIN;}
 "/"	{ return 	OP_BIN;}
 “/=“	{ return 	OP_BIN;}
@@ -36,18 +36,14 @@
 "**"	{ return 	OP_BIN;}
 
 "!"	{ return 	OP_UNIT;}
-“+”	{ return 	OP_UNIT;}
-“-”	{ return 	OP_UNIT;}
 “#”	{ return 	OP_UNIT;}
 “?”	{ return 	OP_UNIT;}
 “++”	{ return 	OP_UNIT;}
-“—”	{ return 	OP_UNIT;}
 
 “<<”	{ return 	OP_LIST;}
 “>>”	{ return 	OP_LIST;}
 “$”	{ return 	OP_LIST_START_CURSOR;}
 
-“-“	{ return 	MINUS;}
 “.”	{ return 	POINT;}
 
 “‘”	{ return 	LIMIT_CHAR;}

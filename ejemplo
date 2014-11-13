@@ -1,0 +1,22 @@
+main
+{
+	
+	START_VAR
+	
+	int a, b = 0;
+ 
+	END_VAR
+
+	int F() {
+		a = 1;
+
+		if (a == 1)
+			b = 2;
+
+		return b;
+	}	
+
+	output a;
+
+}
+
