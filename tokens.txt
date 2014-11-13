@@ -1,0 +1,72 @@
+"main"	{ return 	MAIN;}
+"int"	{ return 	TYPE;}
+"float"	{ return 	TYPE;}
+"char"	{ return 	TYPE;}
+"bool"	{ return 	TYPE;}
+“list of”	{ return 	LIST;}
+
+
+"["	{ return 	BEGIN_LIST;}
+"]"	{ return 	END_LIST;}
+"="	{ return 	ASSIGN;}
+
+"-"	{ return 	OP_BIN;}
+"+"	{ return 	OP_BIN;}
+"*"	{ return 	OP_BIN;}
+"/"	{ return 	OP_BIN;}
+“/=“	{ return 	OP_BIN;}
+“%=”	{ return 	OP_BIN;}
+“|”	{ return 	OP_BIN;}
+“^=“	{ return 	OP_BIN;}
+“~”	{ return 	OP_BIN;}
+“+=”	{ return 	OP_BIN;}
+“-=“	{ return 	OP_BIN;}
+“*=“	{ return 	OP_BIN;}
+“@“	{ return 	OP_BIN;}
+"%"	{ return 	OP_BIN;}
+">"	{ return 	OP_BIN;}
+"<"	{ return 	OP_BIN;}
+">="	{ return 	OP_BIN;}
+"<="	{ return 	OP_BIN;}
+"=="	{ return 	OP_BIN;}
+"!="	{ return 	OP_BIN;}
+"||"	{ return 	OP_BIN;}
+"&&"	{ return 	OP_BIN;}
+"^"	{ return 	OP_BIN;}
+"**"	{ return 	OP_BIN;}
+
+"!"	{ return 	OP_UNIT;}
+“+”	{ return 	OP_UNIT;}
+“-”	{ return 	OP_UNIT;}
+“#”	{ return 	OP_UNIT;}
+“?”	{ return 	OP_UNIT;}
+“++”	{ return 	OP_UNIT;}
+“—”	{ return 	OP_UNIT;}
+
+“<<”	{ return 	OP_LIST;}
+“>>”	{ return 	OP_LIST;}
+“$”	{ return 	OP_LIST_START_CURSOR;}
+
+“-“	{ return 	MINUS;}
+“.”	{ return 	POINT;}
+
+“‘”	{ return 	LIMIT_CHAR;}
+
+"("	{ return 	PL;}
+")"	{ return 	PR;}
+"{"	{ return 	BEGIN;}
+"}"	{ return 	END;}
+","	{ return 	COMMA;}
+";"	{ return 	SEMICOLON;}
+"if"	{ return 	CONDITIONAL;}
+"else"	{ return 	ELSE;}
+"while"	{ return 	CONDITIONAL;}
+"do"	{ return 	DO ;}
+"until"	{ return 	UNTIL;}
+"input"	{ return 	INPUT;}
+"output"	{ return 	OUTPUT;}
+"true"	{ return 	BOOL;}
+"false"	{ return 	BOOL;}
+
+“return”	{ return 	RETURN;}
+
