@@ -54,15 +54,15 @@
 
 <sentence_input> ::= INPUT <list_id> SEMICOLON
 
-<sentence_output> ::= OUTPUT <list_expr> SEMICOLON
+<sentence_output> ::= OUTPUT <list_expr_cad> SEMICOLON
 
 <sentence_return> ::= RETURN <expr> SEMICOLON
 
 <sentence_do_until> ::= DO <sentence> UNTIL <expr> SEMICOLON
 
-<sentence_list_forward_back> ::= <expr> OP_LIST
+<sentence_list_forward_back> ::= <expr> OP_LIST SEMICOLON
 
-<sentence_list_start_cursor> ::= OP_LIST_START_CURSOR <expr>
+<sentence_list_start_cursor> ::= OP_LIST_START_CURSOR <expr> SEMICOLON
 
 <expr> ::= PL <expr> PR | 
           <op_unit> <expr> | 
@@ -70,7 +70,6 @@
           <id> | 
           <const> |  // Pudiendo ser una constante de tipo lista.
           <function_call> |
-          <string> | LIMIT_STRING <string> LIMIT_STRING // Si hay que limitar la cadena de caracteres. ""
 
 <list_id> ::= <list_id> COMMA <id> | <id>
 
@@ -78,32 +77,48 @@
 
 <function_call> ::= <id> PL <list_expr> PR
 
-<type> ::= INT | 
+<types> ::= INT | 
             FLOAT | 
             CHAR | 
             BOOL | 
-            LIST <type>;
+
+<type> ::= <types> | LIST <types>
 
 <const> ::= <int> | 
             <float> | 
             LIMIT_CHAR <char> LIMIT_CHAR | 
             <bool> | 
-            BEGIN_LIST <list> END_LIST
+	    <const_list>
 
-<list> ::= <list> COMMA <const> | <const>
+<const_list> ::= <list_of_int> |
+		<list_of_float> |
+		<list_of_char> |
+		<list_of_bool>
+
+
+
+<list_of_int> ::= BEGIN_LIST <list_int> END_LIST
+<list_int> ::= <list_int> COMMA <int> | <int>
+
+<list_of_float> ::= BEGIN_LIST <list_float> END_LIST
+<list_float> ::= <list_float> COMMA <float> | <float>
+
+<list_of_char> ::= BEGIN_LIST <list_char> END_LIST
+<list_char> ::= <list_char> COMMA LIMIT_CHAR <char> LIMIT_CHAR | LIMIT_CHAR <char> LIMIT_CHAR
+
+<list_of_bool> ::= BEGIN_LIST <list_bool> END_LIST
+<list_bool> ::= <list_bool> COMMA <bool> | <bool>
+
+<list_expr_cad> ::= <list_expr_cad> COMMA <expr_cad> | <expr_cad>
+
+<expr_cad> ::= <expr> | <cad>
+
 
 <id> ::= <letter> | <id> <letter> | <id> <digit>
 
-// Si char no son solo caracteres
-<string> ::= <string> <char> | <char>
-// si no..
-<string> ::= <string> <char> | <string> SPACE | // ¿Puede ser un string vacío? ""
+<cad> ::= <cad> <char> | <char>
 
-// Si char no son solo caracteres
-<char> ::= <digit> | <letter> | <symbol> | //¿Puede ser un char vacío? ''
-// si no...
-<char> ::= LIMIT_CHAR <letter> LIMIT_CHAR | LIMIT_CHAR LIMIT_CHAR // ¿Puede ser un char vacío? ''
-// y cambiar en <const> a la regla de char.
+<char> ::= <digit> | <letter> | <symbol> |
 
 <float> ::= <int> POINT <digit> | <int>
 
