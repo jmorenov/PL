@@ -1,4 +1,5 @@
 %{
+#include "tabla.h"
 #define MAXLONBUFFER 200
 char buffer[MAXLONBUFFER];
 %}
@@ -78,10 +79,9 @@ other 	.
 {letter}	{ return  TYPE;}
 {ident}+ { return  ID;}
 {space}+ {}
-{endline} {line++;}
 
-{other} {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);
-	yyerror(buffer);}
+
+{other} {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);}
 %%
 
 /*********************************************************

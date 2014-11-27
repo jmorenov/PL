@@ -363,8 +363,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 66
-#define YY_END_OF_BUFFER 67
+#define YY_NUM_RULES 65
+#define YY_END_OF_BUFFER 66
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -374,11 +374,11 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[128] =
     {   0,
-        0,    0,   67,   65,   63,   64,   34,   35,   40,   23,
-       65,   43,   44,   12,   11,   47,   10,   41,   13,   59,
+        0,    0,   66,   64,   63,   65,   34,   35,   40,   23,
+       64,   43,   44,   12,   11,   47,   10,   41,   13,   59,
        48,   25,    9,   24,   36,   22,   61,    7,    8,   32,
        62,   61,   61,   61,   61,   61,   61,   61,   61,   61,
-       61,   61,   61,   61,   45,   16,   46,   18,   65,   63,
+       61,   61,   61,   61,   45,   16,   46,   18,   64,   63,
        29,   15,   31,   33,   21,   37,   19,   20,   14,    0,
        59,   38,   27,   28,   26,   39,   62,   17,   62,   62,
        52,   62,   62,   62,   49,   62,   62,   62,   62,   62,
@@ -536,9 +536,10 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "tokensLex.l"
 #line 2 "tokensLex.l"
+#include "tabla.h"
 #define MAXLONBUFFER 200
 char buffer[MAXLONBUFFER];
-#line 542 "lex.yy.c"
+#line 543 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -720,10 +721,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 16 "tokensLex.l"
+#line 17 "tokensLex.l"
 
 
-#line 727 "lex.yy.c"
+#line 728 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -808,337 +809,330 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "tokensLex.l"
+#line 19 "tokensLex.l"
 { return 	MAIN;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 19 "tokensLex.l"
+#line 20 "tokensLex.l"
 { return 	TYPE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "tokensLex.l"
+#line 21 "tokensLex.l"
 { return 	TYPE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 21 "tokensLex.l"
+#line 22 "tokensLex.l"
 { return 	TYPE;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 22 "tokensLex.l"
+#line 23 "tokensLex.l"
 { return 	TYPE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 23 "tokensLex.l"
+#line 24 "tokensLex.l"
 { return 	LIST;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 24 "tokensLex.l"
+#line 25 "tokensLex.l"
 { return 	BEGIN_LIST;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 25 "tokensLex.l"
+#line 26 "tokensLex.l"
 { return 	END_LIST;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 26 "tokensLex.l"
+#line 27 "tokensLex.l"
 { return 	ASSIGN;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 27 "tokensLex.l"
+#line 28 "tokensLex.l"
 { return 	OP_PM;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 28 "tokensLex.l"
+#line 29 "tokensLex.l"
 { return 	OP_PM;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 29 "tokensLex.l"
+#line 30 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 30 "tokensLex.l"
+#line 31 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 31 "tokensLex.l"
+#line 32 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 32 "tokensLex.l"
+#line 33 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 33 "tokensLex.l"
+#line 34 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 34 "tokensLex.l"
+#line 35 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 35 "tokensLex.l"
+#line 36 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 36 "tokensLex.l"
+#line 37 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 37 "tokensLex.l"
+#line 38 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 38 "tokensLex.l"
+#line 39 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 39 "tokensLex.l"
+#line 40 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 40 "tokensLex.l"
+#line 41 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 41 "tokensLex.l"
+#line 42 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 42 "tokensLex.l"
+#line 43 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 43 "tokensLex.l"
+#line 44 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 44 "tokensLex.l"
+#line 45 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 45 "tokensLex.l"
+#line 46 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 46 "tokensLex.l"
+#line 47 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 47 "tokensLex.l"
+#line 48 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 48 "tokensLex.l"
+#line 49 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 49 "tokensLex.l"
+#line 50 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 50 "tokensLex.l"
+#line 51 "tokensLex.l"
 { return 	OP_BIN;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 51 "tokensLex.l"
+#line 52 "tokensLex.l"
 { return 	OP_UNIT;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 52 "tokensLex.l"
+#line 53 "tokensLex.l"
 { return 	OP_UNIT;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 53 "tokensLex.l"
+#line 54 "tokensLex.l"
 { return 	OP_UNIT;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 54 "tokensLex.l"
+#line 55 "tokensLex.l"
 { return 	OP_UNIT;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 55 "tokensLex.l"
+#line 56 "tokensLex.l"
 { return 	OP_LIST;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 56 "tokensLex.l"
+#line 57 "tokensLex.l"
 { return 	OP_LIST;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 57 "tokensLex.l"
+#line 58 "tokensLex.l"
 { return 	OP_LIST_START_CURSOR;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 58 "tokensLex.l"
+#line 59 "tokensLex.l"
 { return 	POINT;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 59 "tokensLex.l"
+#line 60 "tokensLex.l"
 { return 	LIMIT_CHAR;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 60 "tokensLex.l"
+#line 61 "tokensLex.l"
 { return 	PL;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 61 "tokensLex.l"
+#line 62 "tokensLex.l"
 { return 	PR;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 62 "tokensLex.l"
+#line 63 "tokensLex.l"
 { return 	BEGIN;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 63 "tokensLex.l"
+#line 64 "tokensLex.l"
 { return 	END;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 64 "tokensLex.l"
+#line 65 "tokensLex.l"
 { return 	COMMA;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 65 "tokensLex.l"
+#line 66 "tokensLex.l"
 { return 	SEMICOLON;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 66 "tokensLex.l"
+#line 67 "tokensLex.l"
 { return 	CONDITIONAL;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 67 "tokensLex.l"
+#line 68 "tokensLex.l"
 { return 	ELSE;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 68 "tokensLex.l"
+#line 69 "tokensLex.l"
 { return 	CONDITIONAL;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 69 "tokensLex.l"
+#line 70 "tokensLex.l"
 { return 	DO ;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 70 "tokensLex.l"
+#line 71 "tokensLex.l"
 { return 	UNTIL;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 71 "tokensLex.l"
+#line 72 "tokensLex.l"
 { return 	INPUT;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 72 "tokensLex.l"
+#line 73 "tokensLex.l"
 { return 	OUTPUT;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 73 "tokensLex.l"
+#line 74 "tokensLex.l"
 { return 	BOOL;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 74 "tokensLex.l"
+#line 75 "tokensLex.l"
 { return 	BOOL;}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 75 "tokensLex.l"
+#line 76 "tokensLex.l"
 { return 	RETURN;}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 76 "tokensLex.l"
+#line 77 "tokensLex.l"
 { return  TYPE;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 77 "tokensLex.l"
+#line 78 "tokensLex.l"
 { return  TYPE;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 78 "tokensLex.l"
+#line 79 "tokensLex.l"
 { return  TYPE;}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 79 "tokensLex.l"
+#line 80 "tokensLex.l"
 { return  ID;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 80 "tokensLex.l"
+#line 81 "tokensLex.l"
 {}
 	YY_BREAK
 case 64:
-/* rule 64 can match eol */
 YY_RULE_SETUP
-#line 81 "tokensLex.l"
-{line++;}
+#line 84 "tokensLex.l"
+{snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);}
 	YY_BREAK
 case 65:
-YY_RULE_SETUP
-#line 83 "tokensLex.l"
-{snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);
-	yyerror(buffer);}
-	YY_BREAK
-case 66:
 YY_RULE_SETUP
 #line 85 "tokensLex.l"
 ECHO;
 	YY_BREAK
-#line 1142 "lex.yy.c"
+#line 1136 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
