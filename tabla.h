@@ -1,4 +1,4 @@
-	#define CONDITIONAL	256
+	#define IF	256
 	#define	ELSE	257
 	#define	DO	258
 	#define	UNTIL	259
@@ -13,7 +13,7 @@
 	#define	ASSIGN	267
 	#define	PL	268
 	#define PR	269
-	#define	BEGIN	270
+	#define	BEGIN_P	270
 	#define	END	271
 	#define	COMMA	272
 	#define	SEMICOLON	273
@@ -32,4 +32,9 @@
     #define SYMBOL 286
     #define MINUS 287
     #define POINT 288
+	#define WHILE 289
+	#define INT 290
+	#define FLOAT 291
+	#define CHAR 292
+	#define CAD 293
 

@@ -1,19 +1,17 @@
 main
 {
 	
-	START_VAR
+	ST··ART_VAR
 	
 	int a, b = 0;
- 
 	END_VAR
 
 	int F() {
-		a = 1;
-
+		a = 1··;
 		if (a == 1)
 			b = 2;
 
-		return b;
+		retu··rn b;
 	}	
 
 	output a;

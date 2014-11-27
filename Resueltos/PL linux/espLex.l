@@ -65,7 +65,7 @@ otros .
 {letra}{alphanum}* { return  IDENT;}
 {blanco}+ {}
 {finLinea} {linea++;printf("\n");}
-{otros} printf ("\n(Linea %d) Error léxico: token %s\n", linea, yytext);
+{otros} printf ("\n(Linea %d) Error léxico: token %s\n", line, yytext);
 
 %%
 

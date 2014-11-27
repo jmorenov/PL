@@ -1,7 +1,12 @@
 %{
 #include "tabla.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #define MAXLONBUFFER 200
+void yyerror( char * msg ) ;
 char buffer[MAXLONBUFFER];
+int line = 1;
 %}
 
 letter	[a-zA-Z]
@@ -10,7 +15,6 @@ digit	[0-9]
 space	[ \t]
 endline [\n]
 symbol 	[^\"\""]
-other 	.
 
 %option noyywrap
 
@@ -57,16 +61,16 @@ other 	.
 ">>"	{ return 	OP_LIST;}
 "$"	{ return 	OP_LIST_START_CURSOR;}
 "."	{ return 	POINT;}
-"‘"	{ return 	LIMIT_CHAR;}
+"'"	{ return 	LIMIT_CHAR;}
 "("	{ return 	PL;}
 ")"	{ return 	PR;}
-"{"	{ return 	BEGIN;}
+"{"	{ return 	BEGIN_P;}
 "}"	{ return 	END;}
 ","	{ return 	COMMA;}
 ";"	{ return 	SEMICOLON;}
-"if"	{ return 	CONDITIONAL;}
+"if"	{ return 	IF;}
 "else"	{ return 	ELSE;}
-"while"	{ return 	CONDITIONAL;}
+"while"	{ return 	WHILE;}
 "do"	{ return 	DO ;}
 "until"	{ return 	UNTIL;}
 "input"	{ return 	INPUT;}
@@ -74,49 +78,14 @@ other 	.
 "true"	{ return 	BOOL;}
 "false"	{ return 	BOOL;}
 "return"	{ return 	RETURN;}
-{digit}+	{ return  TYPE;}
-{digit}+\.{digit}+	{ return  TYPE;}
-{letter}	{ return  TYPE;}
+"START_VAR" { return START_VAR_DEC; }
+"END_VAR" { return END_VAR_DEC; }
+{digit}+	{ return  INT;}
+{digit}+\.{digit}+	{ return  FLOAT;}
+"'"{letter}|{digit}|{symbol}"'"	{ return  CHAR;}
+"\""({letter}|{digit}|{symbol})+"\""	{ return CAD;}
 {ident}+ { return  ID;}
 {space}+ {}
-
-
-{other} {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);}
+{endline} {line++;printf("\n");}
+. {printf("ERROR LÉXICO LÍNEA: %d\n", line);}
 %%
-
-/*********************************************************
-**
-** Fichero: MAIN.C
-** Función: Pruebas de FLEX para practicas Proc.Leng
-**
-*********************************************************/
-#include <stdio.h>
-#include <stdlib.h>
-extern FILE *yyin ;
-int yyparse(void) ;
-FILE *abrir_entrada( int argc, char *argv[] )
-{
-	FILE *f= NULL ;
-	if ( argc > 1 )
-	{
-		f= fopen(argv[1],"r");
-		if (f==NULL)
-		{
-			fprintf(stderr,"fichero ’%s’ no encontrado\n",argv[1]);
-			exit(1);
-		}
-		else
-			printf("leyendo fichero ’%s’.\n",argv[1]);
-	}
-	else
-		printf("leyendo entrada estándar.\n");
-
-	return f ;
-}
-/************************************************************/
-int main( int argc, char *argv[] )
-{
-	yyin= abrir_entrada(argc,argv) ;
-	return yyparse() ;
-}
-
