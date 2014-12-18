@@ -1,5 +1,5 @@
 %{	
-	#include "tabla.h"
+	
 	int linea = 1;
 %}
 

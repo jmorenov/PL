@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 extern FILE *yyin ;
+int yyparse(void);
 FILE *abrir_entrada( int argc, char *argv[] )
 {
 	FILE *f= NULL ;
@@ -31,14 +32,7 @@ FILE *abrir_entrada( int argc, char *argv[] )
 int main( int argc, char *argv[] )
 {
 	yyin= abrir_entrada(argc,argv) ;
-	int val;	
-	val = yylex();
-	while (val != 0)
-	{	printf ("%d ", val) ;
-		val= yylex() ;
-	}
-
-	exit (0);
+	return yyparse();
 }
 
 

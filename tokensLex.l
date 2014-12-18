@@ -1,12 +1,9 @@
 %{
-#include "tabla.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #define MAXLONBUFFER 200
-void yyerror( char * msg ) ;
 char buffer[MAXLONBUFFER];
-int line = 1;
 %}
 
 letter	[a-zA-Z]
@@ -86,6 +83,9 @@ symbol 	[^\"\""]
 "\""({letter}|{digit}|{symbol})+"\""	{ return CAD;}
 {ident}+ { return  ID;}
 {space}+ {}
-{endline} {line++;printf("\n");}
-. {printf("ERROR LÉXICO LÍNEA: %d\n", line);}
+{endline} {linea_actual++;printf("\n");}
+. {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);
+yyerror(buffer);
+}
+
 %%

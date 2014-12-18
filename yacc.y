@@ -13,7 +13,7 @@
 	La siguiente declaracion permite que ’yyerror’ se pueda invocar desde el
 	fuente de lex
 **/
-void yyerror( char * msg ) ;
+void yyerror( const char * msg ) ;
 /**
 	La siguiente variable se usará para conocer el numero de la línea
 	que se esta leyendo en cada momento. También es posible usar la variable
@@ -130,7 +130,7 @@ sentences : sentences sentence | sentence;
 
 sentence : block |
 sentence_assign |
-sentence_if-then-else |
+sentence_if_then_else |
 sentence_while |
 sentence_input |
 sentence_output |
@@ -141,7 +141,7 @@ sentence_list_start_cursor;
 
 sentence_assign : ID ASSIGN expr SEMICOLON;
 
-sentence_if-then-else : IF expr sentence | IF expr sentence ELSE sentence;
+sentence_if_then_else : IF expr sentence | IF expr sentence ELSE sentence;
 
 sentence_while : WHILE expr sentence;
 
@@ -215,7 +215,7 @@ se debe implementar la función yyerror. En este caso
 simplemente escribimos el mensaje de error en pantalla
 **/
 
-void yyerror( char *msg )
+void yyerror( const char *msg )
 {
 	fprintf(stderr,"[Linea %d]: %s\n", linea_actual, msg) ;
 }
