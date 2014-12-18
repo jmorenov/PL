@@ -41,47 +41,49 @@ byacc se encarga de asociar a cada uno un código
 **/
 
 
-%token PRINCIPAL
-%token PROCEDIMIENTO
-%token TIPO
-%token CONST	
-%token ASIG	
-%token MASMENOS
-%token OPUNARIO
-%token PARIZQ
-%token PARDER
-%token INIBLQ
-%token FINBLQ
-%token BEG
-%token END
-%token COMA
-%token PYC
-%token SI
-%token SINO	
-%token MIENTRAS
-%token HACER
-%token HASTA
-%token ENT
-%token SAL
-%token IDENT
-%token CORCHETEIZQ
-%token CORCHETEDER
-%token CADENA
-%token ANDLOG
-%token ORLOG
-%token OREXCL
-%token OPIG
-%token OPREL
-%token OPMUL
+%token MAIN
+%token IF
+%token ELSE
+%token DO
+%token UNTIL
 
-%left ORLOG
-%left ANDLOG
-%left OREXCL
-%left OPIG
-%left OPREL
-%left MASMENOS
-%left OPMUL
-%right OPUNARIO
+%left OP_BIN
+%right OP_LIST
+%left OP_LIST_START_CURSOR
+%right OP_UNIT
+
+%token OP_PM
+%token TYPE
+%token BEGIN_LIST
+%token END_LIST
+%token ASSIGN
+%token PL
+%token PR
+%token BEGIN_P
+%token END
+%token COMMA
+%token SEMICOLON
+%token INPUT
+%token OUTPUT
+%token START_VAR_DEC
+%token END_VAR_DEC
+%token LIST
+%token ID
+%token BOOL
+%token RETURN
+%token LIMIT_CHAR
+%token DIGIT
+%token LETTER
+%token SYMBOL
+%token MINUS
+%token POINT
+%token WHILE
+%token INT
+%token FLOAT
+%token CHAR
+%token CAD
+
+
 %%
 /**
 Sección de producciones que definen la gramática.
