@@ -89,103 +89,115 @@ byacc se encarga de asociar a cada uno un código
 Sección de producciones que definen la gramática.
 **/
 
-Programa : Cabecera_programa bloque;
-Cabecera_programa : PRINCIPAL PARIZQ PARDER;
-bloque :	INIBLQ Declar_de_variables_locales Declar_de_subprogs Sentencias FINBLQ 
-		| INIBLQ Declar_de_variables_locales Sentencias	FINBLQ
-		| INIBLQ Declar_de_subprogs Sentencias FINBLQ
-		| INIBLQ Sentencias FINBLQ
-		| INIBLQ FINBLQ
-		;
-Declar_de_subprogs : Declar_de_subprogs Declar_de_subprog 
-							| Declar_de_subprog;
-Declar_de_subprog : Cabecera_subprog bloque;
-Cabecera_subprog : 	PROCEDIMIENTO IDENT PARIZQ parametros PARDER 
-			| PROCEDIMIENTO IDENT PARIZQ PARDER
-			;
-parametros:	parametros COMA TIPO IDENT 
-		| TIPO IDENT
-		| error;
+/**
+ * Práctica 3: Definición del lenguaje: BBAAD
+ * Grupo 7
+ * Francisco Javier Moreno Vega
+ * Alberto Quesada Aranda
+ * 18/12/2014
+ */
 
-Declar_de_variables_locales : BEG Variables_locales END;
+/**
+ * Definiciones básicas.
+ */
 
-Variables_locales :	Variables_locales Cuerpo_declar_variables 
-			| Cuerpo_declar_variables
-			;
 
-Cuerpo_declar_variables : TIPO lista_nombres PYC | error;
+program : header_program block;
 
-lista_nombres:	lista_nombres COMA id_array
-		| id_array
-		| error;
+block : start_block local_var_dec sub_progs sentences end_block;
 
-id_array:	IDENT
-		| array;
+sub_progs : sub_progs sub_prog | ;
 
-array:	IDENT CORCHETEIZQ CONST CORCHETEDER
-	| IDENT CORCHETEIZQ CONST COMA CONST CORCHETEDER;
+sub_prog : header_subprogram block;
 
-Sentencias : Sentencias Sentencia | Sentencia;
+local_var_dec : START_VAR_DEC local_var END_VAR_DEC | ;
 
-Sentencia :	bloque
-		| sentencia_asignacion
-		| sentencia_if
-		| sentencia_while
-		| sentencia_entrada
-		| sentencia_salida
-		| sentencia_hacer_hasta
-		| llamada_procedimiento
-		| error;
+header_program : type MAIN;
 
-sentencia_asignacion : IDENT ASIG expresion PYC;
+start_block : BEGIN_P;
 
-sentencia_if :	SI PARIZQ expresion PARDER Sentencia 
-		| SI PARIZQ expresion PARDER Sentencia sentencia_else;
+end_block : END;
 
-sentencia_else : SINO Sentencia;
+local_var : local_var var_body | var_body;
 
-sentencia_while : MIENTRAS PARIZQ expresion PARDER Sentencia;
+var_body : type list_id SEMICOLON;
 
-sentencia_entrada : ENT lista_nombres PYC;
+header_subprogram : type ID PL parameters PR;
 
-sentencia_salida : SAL exp_cadenas PYC;
+parameters : parameters COMMA type ID | type ID | ;
 
-sentencia_hacer_hasta : HACER Sentencia HASTA expresion PYC;
+sentences : sentences sentence | sentence;
 
-llamada_procedimiento : IDENT PARIZQ expresiones PARDER PYC 
-			| IDENT PARIZQ PARDER PYC;
+sentence : block |
+sentence_assign |
+sentence_if-then-else |
+sentence_while |
+sentence_input |
+sentence_output |
+sentence_return |
+sentence_do_until |
+sentence_list_forward_back |
+sentence_list_start_cursor;
 
-expresiones : expresiones COMA expresion | expresion;
+sentence_assign : ID ASSIGN expr SEMICOLON;
 
-expresion :   PARIZQ expresion PARDER 
-			| OPUNARIO expresion
-			| expresion OPREL expresion
-			| expresion OPMUL expresion
-			| expresion ANDLOG expresion
-			| expresion ORLOG expresion
-			| expresion OPIG expresion
-			| expresion OREXCL expresion
-			| MASMENOS %prec OPUNARIO expresion
-			| expresion MASMENOS expresion
-			| id_posArray
-			| CONST
-			| agregado
-			| error;
+sentence_if-then-else : IF expr sentence | IF expr sentence ELSE sentence;
 
-exp_cadenas:	exp_cadenas COMA exp_cadena | exp_cadena;
+sentence_while : WHILE expr sentence;
 
-id_posArray: 	IDENT
-		| IDENT CORCHETEIZQ expresion CORCHETEDER 
-		| IDENT CORCHETEIZQ expresion COMA expresion CORCHETEDER;
+sentence_input : INPUT list_id SEMICOLON;
 
-exp_cadena: expresion | CADENA;
+sentence_output : OUTPUT list_expr_cad SEMICOLON;
 
-lista_constantes : lista_constantes coma_pyc CONST | CONST;
+sentence_return : RETURN expr SEMICOLON;
 
-agregado: CORCHETEIZQ lista_constantes CORCHETEDER;
+sentence_do_until : DO sentence UNTIL expr SEMICOLON;
 
-coma_pyc: COMA | PYC;
+sentence_list_forward_back : expr OP_LIST SEMICOLON;
 
+sentence_list_start_cursor : OP_LIST_START_CURSOR expr SEMICOLON;
+
+expr : PL expr PR |
+OP_UNIT expr |
+expr OP_BIN expr |
+ID |
+const |
+function_call | ;
+
+list_id : list_id COMMA ID | ID;
+
+list_expr : list_expr COMMA expr | expr;
+
+function_call : ID PL list_expr PR;
+
+type : TYPE | LIST TYPE;
+
+const : INT |
+FLOAT |
+LIMIT_CHAR CHAR LIMIT_CHAR |
+BOOL |
+const_list;
+
+const_list : list_of_int |
+list_of_float |
+list_of_char |
+list_of_bool;
+
+list_of_int : BEGIN_LIST list_int END_LIST;
+list_int : list_int COMMA INT | INT;
+
+list_of_float : BEGIN_LIST list_float END_LIST;
+list_float : list_float COMMA FLOAT | FLOAT;
+
+list_of_char : BEGIN_LIST list_char END_LIST;
+list_char : list_char COMMA LIMIT_CHAR CHAR LIMIT_CHAR | LIMIT_CHAR CHAR LIMIT_CHAR;
+
+list_of_bool : BEGIN_LIST list_bool END_LIST;
+list_bool : list_bool COMMA BOOL | BOOL;
+
+list_expr_cad : list_expr_cad COMMA expr_cad | expr_cad;
+
+expr_cad : expr | CAD;
 
 /** esto representa la cadena vacía **/ ;
 %%
