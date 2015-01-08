@@ -105,5 +105,3 @@ list_bool : list_bool COMMA BOOL | BOOL;
 list_expr_cad : list_expr_cad COMMA expr_cad | expr_cad;
 
 expr_cad : expr | CAD;
-
-

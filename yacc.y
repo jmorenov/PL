@@ -72,11 +72,6 @@ byacc se encarga de asociar a cada uno un código
 %token BOOL
 %token RETURN
 %token LIMIT_CHAR
-%token DIGIT
-%token LETTER
-%token SYMBOL
-%token MINUS
-%token POINT
 %token WHILE
 %token INT
 %token FLOAT
@@ -160,6 +155,7 @@ sentence_list_start_cursor : OP_LIST_START_CURSOR expr SEMICOLON;
 expr : PL expr PR |
 OP_UNIT expr |
 expr OP_BIN expr |
+expr OP_PM expr |
 ID |
 const |
 function_call | ;

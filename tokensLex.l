@@ -57,7 +57,6 @@ symbol 	[^\"\""]
 "<<"	{ return 	OP_LIST;}
 ">>"	{ return 	OP_LIST;}
 "$"	{ return 	OP_LIST_START_CURSOR;}
-"."	{ return 	POINT;}
 "'"	{ return 	LIMIT_CHAR;}
 "("	{ return 	PL;}
 ")"	{ return 	PR;}
