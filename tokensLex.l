@@ -7,7 +7,7 @@ char buffer[MAXLONBUFFER];
 %}
 
 letter	[a-zA-Z]
-ident	[a-zA-Z_]
+alphanum [a-zA-Z0-9_]
 digit	[0-9]
 space	[ \t]
 endline [\n]
@@ -25,7 +25,7 @@ symbol 	[^\"\""]
 "list of"	{ return 	LIST;}
 "["	{ return 	BEGIN_LIST;}
 "]"	{ return 	END_LIST;}
-"="	{ return 	ASSIGN;}
+"="	{ return 	ASSIGN;}	
 "-"	{ return 	OP_PM;}
 "+"	{ return 	OP_PM;}
 "*"	{ return 	OP_BIN;}
@@ -57,7 +57,6 @@ symbol 	[^\"\""]
 "<<"	{ return 	OP_LIST;}
 ">>"	{ return 	OP_LIST;}
 "$"	{ return 	OP_LIST_START_CURSOR;}
-"'"	{ return 	LIMIT_CHAR;}
 "("	{ return 	PL;}
 ")"	{ return 	PR;}
 "{"	{ return 	BEGIN_P;}
@@ -80,9 +79,9 @@ symbol 	[^\"\""]
 {digit}+\.{digit}+	{ return  FLOAT;}
 "'"{letter}|{digit}|{symbol}"'"	{ return  CHAR;}
 "\""({letter}|{digit}|{symbol})+"\""	{ return CAD;}
-{ident}+ { return  ID;}
+{letter}{alphanum}* { return  ID;}
 {space}+ {}
-{endline} {linea_actual++;printf("\n");}
+{endline} {linea_actual++;}
 . {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);
 yyerror(buffer);
 }

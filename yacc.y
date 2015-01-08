@@ -51,8 +51,8 @@ byacc se encarga de asociar a cada uno un código
 %right OP_LIST
 %left OP_LIST_START_CURSOR
 %right OP_UNIT
+%left OP_PM
 
-%token OP_PM
 %token TYPE
 %token BEGIN_LIST
 %token END_LIST
@@ -71,7 +71,6 @@ byacc se encarga de asociar a cada uno un código
 %token ID
 %token BOOL
 %token RETURN
-%token LIMIT_CHAR
 %token WHILE
 %token INT
 %token FLOAT
@@ -140,7 +139,7 @@ sentence_if_then_else : IF expr sentence | IF expr sentence ELSE sentence;
 
 sentence_while : WHILE expr sentence;
 
-sentence_input : INPUT list_id SEMICOLON;
+sentence_input : INPUT CAD COMMA list_id SEMICOLON | INPUT list_id SEMICOLON;
 
 sentence_output : OUTPUT list_expr_cad SEMICOLON;
 
@@ -156,21 +155,21 @@ expr : PL expr PR |
 OP_UNIT expr |
 expr OP_BIN expr |
 expr OP_PM expr |
-ID |
 const |
-function_call | ;
+function_call |
+ID;
 
 list_id : list_id COMMA ID | ID;
 
 list_expr : list_expr COMMA expr | expr;
 
-function_call : ID PL list_expr PR;
+function_call : ID PL list_expr PR | ID PL PR;
 
 type : TYPE | LIST TYPE;
 
 const : INT |
 FLOAT |
-LIMIT_CHAR CHAR LIMIT_CHAR |
+CHAR |
 BOOL |
 const_list;
 
@@ -186,7 +185,7 @@ list_of_float : BEGIN_LIST list_float END_LIST;
 list_float : list_float COMMA FLOAT | FLOAT;
 
 list_of_char : BEGIN_LIST list_char END_LIST;
-list_char : list_char COMMA LIMIT_CHAR CHAR LIMIT_CHAR | LIMIT_CHAR CHAR LIMIT_CHAR;
+list_char : list_char COMMA CHAR | CHAR;
 
 list_of_bool : BEGIN_LIST list_bool END_LIST;
 list_bool : list_bool COMMA BOOL | BOOL;
@@ -194,8 +193,6 @@ list_bool : list_bool COMMA BOOL | BOOL;
 list_expr_cad : list_expr_cad COMMA expr_cad | expr_cad;
 
 expr_cad : expr | CAD;
-
-/** esto representa la cadena vacía **/ ;
 %%
 /** aqui incluimos el fichero generado por el ’lex’
 *** que implementa la función ’yylex’
