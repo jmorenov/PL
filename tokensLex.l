@@ -11,7 +11,7 @@ alphanum [a-zA-Z0-9_]
 digit	[0-9]
 space	[ \t]
 endline [\n]
-symbol 	[^\"\""]
+symbol 	[^\"\']
 
 %option noyywrap
 
@@ -77,7 +77,7 @@ symbol 	[^\"\""]
 "END_VAR" { return END_VAR_DEC; }
 {digit}+	{ return  INT;}
 {digit}+\.{digit}+	{ return  FLOAT;}
-"'"{letter}|{digit}|{symbol}"'"	{ return  CHAR;}
+"\'"{letter}|{digit}|{symbol}"\'"	{ return  CHAR;}
 "\""({letter}|{digit}|{symbol})+"\""	{ return CAD;}
 {letter}{alphanum}* { return  ID;}
 {space}+ {}
