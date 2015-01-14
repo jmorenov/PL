@@ -1,0 +1,19 @@
+main
+{
+	
+	ST··ART_VAR
+	
+	int a, b = 0;
+	END_VAR
+
+	int F() {
+		a = 1··;
+		if (a == 1)
+			b = 2;
+
+		retu··rn b;
+	}	
+
+	output a;
+
+}
