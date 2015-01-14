@@ -62,7 +62,7 @@ typedef enum {
 typedef struct {
     tipoEntrada entrada ;
     char *nombre;
-    dtipo tipoDato;
+    dtype tipoDato;
     unsigned int parametros;
     unsigned int dimensiones;
     int TamDimen1;
@@ -77,7 +77,7 @@ entradaTS TS[MAX_TS] ;
 typedef struct {
     int    attrib ;
     char  *lexem ;
-    dtipo  type ;
+    dtype  type ;
 } atributos ;
 
 
