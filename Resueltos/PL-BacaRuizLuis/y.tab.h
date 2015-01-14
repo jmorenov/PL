@@ -1,21 +1,19 @@
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
-/* A Bison parser, made by GNU Bison 2.4.1.  */
+/* Bison interface for Yacc-like parsers in C
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
-   
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -28,58 +26,66 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
 
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     MAIN = 258,
-     MAS_MENOS = 259,
-     ENTERO = 260,
-     UNARIO = 261,
-     CASE = 262,
-     PARIZQ = 263,
-     PARDER = 264,
-     ASIG = 265,
-     IF = 266,
-     ELSE = 267,
-     WHILE = 268,
-     INPUT = 269,
-     OUTPUT = 270,
-     F_VAR_LOCAL = 271,
-     I_VAR_LOCAL = 272,
-     FIN_BLOQUE = 273,
-     INI_BLOQUE = 274,
-     TIPO_DATO = 275,
-     RETURN = 276,
-     SWITCH = 277,
-     BOOL = 278,
-     I_CONS_PILA = 279,
-     F_CONS_PILA = 280,
-     FIN_SENTENC = 281,
-     CADENA = 282,
-     REAL = 283,
-     NOMBRE = 284,
-     CHAR = 285,
-     BREAK = 286,
-     COMA = 287,
-     DOS_PUNTOS = 288,
-     OR_LOGICO = 289,
-     AND_LOGICO = 290,
-     OP_IGUALDAD = 291,
-     OP_RELACIONAL = 292,
-     MULTIPLICAT = 293,
-     INCREMENTO = 294,
-     OR_BIT = 295,
-     REDIRECT_E = 296,
-     REDIRECT_S = 297
-   };
+  enum yytokentype
+  {
+    MAIN = 258,
+    MAS_MENOS = 259,
+    ENTERO = 260,
+    UNARIO = 261,
+    CASE = 262,
+    PARIZQ = 263,
+    PARDER = 264,
+    ASIG = 265,
+    IF = 266,
+    ELSE = 267,
+    WHILE = 268,
+    INPUT = 269,
+    OUTPUT = 270,
+    F_VAR_LOCAL = 271,
+    I_VAR_LOCAL = 272,
+    FIN_BLOQUE = 273,
+    INI_BLOQUE = 274,
+    TIPO_DATO = 275,
+    RETURN = 276,
+    SWITCH = 277,
+    BOOL = 278,
+    I_CONS_PILA = 279,
+    F_CONS_PILA = 280,
+    FIN_SENTENC = 281,
+    CADENA = 282,
+    REAL = 283,
+    NOMBRE = 284,
+    CHAR = 285,
+    BREAK = 286,
+    COMA = 287,
+    DOS_PUNTOS = 288,
+    OR_LOGICO = 289,
+    AND_LOGICO = 290,
+    OP_IGUALDAD = 291,
+    OP_RELACIONAL = 292,
+    MULTIPLICAT = 293,
+    INCREMENTO = 294,
+    OR_BIT = 295,
+    REDIRECT_E = 296,
+    REDIRECT_S = 297
+  };
 #endif
 /* Tokens.  */
 #define MAIN 258
@@ -123,16 +129,16 @@
 #define REDIRECT_E 296
 #define REDIRECT_S 297
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+
 extern YYSTYPE yylval;
 
+int yyparse (void);
 
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */

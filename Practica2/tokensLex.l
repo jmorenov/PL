@@ -10,7 +10,7 @@ int line = 1;
 %}
 
 letter	[a-zA-Z]
-ident	[a-zA-Z_]
+alphanum [a-zA-Z0-9_]
 digit	[0-9]
 space	[ \t]
 endline [\n]
@@ -28,7 +28,7 @@ symbol 	[^\"\""]
 "list of"	{ return 	LIST;}
 "["	{ return 	BEGIN_LIST;}
 "]"	{ return 	END_LIST;}
-"="	{ return 	ASSIGN;}
+"="	{ return 	ASSIGN;}	
 "-"	{ return 	OP_PM;}
 "+"	{ return 	OP_PM;}
 "*"	{ return 	OP_BIN;}
@@ -60,8 +60,6 @@ symbol 	[^\"\""]
 "<<"	{ return 	OP_LIST;}
 ">>"	{ return 	OP_LIST;}
 "$"	{ return 	OP_LIST_START_CURSOR;}
-"."	{ return 	POINT;}
-"'"	{ return 	LIMIT_CHAR;}
 "("	{ return 	PL;}
 ")"	{ return 	PR;}
 "{"	{ return 	BEGIN_P;}
@@ -82,10 +80,10 @@ symbol 	[^\"\""]
 "END_VAR" { return END_VAR_DEC; }
 {digit}+	{ return  INT;}
 {digit}+\.{digit}+	{ return  FLOAT;}
-"'"{letter}|{digit}|{symbol}"'"	{ return  CHAR;}
-"\""({letter}|{digit}|{symbol})+"\""	{ return CAD;}
-{ident}+ { return  ID;}
+"\'"{symbol}"\'"	{ return  CHAR;}
+"\""{symbol}+"\""	{ return CAD;}
+{letter}{alphanum}* { return  ID;}
 {space}+ {}
-{endline} {line++;printf("\n");}
+{endline} {line++;printf("\n [Line %d]: ", line);}
 . {printf("ERROR LÉXICO LÍNEA: %d\n", line);}
 %%

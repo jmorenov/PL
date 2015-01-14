@@ -32,7 +32,7 @@ procedimiento funcionA (entero a1,  real  a2, caracter a3)
 		sino
 			x1= 3.1 ;
 	}
-	functionC (true,a 10);;
+	functionC (true, 10);;
 	xf/10.0;
 			
 	mientras (x2<10.0)

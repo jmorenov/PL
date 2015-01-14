@@ -98,8 +98,7 @@ Sección de producciones que definen la gramática.
 
 program : header_program block;
 
-block : start_block local_var_dec sub_progs sentences end_block |
-				start_block local_var_dec sub_progs end_block;
+block : start_block local_var_dec sub_progs sentences end_block
 
 sub_progs : sub_progs sub_prog | ;
 

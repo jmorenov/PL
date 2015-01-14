@@ -22,7 +22,7 @@ Gramática
 
     4 DECLAR_DE_VARIABLES_LOCALES: I_VAR_LOCAL VARIABLES_LOCALES F_VAR_LOCAL
 
-    5 DECLAR_DE_SUBPROGS: /* vacío */
+    5 DECLAR_DE_SUBPROGS: %empty
     6                   | DECLAR_DE_SUBPROGS DECLAR_SUBPROG
 
     7 SENTENCIAS: SENTENCIAS SENTENCIA
@@ -61,7 +61,7 @@ Gramática
    29 LISTA_EXPRESIONES_O_SALIDAS: LISTA_EXPRESIONES_O_SALIDAS COMA EXPRESION_CADENA
    30                            | EXPRESION_CADENA
 
-   31 EXPRESION_CADENA: /* vacío */
+   31 EXPRESION_CADENA: %empty
    32                 | CADENA
 
    33 SENTENCIA_RETURN: RETURN EXPRESION FIN_SENTENC
@@ -76,7 +76,7 @@ Gramática
    39          | VARIABLE OR_LOGICO VARIABLE
    40          | VARIABLE AND_LOGICO VARIABLE
 
-   41 BLOQUE_SWITCH: /* vacío */
+   41 BLOQUE_SWITCH: %empty
    42              | CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH
 
    43 CABECERA_SUBPROG: TIPO_DATO VARIABLE PARIZQ PARAM PARDER
@@ -124,7 +124,7 @@ Gramática
 
    77 CONST_PILA_BOOLEANO: I_CONS_PILA LISTA_CONST_BOOLEANO F_CONS_PILA
 
-   78 LISTA_CONST_BOOLEANO: /* vacío */
+   78 LISTA_CONST_BOOLEANO: %empty
    79                     | LISTA_CONST_BOOLEANO
    80                     | BOOL
 
@@ -135,7 +135,7 @@ Gramática
 
    84 FUNCION: VARIABLE PARIZQ LISTA_EXPRESION PARDER
 
-   85 LISTA_EXPRESION: /* vacío */
+   85 LISTA_EXPRESION: %empty
    86                | LISTA_EXPRESION COMA EXPRESION
    87                | EXPRESION
 
@@ -272,7 +272,7 @@ LISTA_EXPRESION (81)
     en la izquierda: 85 86 87, en la derecha: 84 86
 
 
-estado 0
+State 0
 
     0 $accept: . PROGRAMA $end
     1 PROGRAMA: . MAIN BLOQUE
@@ -282,7 +282,7 @@ estado 0
     PROGRAMA  ir al estado 2
 
 
-estado 1
+State 1
 
     1 PROGRAMA: MAIN . BLOQUE
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
@@ -292,14 +292,14 @@ estado 1
     BLOQUE  ir al estado 4
 
 
-estado 2
+State 2
 
     0 $accept: PROGRAMA . $end
 
     $end  desplazar e ir al estado 5
 
 
-estado 3
+State 3
 
     2 BLOQUE: INI_BLOQUE . DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     4 DECLAR_DE_VARIABLES_LOCALES: . I_VAR_LOCAL VARIABLES_LOCALES F_VAR_LOCAL
@@ -309,21 +309,21 @@ estado 3
     DECLAR_DE_VARIABLES_LOCALES  ir al estado 7
 
 
-estado 4
+State 4
 
     1 PROGRAMA: MAIN BLOQUE .
 
     $default  reduce usando la regla 1 (PROGRAMA)
 
 
-estado 5
+State 5
 
     0 $accept: PROGRAMA $end .
 
     $default  aceptar
 
 
-estado 6
+State 6
 
     4 DECLAR_DE_VARIABLES_LOCALES: I_VAR_LOCAL . VARIABLES_LOCALES F_VAR_LOCAL
    17 VARIABLES_LOCALES: . VARIABLES_LOCALES CUERPO_DECLAR_VARIABLES
@@ -336,10 +336,10 @@ estado 6
     CUERPO_DECLAR_VARIABLES  ir al estado 10
 
 
-estado 7
+State 7
 
     2 BLOQUE: INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES . DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
-    5 DECLAR_DE_SUBPROGS: .
+    5 DECLAR_DE_SUBPROGS: . %empty
     6                   | . DECLAR_DE_SUBPROGS DECLAR_SUBPROG
 
     $default  reduce usando la regla 5 (DECLAR_DE_SUBPROGS)
@@ -347,7 +347,7 @@ estado 7
     DECLAR_DE_SUBPROGS  ir al estado 11
 
 
-estado 8
+State 8
 
     3 VARIABLE: . NOMBRE
    26 LISTA_VARIABLES: . LISTA_VARIABLES COMA VARIABLE
@@ -360,7 +360,7 @@ estado 8
     LISTA_VARIABLES  ir al estado 14
 
 
-estado 9
+State 9
 
     4 DECLAR_DE_VARIABLES_LOCALES: I_VAR_LOCAL VARIABLES_LOCALES . F_VAR_LOCAL
    17 VARIABLES_LOCALES: VARIABLES_LOCALES . CUERPO_DECLAR_VARIABLES
@@ -372,14 +372,14 @@ estado 9
     CUERPO_DECLAR_VARIABLES  ir al estado 16
 
 
-estado 10
+State 10
 
    18 VARIABLES_LOCALES: CUERPO_DECLAR_VARIABLES .
 
     $default  reduce usando la regla 18 (VARIABLES_LOCALES)
 
 
-estado 11
+State 11
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     2       | INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS . SENTENCIAS FIN_BLOQUE
@@ -431,21 +431,21 @@ estado 11
     CABECERA_SUBPROG      ir al estado 36
 
 
-estado 12
+State 12
 
     3 VARIABLE: NOMBRE .
 
     $default  reduce usando la regla 3 (VARIABLE)
 
 
-estado 13
+State 13
 
    27 LISTA_VARIABLES: VARIABLE .
 
     $default  reduce usando la regla 27 (LISTA_VARIABLES)
 
 
-estado 14
+State 14
 
    26 LISTA_VARIABLES: LISTA_VARIABLES . COMA VARIABLE
    35 CUERPO_DECLAR_VARIABLES: TIPO_DATO LISTA_VARIABLES . FIN_SENTENC
@@ -454,21 +454,21 @@ estado 14
     COMA         desplazar e ir al estado 38
 
 
-estado 15
+State 15
 
     4 DECLAR_DE_VARIABLES_LOCALES: I_VAR_LOCAL VARIABLES_LOCALES F_VAR_LOCAL .
 
     $default  reduce usando la regla 4 (DECLAR_DE_VARIABLES_LOCALES)
 
 
-estado 16
+State 16
 
    17 VARIABLES_LOCALES: VARIABLES_LOCALES CUERPO_DECLAR_VARIABLES .
 
     $default  reduce usando la regla 17 (VARIABLES_LOCALES)
 
 
-estado 17
+State 17
 
    21 SENTENCIA_IF: IF . PARIZQ CONDICION PARDER SENTENCIA
    22             | IF . PARIZQ CONDICION PARDER SENTENCIA SENTENCIA_ELSE
@@ -476,14 +476,14 @@ estado 17
     PARIZQ  desplazar e ir al estado 39
 
 
-estado 18
+State 18
 
    24 SENTENCIA_WHILE: WHILE . PARIZQ CONDICION PARDER SENTENCIA
 
     PARIZQ  desplazar e ir al estado 40
 
 
-estado 19
+State 19
 
     3 VARIABLE: . NOMBRE
    25 SENTENCIA_ENTRADA: INPUT . LISTA_VARIABLES
@@ -496,12 +496,12 @@ estado 19
     LISTA_VARIABLES  ir al estado 41
 
 
-estado 20
+State 20
 
    28 SENTENCIA_SALIDA: OUTPUT . LISTA_EXPRESIONES_O_SALIDAS
    29 LISTA_EXPRESIONES_O_SALIDAS: . LISTA_EXPRESIONES_O_SALIDAS COMA EXPRESION_CADENA
    30                            | . EXPRESION_CADENA
-   31 EXPRESION_CADENA: .  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK, COMA]
+   31 EXPRESION_CADENA: . %empty  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK, COMA]
    32                 | . CADENA
 
     CADENA  desplazar e ir al estado 42
@@ -512,7 +512,7 @@ estado 20
     EXPRESION_CADENA             ir al estado 44
 
 
-estado 21
+State 21
 
     3 VARIABLE: . NOMBRE
    43 CABECERA_SUBPROG: TIPO_DATO . VARIABLE PARIZQ PARAM PARDER
@@ -522,7 +522,7 @@ estado 21
     VARIABLE  ir al estado 45
 
 
-estado 22
+State 22
 
     3 VARIABLE: . NOMBRE
    33 SENTENCIA_RETURN: RETURN . EXPRESION FIN_SENTENC
@@ -578,28 +578,28 @@ estado 22
     FUNCION              ir al estado 62
 
 
-estado 23
+State 23
 
    34 SENTENCIA_SWITCH: SWITCH . PARIZQ VARIABLE PARDER INI_BLOQUE BLOQUE_SWITCH FIN_BLOQUE
 
     PARIZQ  desplazar e ir al estado 63
 
 
-estado 24
+State 24
 
     9 SENTENCIA: BLOQUE .
 
     $default  reduce usando la regla 9 (SENTENCIA)
 
 
-estado 25
+State 25
 
    20 SENTENCIA_ASIGNACION: VARIABLE . ASIG EXPRESION FIN_SENTENC
 
     ASIG  desplazar e ir al estado 64
 
 
-estado 26
+State 26
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     2       | INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS . FIN_BLOQUE
@@ -644,70 +644,70 @@ estado 26
     SENTENCIA_SWITCH      ir al estado 35
 
 
-estado 27
+State 27
 
     8 SENTENCIAS: SENTENCIA .
 
     $default  reduce usando la regla 8 (SENTENCIAS)
 
 
-estado 28
+State 28
 
     6 DECLAR_DE_SUBPROGS: DECLAR_DE_SUBPROGS DECLAR_SUBPROG .
 
     $default  reduce usando la regla 6 (DECLAR_DE_SUBPROGS)
 
 
-estado 29
+State 29
 
    10 SENTENCIA: SENTENCIA_ASIGNACION .
 
     $default  reduce usando la regla 10 (SENTENCIA)
 
 
-estado 30
+State 30
 
    11 SENTENCIA: SENTENCIA_IF .
 
     $default  reduce usando la regla 11 (SENTENCIA)
 
 
-estado 31
+State 31
 
    12 SENTENCIA: SENTENCIA_WHILE .
 
     $default  reduce usando la regla 12 (SENTENCIA)
 
 
-estado 32
+State 32
 
    13 SENTENCIA: SENTENCIA_ENTRADA .
 
     $default  reduce usando la regla 13 (SENTENCIA)
 
 
-estado 33
+State 33
 
    14 SENTENCIA: SENTENCIA_SALIDA .
 
     $default  reduce usando la regla 14 (SENTENCIA)
 
 
-estado 34
+State 34
 
    15 SENTENCIA: SENTENCIA_RETURN .
 
     $default  reduce usando la regla 15 (SENTENCIA)
 
 
-estado 35
+State 35
 
    16 SENTENCIA: SENTENCIA_SWITCH .
 
     $default  reduce usando la regla 16 (SENTENCIA)
 
 
-estado 36
+State 36
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
    19 DECLAR_SUBPROG: CABECERA_SUBPROG . BLOQUE
@@ -717,14 +717,14 @@ estado 36
     BLOQUE  ir al estado 67
 
 
-estado 37
+State 37
 
    35 CUERPO_DECLAR_VARIABLES: TIPO_DATO LISTA_VARIABLES FIN_SENTENC .
 
     $default  reduce usando la regla 35 (CUERPO_DECLAR_VARIABLES)
 
 
-estado 38
+State 38
 
     3 VARIABLE: . NOMBRE
    26 LISTA_VARIABLES: LISTA_VARIABLES COMA . VARIABLE
@@ -734,7 +734,7 @@ estado 38
     VARIABLE  ir al estado 68
 
 
-estado 39
+State 39
 
     3 VARIABLE: . NOMBRE
    21 SENTENCIA_IF: IF PARIZQ . CONDICION PARDER SENTENCIA
@@ -753,7 +753,7 @@ estado 39
     CONDICION  ir al estado 72
 
 
-estado 40
+State 40
 
     3 VARIABLE: . NOMBRE
    24 SENTENCIA_WHILE: WHILE PARIZQ . CONDICION PARDER SENTENCIA
@@ -771,7 +771,7 @@ estado 40
     CONDICION  ir al estado 73
 
 
-estado 41
+State 41
 
    25 SENTENCIA_ENTRADA: INPUT LISTA_VARIABLES .  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK]
    26 LISTA_VARIABLES: LISTA_VARIABLES . COMA VARIABLE
@@ -781,14 +781,14 @@ estado 41
     $default  reduce usando la regla 25 (SENTENCIA_ENTRADA)
 
 
-estado 42
+State 42
 
    32 EXPRESION_CADENA: CADENA .
 
     $default  reduce usando la regla 32 (EXPRESION_CADENA)
 
 
-estado 43
+State 43
 
    28 SENTENCIA_SALIDA: OUTPUT LISTA_EXPRESIONES_O_SALIDAS .  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK]
    29 LISTA_EXPRESIONES_O_SALIDAS: LISTA_EXPRESIONES_O_SALIDAS . COMA EXPRESION_CADENA
@@ -798,21 +798,21 @@ estado 43
     $default  reduce usando la regla 28 (SENTENCIA_SALIDA)
 
 
-estado 44
+State 44
 
    30 LISTA_EXPRESIONES_O_SALIDAS: EXPRESION_CADENA .
 
     $default  reduce usando la regla 30 (LISTA_EXPRESIONES_O_SALIDAS)
 
 
-estado 45
+State 45
 
    43 CABECERA_SUBPROG: TIPO_DATO VARIABLE . PARIZQ PARAM PARDER
 
     PARIZQ  desplazar e ir al estado 75
 
 
-estado 46
+State 46
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -868,14 +868,14 @@ estado 46
     FUNCION              ir al estado 62
 
 
-estado 47
+State 47
 
    62 CONSTANTE: ENTERO .
 
     $default  reduce usando la regla 62 (CONSTANTE)
 
 
-estado 48
+State 48
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -931,7 +931,7 @@ estado 48
     FUNCION              ir al estado 62
 
 
-estado 49
+State 49
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -987,14 +987,14 @@ estado 49
     FUNCION              ir al estado 62
 
 
-estado 50
+State 50
 
    64 CONSTANTE: BOOL .
 
     $default  reduce usando la regla 64 (CONSTANTE)
 
 
-estado 51
+State 51
 
    71 CONST_PILA_ENTERO: I_CONS_PILA . LISTA_CONST_ENTERO F_CONS_PILA
    72 LISTA_CONST_ENTERO: . LISTA_CONST_ENTERO COMA ENTERO
@@ -1003,7 +1003,7 @@ estado 51
    75 LISTA_CONST_REAL: . LISTA_CONST_REAL COMA REAL
    76                 | . REAL
    77 CONST_PILA_BOOLEANO: I_CONS_PILA . LISTA_CONST_BOOLEANO F_CONS_PILA
-   78 LISTA_CONST_BOOLEANO: .  [F_CONS_PILA]
+   78 LISTA_CONST_BOOLEANO: . %empty  [F_CONS_PILA]
    79                     | . LISTA_CONST_BOOLEANO
    80                     | . BOOL
    81 CONST_PILA_CARACTER: I_CONS_PILA . LISTA_CONST_CARACTER F_CONS_PILA
@@ -1023,21 +1023,21 @@ estado 51
     LISTA_CONST_CARACTER  ir al estado 86
 
 
-estado 52
+State 52
 
    63 CONSTANTE: REAL .
 
     $default  reduce usando la regla 63 (CONSTANTE)
 
 
-estado 53
+State 53
 
    65 CONSTANTE: CHAR .
 
     $default  reduce usando la regla 65 (CONSTANTE)
 
 
-estado 54
+State 54
 
    48 EXPRESION: VARIABLE .  [MAS_MENOS, PARDER, FIN_SENTENC, COMA, DOS_PUNTOS, OR_LOGICO, AND_LOGICO, OP_IGUALDAD, OP_RELACIONAL, MULTIPLICAT, INCREMENTO, OR_BIT, REDIRECT_E, REDIRECT_S]
    84 FUNCION: VARIABLE . PARIZQ LISTA_EXPRESION PARDER
@@ -1047,7 +1047,7 @@ estado 54
     $default  reduce usando la regla 48 (EXPRESION)
 
 
-estado 55
+State 55
 
    33 SENTENCIA_RETURN: RETURN EXPRESION . FIN_SENTENC
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
@@ -1074,56 +1074,56 @@ estado 55
     REDIRECT_S     desplazar e ir al estado 98
 
 
-estado 56
+State 56
 
    49 EXPRESION: CONSTANTE .
 
     $default  reduce usando la regla 49 (EXPRESION)
 
 
-estado 57
+State 57
 
    66 CONSTANTE: CONST_PILA .
 
     $default  reduce usando la regla 66 (CONSTANTE)
 
 
-estado 58
+State 58
 
    67 CONST_PILA: CONST_PILA_ENTERO .
 
     $default  reduce usando la regla 67 (CONST_PILA)
 
 
-estado 59
+State 59
 
    68 CONST_PILA: CONST_PILA_REAL .
 
     $default  reduce usando la regla 68 (CONST_PILA)
 
 
-estado 60
+State 60
 
    69 CONST_PILA: CONST_PILA_BOOLEANO .
 
     $default  reduce usando la regla 69 (CONST_PILA)
 
 
-estado 61
+State 61
 
    70 CONST_PILA: CONST_PILA_CARACTER .
 
     $default  reduce usando la regla 70 (CONST_PILA)
 
 
-estado 62
+State 62
 
    50 EXPRESION: FUNCION .
 
     $default  reduce usando la regla 50 (EXPRESION)
 
 
-estado 63
+State 63
 
     3 VARIABLE: . NOMBRE
    34 SENTENCIA_SWITCH: SWITCH PARIZQ . VARIABLE PARDER INI_BLOQUE BLOQUE_SWITCH FIN_BLOQUE
@@ -1133,7 +1133,7 @@ estado 63
     VARIABLE  ir al estado 99
 
 
-estado 64
+State 64
 
     3 VARIABLE: . NOMBRE
    20 SENTENCIA_ASIGNACION: VARIABLE ASIG . EXPRESION FIN_SENTENC
@@ -1189,35 +1189,35 @@ estado 64
     FUNCION              ir al estado 62
 
 
-estado 65
+State 65
 
     2 BLOQUE: INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE .
 
     $default  reduce usando la regla 2 (BLOQUE)
 
 
-estado 66
+State 66
 
     7 SENTENCIAS: SENTENCIAS SENTENCIA .
 
     $default  reduce usando la regla 7 (SENTENCIAS)
 
 
-estado 67
+State 67
 
    19 DECLAR_SUBPROG: CABECERA_SUBPROG BLOQUE .
 
     $default  reduce usando la regla 19 (DECLAR_SUBPROG)
 
 
-estado 68
+State 68
 
    26 LISTA_VARIABLES: LISTA_VARIABLES COMA VARIABLE .
 
     $default  reduce usando la regla 26 (LISTA_VARIABLES)
 
 
-estado 69
+State 69
 
     3 VARIABLE: . NOMBRE
    37 CONDICION: OR_LOGICO . VARIABLE
@@ -1227,7 +1227,7 @@ estado 69
     VARIABLE  ir al estado 101
 
 
-estado 70
+State 70
 
     3 VARIABLE: . NOMBRE
    38 CONDICION: AND_LOGICO . VARIABLE
@@ -1237,7 +1237,7 @@ estado 70
     VARIABLE  ir al estado 102
 
 
-estado 71
+State 71
 
    36 CONDICION: VARIABLE . OP_IGUALDAD VARIABLE
    39          | VARIABLE . OR_LOGICO VARIABLE
@@ -1248,7 +1248,7 @@ estado 71
     OP_IGUALDAD  desplazar e ir al estado 105
 
 
-estado 72
+State 72
 
    21 SENTENCIA_IF: IF PARIZQ CONDICION . PARDER SENTENCIA
    22             | IF PARIZQ CONDICION . PARDER SENTENCIA SENTENCIA_ELSE
@@ -1256,17 +1256,17 @@ estado 72
     PARDER  desplazar e ir al estado 106
 
 
-estado 73
+State 73
 
    24 SENTENCIA_WHILE: WHILE PARIZQ CONDICION . PARDER SENTENCIA
 
     PARDER  desplazar e ir al estado 107
 
 
-estado 74
+State 74
 
    29 LISTA_EXPRESIONES_O_SALIDAS: LISTA_EXPRESIONES_O_SALIDAS COMA . EXPRESION_CADENA
-   31 EXPRESION_CADENA: .  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK, COMA]
+   31 EXPRESION_CADENA: . %empty  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK, COMA]
    32                 | . CADENA
 
     CADENA  desplazar e ir al estado 42
@@ -1276,7 +1276,7 @@ estado 74
     EXPRESION_CADENA  ir al estado 108
 
 
-estado 75
+State 75
 
    43 CABECERA_SUBPROG: TIPO_DATO VARIABLE PARIZQ . PARAM PARDER
    44 PARAM: . PARAM COMA TIPO_DATO VARIABLE
@@ -1287,7 +1287,7 @@ estado 75
     PARAM  ir al estado 110
 
 
-estado 76
+State 76
 
    51 EXPRESION: MAS_MENOS EXPRESION .  [MAS_MENOS, PARDER, FIN_SENTENC, COMA, DOS_PUNTOS, OR_LOGICO, AND_LOGICO, OP_IGUALDAD, OP_RELACIONAL, MULTIPLICAT, INCREMENTO, OR_BIT, REDIRECT_E, REDIRECT_S]
    52          | EXPRESION . MAS_MENOS EXPRESION
@@ -1325,7 +1325,7 @@ estado 76
     $default       reduce usando la regla 51 (EXPRESION)
 
 
-estado 77
+State 77
 
    47 EXPRESION: UNARIO EXPRESION .  [MAS_MENOS, PARDER, FIN_SENTENC, COMA, DOS_PUNTOS, OR_LOGICO, AND_LOGICO, OP_IGUALDAD, OP_RELACIONAL, MULTIPLICAT, INCREMENTO, OR_BIT, REDIRECT_E, REDIRECT_S]
    52          | EXPRESION . MAS_MENOS EXPRESION
@@ -1363,7 +1363,7 @@ estado 77
     $default       reduce usando la regla 47 (EXPRESION)
 
 
-estado 78
+State 78
 
    46 EXPRESION: PARIZQ EXPRESION . PARDER
    52          | EXPRESION . MAS_MENOS EXPRESION
@@ -1390,35 +1390,35 @@ estado 78
     REDIRECT_S     desplazar e ir al estado 98
 
 
-estado 79
+State 79
 
    73 LISTA_CONST_ENTERO: ENTERO .
 
     $default  reduce usando la regla 73 (LISTA_CONST_ENTERO)
 
 
-estado 80
+State 80
 
    80 LISTA_CONST_BOOLEANO: BOOL .
 
     $default  reduce usando la regla 80 (LISTA_CONST_BOOLEANO)
 
 
-estado 81
+State 81
 
    76 LISTA_CONST_REAL: REAL .
 
     $default  reduce usando la regla 76 (LISTA_CONST_REAL)
 
 
-estado 82
+State 82
 
    83 LISTA_CONST_CARACTER: CHAR .
 
     $default  reduce usando la regla 83 (LISTA_CONST_CARACTER)
 
 
-estado 83
+State 83
 
    71 CONST_PILA_ENTERO: I_CONS_PILA LISTA_CONST_ENTERO . F_CONS_PILA
    72 LISTA_CONST_ENTERO: LISTA_CONST_ENTERO . COMA ENTERO
@@ -1427,7 +1427,7 @@ estado 83
     COMA         desplazar e ir al estado 113
 
 
-estado 84
+State 84
 
    74 CONST_PILA_REAL: I_CONS_PILA LISTA_CONST_REAL . F_CONS_PILA
    75 LISTA_CONST_REAL: LISTA_CONST_REAL . COMA REAL
@@ -1436,7 +1436,7 @@ estado 84
     COMA         desplazar e ir al estado 115
 
 
-estado 85
+State 85
 
    77 CONST_PILA_BOOLEANO: I_CONS_PILA LISTA_CONST_BOOLEANO . F_CONS_PILA
    79 LISTA_CONST_BOOLEANO: LISTA_CONST_BOOLEANO .  [F_CONS_PILA]
@@ -1446,7 +1446,7 @@ estado 85
     F_CONS_PILA  [reduce usando la regla 79 (LISTA_CONST_BOOLEANO)]
 
 
-estado 86
+State 86
 
    81 CONST_PILA_CARACTER: I_CONS_PILA LISTA_CONST_CARACTER . F_CONS_PILA
    82 LISTA_CONST_CARACTER: LISTA_CONST_CARACTER . CHAR
@@ -1455,7 +1455,7 @@ estado 86
     CHAR         desplazar e ir al estado 118
 
 
-estado 87
+State 87
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -1489,7 +1489,7 @@ estado 87
    81 CONST_PILA_CARACTER: . I_CONS_PILA LISTA_CONST_CARACTER F_CONS_PILA
    84 FUNCION: . VARIABLE PARIZQ LISTA_EXPRESION PARDER
    84        | VARIABLE PARIZQ . LISTA_EXPRESION PARDER
-   85 LISTA_EXPRESION: .  [PARDER, COMA]
+   85 LISTA_EXPRESION: . %empty  [PARDER, COMA]
    86                | . LISTA_EXPRESION COMA EXPRESION
    87                | . EXPRESION
 
@@ -1517,7 +1517,7 @@ estado 87
     LISTA_EXPRESION      ir al estado 120
 
 
-estado 88
+State 88
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -1573,84 +1573,84 @@ estado 88
     FUNCION              ir al estado 62
 
 
-estado 89
+State 89
 
    33 SENTENCIA_RETURN: RETURN EXPRESION FIN_SENTENC .
 
     $default  reduce usando la regla 33 (SENTENCIA_RETURN)
 
 
-estado 90
+State 90
 
    53 EXPRESION: EXPRESION OR_LOGICO .
 
     $default  reduce usando la regla 53 (EXPRESION)
 
 
-estado 91
+State 91
 
    54 EXPRESION: EXPRESION AND_LOGICO .
 
     $default  reduce usando la regla 54 (EXPRESION)
 
 
-estado 92
+State 92
 
    55 EXPRESION: EXPRESION OP_IGUALDAD .
 
     $default  reduce usando la regla 55 (EXPRESION)
 
 
-estado 93
+State 93
 
    56 EXPRESION: EXPRESION OP_RELACIONAL .
 
     $default  reduce usando la regla 56 (EXPRESION)
 
 
-estado 94
+State 94
 
    57 EXPRESION: EXPRESION MULTIPLICAT .
 
     $default  reduce usando la regla 57 (EXPRESION)
 
 
-estado 95
+State 95
 
    58 EXPRESION: EXPRESION INCREMENTO .
 
     $default  reduce usando la regla 58 (EXPRESION)
 
 
-estado 96
+State 96
 
    59 EXPRESION: EXPRESION OR_BIT .
 
     $default  reduce usando la regla 59 (EXPRESION)
 
 
-estado 97
+State 97
 
    60 EXPRESION: EXPRESION REDIRECT_E .
 
     $default  reduce usando la regla 60 (EXPRESION)
 
 
-estado 98
+State 98
 
    61 EXPRESION: EXPRESION REDIRECT_S .
 
     $default  reduce usando la regla 61 (EXPRESION)
 
 
-estado 99
+State 99
 
    34 SENTENCIA_SWITCH: SWITCH PARIZQ VARIABLE . PARDER INI_BLOQUE BLOQUE_SWITCH FIN_BLOQUE
 
     PARDER  desplazar e ir al estado 122
 
 
-estado 100
+State 100
 
    20 SENTENCIA_ASIGNACION: VARIABLE ASIG EXPRESION . FIN_SENTENC
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
@@ -1677,21 +1677,21 @@ estado 100
     REDIRECT_S     desplazar e ir al estado 98
 
 
-estado 101
+State 101
 
    37 CONDICION: OR_LOGICO VARIABLE .
 
     $default  reduce usando la regla 37 (CONDICION)
 
 
-estado 102
+State 102
 
    38 CONDICION: AND_LOGICO VARIABLE .
 
     $default  reduce usando la regla 38 (CONDICION)
 
 
-estado 103
+State 103
 
     3 VARIABLE: . NOMBRE
    39 CONDICION: VARIABLE OR_LOGICO . VARIABLE
@@ -1701,7 +1701,7 @@ estado 103
     VARIABLE  ir al estado 124
 
 
-estado 104
+State 104
 
     3 VARIABLE: . NOMBRE
    40 CONDICION: VARIABLE AND_LOGICO . VARIABLE
@@ -1711,7 +1711,7 @@ estado 104
     VARIABLE  ir al estado 125
 
 
-estado 105
+State 105
 
     3 VARIABLE: . NOMBRE
    36 CONDICION: VARIABLE OP_IGUALDAD . VARIABLE
@@ -1721,7 +1721,7 @@ estado 105
     VARIABLE  ir al estado 126
 
 
-estado 106
+State 106
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     3 VARIABLE: . NOMBRE
@@ -1765,7 +1765,7 @@ estado 106
     SENTENCIA_SWITCH      ir al estado 35
 
 
-estado 107
+State 107
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     3 VARIABLE: . NOMBRE
@@ -1808,14 +1808,14 @@ estado 107
     SENTENCIA_SWITCH      ir al estado 35
 
 
-estado 108
+State 108
 
    29 LISTA_EXPRESIONES_O_SALIDAS: LISTA_EXPRESIONES_O_SALIDAS COMA EXPRESION_CADENA .
 
     $default  reduce usando la regla 29 (LISTA_EXPRESIONES_O_SALIDAS)
 
 
-estado 109
+State 109
 
     3 VARIABLE: . NOMBRE
    45 PARAM: TIPO_DATO . VARIABLE
@@ -1825,7 +1825,7 @@ estado 109
     VARIABLE  ir al estado 129
 
 
-estado 110
+State 110
 
    43 CABECERA_SUBPROG: TIPO_DATO VARIABLE PARIZQ PARAM . PARDER
    44 PARAM: PARAM . COMA TIPO_DATO VARIABLE
@@ -1834,63 +1834,63 @@ estado 110
     COMA    desplazar e ir al estado 131
 
 
-estado 111
+State 111
 
    46 EXPRESION: PARIZQ EXPRESION PARDER .
 
     $default  reduce usando la regla 46 (EXPRESION)
 
 
-estado 112
+State 112
 
    71 CONST_PILA_ENTERO: I_CONS_PILA LISTA_CONST_ENTERO F_CONS_PILA .
 
     $default  reduce usando la regla 71 (CONST_PILA_ENTERO)
 
 
-estado 113
+State 113
 
    72 LISTA_CONST_ENTERO: LISTA_CONST_ENTERO COMA . ENTERO
 
     ENTERO  desplazar e ir al estado 132
 
 
-estado 114
+State 114
 
    74 CONST_PILA_REAL: I_CONS_PILA LISTA_CONST_REAL F_CONS_PILA .
 
     $default  reduce usando la regla 74 (CONST_PILA_REAL)
 
 
-estado 115
+State 115
 
    75 LISTA_CONST_REAL: LISTA_CONST_REAL COMA . REAL
 
     REAL  desplazar e ir al estado 133
 
 
-estado 116
+State 116
 
    77 CONST_PILA_BOOLEANO: I_CONS_PILA LISTA_CONST_BOOLEANO F_CONS_PILA .
 
     $default  reduce usando la regla 77 (CONST_PILA_BOOLEANO)
 
 
-estado 117
+State 117
 
    81 CONST_PILA_CARACTER: I_CONS_PILA LISTA_CONST_CARACTER F_CONS_PILA .
 
     $default  reduce usando la regla 81 (CONST_PILA_CARACTER)
 
 
-estado 118
+State 118
 
    82 LISTA_CONST_CARACTER: LISTA_CONST_CARACTER CHAR .
 
     $default  reduce usando la regla 82 (LISTA_CONST_CARACTER)
 
 
-estado 119
+State 119
 
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
    53          | EXPRESION . OR_LOGICO
@@ -1918,7 +1918,7 @@ estado 119
     $default  reduce usando la regla 87 (LISTA_EXPRESION)
 
 
-estado 120
+State 120
 
    84 FUNCION: VARIABLE PARIZQ LISTA_EXPRESION . PARDER
    86 LISTA_EXPRESION: LISTA_EXPRESION . COMA EXPRESION
@@ -1927,7 +1927,7 @@ estado 120
     COMA    desplazar e ir al estado 135
 
 
-estado 121
+State 121
 
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
    52          | EXPRESION MAS_MENOS EXPRESION .  [MAS_MENOS, PARDER, FIN_SENTENC, COMA, DOS_PUNTOS, OR_LOGICO, AND_LOGICO, OP_IGUALDAD, OP_RELACIONAL, OR_BIT, REDIRECT_E, REDIRECT_S]
@@ -1960,42 +1960,42 @@ estado 121
     El conflicto entre la regla 52 y el terminal OR_BIT se resuelve como reducción. (OR_BIT < MAS_MENOS).
 
 
-estado 122
+State 122
 
    34 SENTENCIA_SWITCH: SWITCH PARIZQ VARIABLE PARDER . INI_BLOQUE BLOQUE_SWITCH FIN_BLOQUE
 
     INI_BLOQUE  desplazar e ir al estado 136
 
 
-estado 123
+State 123
 
    20 SENTENCIA_ASIGNACION: VARIABLE ASIG EXPRESION FIN_SENTENC .
 
     $default  reduce usando la regla 20 (SENTENCIA_ASIGNACION)
 
 
-estado 124
+State 124
 
    39 CONDICION: VARIABLE OR_LOGICO VARIABLE .
 
     $default  reduce usando la regla 39 (CONDICION)
 
 
-estado 125
+State 125
 
    40 CONDICION: VARIABLE AND_LOGICO VARIABLE .
 
     $default  reduce usando la regla 40 (CONDICION)
 
 
-estado 126
+State 126
 
    36 CONDICION: VARIABLE OP_IGUALDAD VARIABLE .
 
     $default  reduce usando la regla 36 (CONDICION)
 
 
-estado 127
+State 127
 
    21 SENTENCIA_IF: IF PARIZQ CONDICION PARDER SENTENCIA .  [IF, ELSE, WHILE, INPUT, OUTPUT, FIN_BLOQUE, INI_BLOQUE, RETURN, SWITCH, NOMBRE, BREAK]
    22             | IF PARIZQ CONDICION PARDER SENTENCIA . SENTENCIA_ELSE
@@ -2009,56 +2009,56 @@ estado 127
     SENTENCIA_ELSE  ir al estado 138
 
 
-estado 128
+State 128
 
    24 SENTENCIA_WHILE: WHILE PARIZQ CONDICION PARDER SENTENCIA .
 
     $default  reduce usando la regla 24 (SENTENCIA_WHILE)
 
 
-estado 129
+State 129
 
    45 PARAM: TIPO_DATO VARIABLE .
 
     $default  reduce usando la regla 45 (PARAM)
 
 
-estado 130
+State 130
 
    43 CABECERA_SUBPROG: TIPO_DATO VARIABLE PARIZQ PARAM PARDER .
 
     $default  reduce usando la regla 43 (CABECERA_SUBPROG)
 
 
-estado 131
+State 131
 
    44 PARAM: PARAM COMA . TIPO_DATO VARIABLE
 
     TIPO_DATO  desplazar e ir al estado 139
 
 
-estado 132
+State 132
 
    72 LISTA_CONST_ENTERO: LISTA_CONST_ENTERO COMA ENTERO .
 
     $default  reduce usando la regla 72 (LISTA_CONST_ENTERO)
 
 
-estado 133
+State 133
 
    75 LISTA_CONST_REAL: LISTA_CONST_REAL COMA REAL .
 
     $default  reduce usando la regla 75 (LISTA_CONST_REAL)
 
 
-estado 134
+State 134
 
    84 FUNCION: VARIABLE PARIZQ LISTA_EXPRESION PARDER .
 
     $default  reduce usando la regla 84 (FUNCION)
 
 
-estado 135
+State 135
 
     3 VARIABLE: . NOMBRE
    46 EXPRESION: . PARIZQ EXPRESION PARDER
@@ -2114,10 +2114,10 @@ estado 135
     FUNCION              ir al estado 62
 
 
-estado 136
+State 136
 
    34 SENTENCIA_SWITCH: SWITCH PARIZQ VARIABLE PARDER INI_BLOQUE . BLOQUE_SWITCH FIN_BLOQUE
-   41 BLOQUE_SWITCH: .  [FIN_BLOQUE]
+   41 BLOQUE_SWITCH: . %empty  [FIN_BLOQUE]
    42              | . CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH
 
     CASE  desplazar e ir al estado 141
@@ -2127,7 +2127,7 @@ estado 136
     BLOQUE_SWITCH  ir al estado 142
 
 
-estado 137
+State 137
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     3 VARIABLE: . NOMBRE
@@ -2170,14 +2170,14 @@ estado 137
     SENTENCIA_SWITCH      ir al estado 35
 
 
-estado 138
+State 138
 
    22 SENTENCIA_IF: IF PARIZQ CONDICION PARDER SENTENCIA SENTENCIA_ELSE .
 
     $default  reduce usando la regla 22 (SENTENCIA_IF)
 
 
-estado 139
+State 139
 
     3 VARIABLE: . NOMBRE
    44 PARAM: PARAM COMA TIPO_DATO . VARIABLE
@@ -2187,7 +2187,7 @@ estado 139
     VARIABLE  ir al estado 144
 
 
-estado 140
+State 140
 
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
    53          | EXPRESION . OR_LOGICO
@@ -2215,7 +2215,7 @@ estado 140
     $default  reduce usando la regla 86 (LISTA_EXPRESION)
 
 
-estado 141
+State 141
 
     3 VARIABLE: . NOMBRE
    42 BLOQUE_SWITCH: CASE . EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH
@@ -2271,28 +2271,28 @@ estado 141
     FUNCION              ir al estado 62
 
 
-estado 142
+State 142
 
    34 SENTENCIA_SWITCH: SWITCH PARIZQ VARIABLE PARDER INI_BLOQUE BLOQUE_SWITCH . FIN_BLOQUE
 
     FIN_BLOQUE  desplazar e ir al estado 146
 
 
-estado 143
+State 143
 
    23 SENTENCIA_ELSE: ELSE SENTENCIA .
 
     $default  reduce usando la regla 23 (SENTENCIA_ELSE)
 
 
-estado 144
+State 144
 
    44 PARAM: PARAM COMA TIPO_DATO VARIABLE .
 
     $default  reduce usando la regla 44 (PARAM)
 
 
-estado 145
+State 145
 
    42 BLOQUE_SWITCH: CASE EXPRESION . DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH
    52 EXPRESION: EXPRESION . MAS_MENOS EXPRESION
@@ -2319,14 +2319,14 @@ estado 145
     REDIRECT_S     desplazar e ir al estado 98
 
 
-estado 146
+State 146
 
    34 SENTENCIA_SWITCH: SWITCH PARIZQ VARIABLE PARDER INI_BLOQUE BLOQUE_SWITCH FIN_BLOQUE .
 
     $default  reduce usando la regla 34 (SENTENCIA_SWITCH)
 
 
-estado 147
+State 147
 
     2 BLOQUE: . INI_BLOQUE DECLAR_DE_VARIABLES_LOCALES DECLAR_DE_SUBPROGS SENTENCIAS FIN_BLOQUE
     3 VARIABLE: . NOMBRE
@@ -2369,23 +2369,23 @@ estado 147
     SENTENCIA_SWITCH      ir al estado 35
 
 
-estado 148
+State 148
 
    42 BLOQUE_SWITCH: CASE EXPRESION DOS_PUNTOS SENTENCIA . BREAK FIN_SENTENC BLOQUE_SWITCH
 
     BREAK  desplazar e ir al estado 149
 
 
-estado 149
+State 149
 
    42 BLOQUE_SWITCH: CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK . FIN_SENTENC BLOQUE_SWITCH
 
     FIN_SENTENC  desplazar e ir al estado 150
 
 
-estado 150
+State 150
 
-   41 BLOQUE_SWITCH: .  [FIN_BLOQUE]
+   41 BLOQUE_SWITCH: . %empty  [FIN_BLOQUE]
    42              | . CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH
    42              | CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC . BLOQUE_SWITCH
 
@@ -2396,7 +2396,7 @@ estado 150
     BLOQUE_SWITCH  ir al estado 151
 
 
-estado 151
+State 151
 
    42 BLOQUE_SWITCH: CASE EXPRESION DOS_PUNTOS SENTENCIA BREAK FIN_SENTENC BLOQUE_SWITCH .
 

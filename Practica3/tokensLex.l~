@@ -55,7 +55,7 @@ symbol_cad		[^\"]
 "#"	{ return 	OP_UNIT;}
 "?"	{ return 	OP_UNIT;}
 "--" { return OP_BIN;}
-"++"	{ return 	OP_BIN;}
+"++"	{ return 	OP_UNIT;}
 "<<"	{ return 	OP_LIST;}
 ">>"	{ return 	OP_LIST;}
 "$"	{ return 	OP_LIST_START_CURSOR;}
