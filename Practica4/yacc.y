@@ -140,14 +140,14 @@ Sección de producciones que definen la gramática.
 
 program : header_program block;
 
-block : start_block local_var_dec sub_progs sentences end_block |
-				start_block local_var_dec sub_progs end_block;
+block : start_block { TS_InsertMark(); } local_var_dec sub_progs sentences end_block { TS_EmptyInputs(); }|
+				start_block { TS_InsertMark(); } local_var_dec sub_progs end_block { TS_EmptyInputs(); } ;
 
 sub_progs : sub_progs sub_prog | ;
 
-sub_prog : header_subprogram block;
+sub_prog : header_subprogram {subProg = 1;} block {subProg = 0;} ;
 
-local_var_dec : START_VAR_DEC local_var END_VAR_DEC | ;
+local_var_dec : START_VAR_DEC { decVar = 1; } local_var END_VAR_DEC { decVar = 0; } | ;
 
 header_program : type MAIN PL PR;
 
@@ -157,13 +157,16 @@ end_block : END;
 
 local_var : local_var var_body | var_body;
 
-var_body : type list_id SEMICOLON | error;
+var_body : type {tipoTMP = $1.type; tipoArray = $1.type;} list_id SEMICOLON | error;
 
-list_id : list_id COMMA ID | ID | error;
+list_id : list_id COMMA ID { if(decVar){existVar($3);
+    TS_InsertId($3);}
+}| ID { if(decVar){existVar($3);
+    TS_InsertId($3);}| error;
 
-header_subprogram : type ID PL parameters PR | type ID PL PR;
+header_subprogram : type ID PL {TS_InsertSubprog($2);} parameters PR | type ID PL PR {TS_InsertSubprog($2);};
 
-parameters : parameters COMMA type ID | type ID | error;
+parameters : parameters COMMA type ID {TS_InsertParam($4); | type ID {TS_InsertParam($2);} | error;
 
 sentences : sentences sentence | sentence;
 
@@ -179,11 +182,16 @@ sentence_list_forward_back |
 sentence_list_start_cursor |
 error;
 
-sentence_assign : ID ASSIGN expr SEMICOLON;
+sentence_assign : ID ASSIGN expr SEMICOLON {$$.type =  checkType2($1,$2,$3);};
 
-sentence_if_then_else : IF PL expr PR sentence | IF PL expr PR sentence ELSE sentence;
+sentence_if_then_else : IF PL expr PR sentence {if($3.type != boolean)
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica \n",linea_si);}
+| IF PL expr PR sentence ELSE sentence {if($3.type != boolean)
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica \n",linea_si);}
+;
 
-sentence_while : WHILE PL expr PR sentence;
+sentence_while : WHILE PL expr PR sentence {if($3.type != boolean)
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica \n",linea_si);};
 
 sentence_input : INPUT CAD COMMA list_id SEMICOLON | INPUT list_id SEMICOLON;
 
@@ -191,19 +199,20 @@ sentence_output : OUTPUT list_expr_cad SEMICOLON;
 
 sentence_return : RETURN expr SEMICOLON;
 
-sentence_do_until : DO sentence UNTIL PL expr PR SEMICOLON;
+sentence_do_until : DO sentence UNTIL PL expr PR SEMICOLON {if($4.type != boolean)
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica \n",linea_si);};
 
 sentence_list_forward_back : expr OP_LIST SEMICOLON;
 
 sentence_list_start_cursor : OP_LIST_START_CURSOR expr SEMICOLON;
 
-expr : PL expr PR |
-OP_UNIT expr |
+expr : PL expr PR {	$$.type = $2.type;} |
+OP_UNIT expr {	$$.type = $2.type;}|
 ID |
-const |
+const {$$.type = $1.type;}|
 function_call |
-expr OP_BIN expr |
-expr OP_PM expr | 
+expr OP_BIN expr {	$$.type =  checkType($1,$2,$3);}|
+expr OP_PM expr {	$$.type =  checkType($1,$2,$3);}|
 error;
 
 function_call : ID PL list_expr PR | ID PL PR;
