@@ -1,0 +1,8 @@
+int main()
+{
+	START_VAR
+	float b;
+	END_VAR
+
+	b = 2+2;
+}

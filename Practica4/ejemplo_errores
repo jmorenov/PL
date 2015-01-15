@@ -1,8 +1,8 @@
 int main()
 {
 	START_VAR
-		int ve;
-		float vf;
+		int ve v1, v5, v4
+		float v3, v5 v6;
 		char vc;
 		bool vl;
 		list of int pe, pe2;
@@ -11,7 +11,7 @@ int main()
 		list of bool pl;
 	END_VAR
 
-	int funcionA(int a1, float a2, char a3)
+	int funcionA(int a1, float a2 char a3)
 	{
 		START_VAR
 			int x1, x2;
@@ -37,7 +37,10 @@ int main()
 					return x1;
 				}
 			xf = funcionC(true, 10);
-				
+			x2 = xf * (funcionC(false, 1) - funcionC(true, 23)) / 10.0;
+			
+			while(x2*funcionC(false, 1) - xf < 10.0)
+				x2 = x2 * xf;		
 		}
 		
 		float funcionD(float d1)
@@ -59,7 +62,7 @@ int main()
 			}
 			
 			input "introduzca un valor entero: ", valor;
-			if(d1 > 0.0)
+			if(d1 >* 0.0)
 			{
 				START_VAR
 					int dato;
@@ -71,12 +74,14 @@ int main()
 			else
 			{
 				valor = valor *100;
-				d1 = 10 / 1000.0;
+				d1 = d1 /)· 1000.0;
 			}
 			return d1;
 		}
-		vf = funcionD(1);
+		pe = pe--0;
+		pe = pe++10@0;
 	}
-	ve = funcionA(1, 2.2, 'c');
+	pf = pf++10.0@0;
+	pc = pc++'#'@0;
 }
 

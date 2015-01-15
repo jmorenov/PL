@@ -82,20 +82,20 @@ symbol_cad		[^\"]
 "START_VAR" { return START_VAR_DEC; }
 "END_VAR" { return END_VAR_DEC; }
 
-"true"	{ yylval.lexema = strdup (yytext); yylval.attrib = BOOL;
+"true"	{ yylval.lexem = strdup (yytext); yylval.attrib = BOOL;
 				yylval.type = boolean; return 	BOOL;}
-"false"	{ yylval.lexema = strdup (yytext); yylval.attrib = BOOL;
+"false"	{ yylval.lexem = strdup (yytext); yylval.attrib = BOOL;
 				yylval.type = boolean; return 	BOOL;}
 
-{digit}+	{ yylval.lexema = strdup (yytext); yylval.attrib = INT;
+{digit}+	{ yylval.lexem = strdup (yytext); yylval.attrib = INT;
 					yylval.type = integer; return  INT;}
-{digit}+\.{digit}+	{ yylval.lexema = strdup (yytext); yylval.attrib = FLOAT;
+{digit}+\.{digit}+	{ yylval.lexem = strdup (yytext); yylval.attrib = FLOAT;
 					yylval.type = real; return  FLOAT;}
-"\'"{symbol_char}"\'"	{ yylval.lexema = strdup (yytext); yylval.attrib = CHAR;
+"\'"{symbol_char}"\'"	{ yylval.lexem = strdup (yytext); yylval.attrib = CHAR;
 					yylval.type = character; return  CHAR;}
-"\""{symbol_cad}+"\""	{ yylval.lexema = strdup (yytext); yylval.attrib = CAD;
+"\""{symbol_cad}+"\""	{ yylval.lexem = strdup (yytext); yylval.attrib = CAD;
 					return CAD;}
-{letter}{alphanum}* { yylval.attrib = ID; yylval.lexema = strdup (yytext); return  ID;}
+{letter}{alphanum}* { yylval.attrib = ID; yylval.lexem = strdup (yytext); return  ID;}
 {space}+ {}
 {endline} {linea_actual++;}
 . {snprintf(buffer, MAXLONBUFFER, "el(los) caracter(es) '%s' no forma(n) ningun token conocido",yytext);

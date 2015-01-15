@@ -21,7 +21,7 @@ principal()
 			}
 		entrada d1;
 	}
-	
+	d1 = 2+2;
 	salida " ";
 }
 

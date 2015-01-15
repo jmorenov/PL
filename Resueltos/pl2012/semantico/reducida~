@@ -13,12 +13,12 @@ principal()
 			end
 			entrada e1, e2 ;
 		}
-		si (e1 > 2)
-		{	entrada e2;
-		}
-		sino
-		{	entrada d1;
-		}
+			si (e1 > 2)
+			{	entrada e2;
+			}
+			sino
+			{	entrada d1;
+			}
 		entrada d1;
 	}
 	

@@ -33,8 +33,43 @@
     #define MINUS 287
     #define POINT 288
 	#define WHILE 289
-	#define INT 290
-	#define FLOAT 291
-	#define CHAR 292
-	#define CAD 293
+#define INT 290
+#define FLOAT 291
+#define CHAR 292
+#define CAD 293
 
+#define MAIN 256
+%token IF
+%token ELSE
+%token DO
+%token UNTIL
+
+%left OP_BIN
+%right OP_LIST
+%left OP_LIST_START_CURSOR
+%right OP_UNIT
+%left OP_PM
+
+%token TYPE
+%token BEGIN_LIST
+%token END_LIST
+%token ASSIGN
+%token PL
+%token PR
+%token BEGIN_P
+%token END
+%token COMMA
+%token SEMICOLON
+%token INPUT
+%token OUTPUT
+%token START_VAR_DEC
+%token END_VAR_DEC
+%token LIST
+%token ID
+%token BOOL
+%token RETURN
+%token WHILE
+%token INT
+%token FLOAT
+%token CHAR
+%token CAD

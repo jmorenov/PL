@@ -1,0 +1,2090 @@
+Estado 145 conflictos: 1 desplazamiento(s)/reducción(ones)
+
+
+Gramática
+
+    0 $accept: program $end
+
+    1 program: header_program block
+
+    2 $@1: %empty
+
+    3 block: start_block $@1 local_var_dec sub_progs sentences end_block
+
+    4 sub_progs: sub_progs sub_prog
+    5          | %empty
+
+    6 $@2: %empty
+
+    7 sub_prog: header_subprogram $@2 block
+
+    8 $@3: %empty
+
+    9 local_var_dec: START_VAR_DEC $@3 local_var END_VAR_DEC
+   10              | %empty
+
+   11 header_program: type MAIN PL PR
+
+   12 start_block: BEGIN_P
+
+   13 end_block: END
+
+   14 local_var: local_var var_body
+   15          | var_body
+
+   16 $@4: %empty
+
+   17 var_body: type $@4 list_id SEMICOLON
+   18         | error
+
+   19 list_id: list_id COMMA ID
+   20        | ID
+   21        | error
+
+   22 $@5: %empty
+
+   23 header_subprogram: type ID PL $@5 parameters PR
+   24                  | type ID PL PR
+
+   25 parameters: parameters COMMA type ID
+   26           | type ID
+   27           | error
+
+   28 sentences: sentences sentence
+   29          | sentence
+
+   30 sentence: block
+   31         | sentence_assign
+   32         | sentence_if_then_else
+   33         | sentence_while
+   34         | sentence_input
+   35         | sentence_output
+   36         | sentence_return
+   37         | sentence_do_until
+   38         | sentence_list_forward_back
+   39         | sentence_list_start_cursor
+   40         | error
+
+   41 sentence_assign: ID ASSIGN expr SEMICOLON
+
+   42 sentence_if_then_else: IF PL expr PR sentence
+   43                      | IF PL expr PR sentence ELSE sentence
+
+   44 sentence_while: WHILE PL expr PR sentence
+
+   45 sentence_input: INPUT CAD COMMA list_id SEMICOLON
+   46               | INPUT list_id SEMICOLON
+
+   47 sentence_output: OUTPUT list_expr_cad SEMICOLON
+
+   48 sentence_return: RETURN expr SEMICOLON
+
+   49 sentence_do_until: DO sentence UNTIL PL expr PR SEMICOLON
+
+   50 sentence_list_forward_back: expr OP_LIST SEMICOLON
+
+   51 sentence_list_start_cursor: OP_LIST_START_CURSOR expr SEMICOLON
+
+   52 expr: PL expr PR
+   53     | OP_UNIT expr
+   54     | ID
+   55     | const
+   56     | function_call
+   57     | expr OP_BIN expr
+   58     | expr OP_PM expr
+   59     | error
+
+   60 $@6: %empty
+
+   61 function_call: ID PL $@6 list_expr PR
+
+   62 $@7: %empty
+
+   63 function_call: ID PL $@7 PR
+
+   64 list_expr: list_expr COMMA expr
+   65          | expr
+
+   66 type: TYPE
+   67     | LIST TYPE
+
+   68 const: INT
+   69      | FLOAT
+   70      | CHAR
+   71      | BOOL
+   72      | const_list
+
+   73 const_list: list_of_int
+   74           | list_of_float
+   75           | list_of_char
+   76           | list_of_bool
+
+   77 list_of_int: BEGIN_LIST list_int END_LIST
+
+   78 list_int: list_int COMMA INT
+   79         | INT
+
+   80 list_of_float: BEGIN_LIST list_float END_LIST
+
+   81 list_float: list_float COMMA FLOAT
+   82           | FLOAT
+
+   83 list_of_char: BEGIN_LIST list_char END_LIST
+
+   84 list_char: list_char COMMA CHAR
+   85          | CHAR
+
+   86 list_of_bool: BEGIN_LIST list_bool END_LIST
+
+   87 list_bool: list_bool COMMA BOOL
+   88          | BOOL
+
+   89 list_expr_cad: list_expr_cad COMMA expr_cad
+   90              | expr_cad
+
+   91 expr_cad: expr
+   92         | CAD
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256) 18 21 27 40 59
+MAIN (258) 11
+IF (259) 42 43
+ELSE (260) 43
+DO (261) 49
+UNTIL (262) 49
+OP_BIN (263) 57
+OP_LIST (264) 50
+OP_LIST_START_CURSOR (265) 51
+OP_UNIT (266) 53
+OP_PM (267) 58
+TYPE (268) 66 67
+BEGIN_LIST (269) 77 80 83 86
+END_LIST (270) 77 80 83 86
+ASSIGN (271) 41
+PL (272) 11 23 24 42 43 44 49 52 61 63
+PR (273) 11 23 24 42 43 44 49 52 61 63
+BEGIN_P (274) 12
+END (275) 13
+COMMA (276) 19 25 45 64 78 81 84 87 89
+SEMICOLON (277) 17 41 45 46 47 48 49 50 51
+INPUT (278) 45 46
+OUTPUT (279) 47
+START_VAR_DEC (280) 9
+END_VAR_DEC (281) 9
+LIST (282) 67
+ID (283) 19 20 23 24 25 26 41 54 61 63
+RETURN (284) 48
+WHILE (285) 44
+BOOL (286) 71 87 88
+INT (287) 68 78 79
+FLOAT (288) 69 81 82
+CHAR (289) 70 84 85
+CAD (290) 45 92
+
+
+No terminales con las reglas donde aparecen
+
+$accept (36)
+    en la izquierda: 0
+program (37)
+    en la izquierda: 1, en la derecha: 0
+block (38)
+    en la izquierda: 3, en la derecha: 1 7 30
+$@1 (39)
+    en la izquierda: 2, en la derecha: 3
+sub_progs (40)
+    en la izquierda: 4 5, en la derecha: 3 4
+sub_prog (41)
+    en la izquierda: 7, en la derecha: 4
+$@2 (42)
+    en la izquierda: 6, en la derecha: 7
+local_var_dec (43)
+    en la izquierda: 9 10, en la derecha: 3
+$@3 (44)
+    en la izquierda: 8, en la derecha: 9
+header_program (45)
+    en la izquierda: 11, en la derecha: 1
+start_block (46)
+    en la izquierda: 12, en la derecha: 3
+end_block (47)
+    en la izquierda: 13, en la derecha: 3
+local_var (48)
+    en la izquierda: 14 15, en la derecha: 9 14
+var_body (49)
+    en la izquierda: 17 18, en la derecha: 14 15
+$@4 (50)
+    en la izquierda: 16, en la derecha: 17
+list_id (51)
+    en la izquierda: 19 20 21, en la derecha: 17 19 45 46
+header_subprogram (52)
+    en la izquierda: 23 24, en la derecha: 7
+$@5 (53)
+    en la izquierda: 22, en la derecha: 23
+parameters (54)
+    en la izquierda: 25 26 27, en la derecha: 23 25
+sentences (55)
+    en la izquierda: 28 29, en la derecha: 3 28
+sentence (56)
+    en la izquierda: 30 31 32 33 34 35 36 37 38 39 40, en la derecha:
+    28 29 42 43 44 49
+sentence_assign (57)
+    en la izquierda: 41, en la derecha: 31
+sentence_if_then_else (58)
+    en la izquierda: 42 43, en la derecha: 32
+sentence_while (59)
+    en la izquierda: 44, en la derecha: 33
+sentence_input (60)
+    en la izquierda: 45 46, en la derecha: 34
+sentence_output (61)
+    en la izquierda: 47, en la derecha: 35
+sentence_return (62)
+    en la izquierda: 48, en la derecha: 36
+sentence_do_until (63)
+    en la izquierda: 49, en la derecha: 37
+sentence_list_forward_back (64)
+    en la izquierda: 50, en la derecha: 38
+sentence_list_start_cursor (65)
+    en la izquierda: 51, en la derecha: 39
+expr (66)
+    en la izquierda: 52 53 54 55 56 57 58 59, en la derecha: 41 42
+    43 44 48 49 50 51 52 53 57 58 64 65 91
+function_call (67)
+    en la izquierda: 61 63, en la derecha: 56
+$@6 (68)
+    en la izquierda: 60, en la derecha: 61
+$@7 (69)
+    en la izquierda: 62, en la derecha: 63
+list_expr (70)
+    en la izquierda: 64 65, en la derecha: 61 64
+type (71)
+    en la izquierda: 66 67, en la derecha: 11 17 23 24 25 26
+const (72)
+    en la izquierda: 68 69 70 71 72, en la derecha: 55
+const_list (73)
+    en la izquierda: 73 74 75 76, en la derecha: 72
+list_of_int (74)
+    en la izquierda: 77, en la derecha: 73
+list_int (75)
+    en la izquierda: 78 79, en la derecha: 77 78
+list_of_float (76)
+    en la izquierda: 80, en la derecha: 74
+list_float (77)
+    en la izquierda: 81 82, en la derecha: 80 81
+list_of_char (78)
+    en la izquierda: 83, en la derecha: 75
+list_char (79)
+    en la izquierda: 84 85, en la derecha: 83 84
+list_of_bool (80)
+    en la izquierda: 86, en la derecha: 76
+list_bool (81)
+    en la izquierda: 87 88, en la derecha: 86 87
+list_expr_cad (82)
+    en la izquierda: 89 90, en la derecha: 47 89
+expr_cad (83)
+    en la izquierda: 91 92, en la derecha: 89 90
+
+
+State 0
+
+    0 $accept: . program $end
+
+    TYPE  desplazar e ir al estado 1
+    LIST  desplazar e ir al estado 2
+
+    program         ir al estado 3
+    header_program  ir al estado 4
+    type            ir al estado 5
+
+
+State 1
+
+   66 type: TYPE .
+
+    $default  reduce usando la regla 66 (type)
+
+
+State 2
+
+   67 type: LIST . TYPE
+
+    TYPE  desplazar e ir al estado 6
+
+
+State 3
+
+    0 $accept: program . $end
+
+    $end  desplazar e ir al estado 7
+
+
+State 4
+
+    1 program: header_program . block
+
+    BEGIN_P  desplazar e ir al estado 8
+
+    block        ir al estado 9
+    start_block  ir al estado 10
+
+
+State 5
+
+   11 header_program: type . MAIN PL PR
+
+    MAIN  desplazar e ir al estado 11
+
+
+State 6
+
+   67 type: LIST TYPE .
+
+    $default  reduce usando la regla 67 (type)
+
+
+State 7
+
+    0 $accept: program $end .
+
+    $default  aceptar
+
+
+State 8
+
+   12 start_block: BEGIN_P .
+
+    $default  reduce usando la regla 12 (start_block)
+
+
+State 9
+
+    1 program: header_program block .
+
+    $default  reduce usando la regla 1 (program)
+
+
+State 10
+
+    3 block: start_block . $@1 local_var_dec sub_progs sentences end_block
+
+    $default  reduce usando la regla 2 ($@1)
+
+    $@1  ir al estado 12
+
+
+State 11
+
+   11 header_program: type MAIN . PL PR
+
+    PL  desplazar e ir al estado 13
+
+
+State 12
+
+    3 block: start_block $@1 . local_var_dec sub_progs sentences end_block
+
+    START_VAR_DEC  desplazar e ir al estado 14
+
+    $default  reduce usando la regla 10 (local_var_dec)
+
+    local_var_dec  ir al estado 15
+
+
+State 13
+
+   11 header_program: type MAIN PL . PR
+
+    PR  desplazar e ir al estado 16
+
+
+State 14
+
+    9 local_var_dec: START_VAR_DEC . $@3 local_var END_VAR_DEC
+
+    $default  reduce usando la regla 8 ($@3)
+
+    $@3  ir al estado 17
+
+
+State 15
+
+    3 block: start_block $@1 local_var_dec . sub_progs sentences end_block
+
+    $default  reduce usando la regla 5 (sub_progs)
+
+    sub_progs  ir al estado 18
+
+
+State 16
+
+   11 header_program: type MAIN PL PR .
+
+    $default  reduce usando la regla 11 (header_program)
+
+
+State 17
+
+    9 local_var_dec: START_VAR_DEC $@3 . local_var END_VAR_DEC
+
+    error  desplazar e ir al estado 19
+    TYPE   desplazar e ir al estado 1
+    LIST   desplazar e ir al estado 2
+
+    local_var  ir al estado 20
+    var_body   ir al estado 21
+    type       ir al estado 22
+
+
+State 18
+
+    3 block: start_block $@1 local_var_dec sub_progs . sentences end_block
+    4 sub_progs: sub_progs . sub_prog
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    TYPE                  desplazar e ir al estado 1
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    LIST                  desplazar e ir al estado 2
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    sub_prog                    ir al estado 40
+    start_block                 ir al estado 10
+    header_subprogram           ir al estado 41
+    sentences                   ir al estado 42
+    sentence                    ir al estado 43
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    type                        ir al estado 55
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 19
+
+   18 var_body: error .
+
+    $default  reduce usando la regla 18 (var_body)
+
+
+State 20
+
+    9 local_var_dec: START_VAR_DEC $@3 local_var . END_VAR_DEC
+   14 local_var: local_var . var_body
+
+    error        desplazar e ir al estado 19
+    TYPE         desplazar e ir al estado 1
+    END_VAR_DEC  desplazar e ir al estado 62
+    LIST         desplazar e ir al estado 2
+
+    var_body  ir al estado 63
+    type      ir al estado 22
+
+
+State 21
+
+   15 local_var: var_body .
+
+    $default  reduce usando la regla 15 (local_var)
+
+
+State 22
+
+   17 var_body: type . $@4 list_id SEMICOLON
+
+    $default  reduce usando la regla 16 ($@4)
+
+    $@4  ir al estado 64
+
+
+State 23
+
+   40 sentence: error .
+   59 expr: error .
+
+    OP_BIN    reduce usando la regla 59 (expr)
+    OP_LIST   reduce usando la regla 59 (expr)
+    OP_PM     reduce usando la regla 59 (expr)
+    $default  reduce usando la regla 40 (sentence)
+
+
+State 24
+
+   42 sentence_if_then_else: IF . PL expr PR sentence
+   43                      | IF . PL expr PR sentence ELSE sentence
+
+    PL  desplazar e ir al estado 65
+
+
+State 25
+
+   49 sentence_do_until: DO . sentence UNTIL PL expr PR SEMICOLON
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    start_block                 ir al estado 10
+    sentence                    ir al estado 66
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 26
+
+   51 sentence_list_start_cursor: OP_LIST_START_CURSOR . expr SEMICOLON
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 69
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 27
+
+   53 expr: OP_UNIT . expr
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 70
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 28
+
+   77 list_of_int: BEGIN_LIST . list_int END_LIST
+   80 list_of_float: BEGIN_LIST . list_float END_LIST
+   83 list_of_char: BEGIN_LIST . list_char END_LIST
+   86 list_of_bool: BEGIN_LIST . list_bool END_LIST
+
+    BOOL   desplazar e ir al estado 71
+    INT    desplazar e ir al estado 72
+    FLOAT  desplazar e ir al estado 73
+    CHAR   desplazar e ir al estado 74
+
+    list_int    ir al estado 75
+    list_float  ir al estado 76
+    list_char   ir al estado 77
+    list_bool   ir al estado 78
+
+
+State 29
+
+   52 expr: PL . expr PR
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 79
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 30
+
+   45 sentence_input: INPUT . CAD COMMA list_id SEMICOLON
+   46               | INPUT . list_id SEMICOLON
+
+    error  desplazar e ir al estado 80
+    ID     desplazar e ir al estado 81
+    CAD    desplazar e ir al estado 82
+
+    list_id  ir al estado 83
+
+
+State 31
+
+   47 sentence_output: OUTPUT . list_expr_cad SEMICOLON
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+    CAD         desplazar e ir al estado 84
+
+    expr           ir al estado 85
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+    list_expr_cad  ir al estado 86
+    expr_cad       ir al estado 87
+
+
+State 32
+
+   41 sentence_assign: ID . ASSIGN expr SEMICOLON
+   54 expr: ID .
+   61 function_call: ID . PL $@6 list_expr PR
+   63              | ID . PL $@7 PR
+
+    ASSIGN  desplazar e ir al estado 88
+    PL      desplazar e ir al estado 89
+
+    $default  reduce usando la regla 54 (expr)
+
+
+State 33
+
+   48 sentence_return: RETURN . expr SEMICOLON
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 90
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 34
+
+   44 sentence_while: WHILE . PL expr PR sentence
+
+    PL  desplazar e ir al estado 91
+
+
+State 35
+
+   71 const: BOOL .
+
+    $default  reduce usando la regla 71 (const)
+
+
+State 36
+
+   68 const: INT .
+
+    $default  reduce usando la regla 68 (const)
+
+
+State 37
+
+   69 const: FLOAT .
+
+    $default  reduce usando la regla 69 (const)
+
+
+State 38
+
+   70 const: CHAR .
+
+    $default  reduce usando la regla 70 (const)
+
+
+State 39
+
+   30 sentence: block .
+
+    $default  reduce usando la regla 30 (sentence)
+
+
+State 40
+
+    4 sub_progs: sub_progs sub_prog .
+
+    $default  reduce usando la regla 4 (sub_progs)
+
+
+State 41
+
+    7 sub_prog: header_subprogram . $@2 block
+
+    $default  reduce usando la regla 6 ($@2)
+
+    $@2  ir al estado 92
+
+
+State 42
+
+    3 block: start_block $@1 local_var_dec sub_progs sentences . end_block
+   28 sentences: sentences . sentence
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    END                   desplazar e ir al estado 93
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    start_block                 ir al estado 10
+    end_block                   ir al estado 94
+    sentence                    ir al estado 95
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 43
+
+   29 sentences: sentence .
+
+    $default  reduce usando la regla 29 (sentences)
+
+
+State 44
+
+   31 sentence: sentence_assign .
+
+    $default  reduce usando la regla 31 (sentence)
+
+
+State 45
+
+   32 sentence: sentence_if_then_else .
+
+    $default  reduce usando la regla 32 (sentence)
+
+
+State 46
+
+   33 sentence: sentence_while .
+
+    $default  reduce usando la regla 33 (sentence)
+
+
+State 47
+
+   34 sentence: sentence_input .
+
+    $default  reduce usando la regla 34 (sentence)
+
+
+State 48
+
+   35 sentence: sentence_output .
+
+    $default  reduce usando la regla 35 (sentence)
+
+
+State 49
+
+   36 sentence: sentence_return .
+
+    $default  reduce usando la regla 36 (sentence)
+
+
+State 50
+
+   37 sentence: sentence_do_until .
+
+    $default  reduce usando la regla 37 (sentence)
+
+
+State 51
+
+   38 sentence: sentence_list_forward_back .
+
+    $default  reduce usando la regla 38 (sentence)
+
+
+State 52
+
+   39 sentence: sentence_list_start_cursor .
+
+    $default  reduce usando la regla 39 (sentence)
+
+
+State 53
+
+   50 sentence_list_forward_back: expr . OP_LIST SEMICOLON
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN   desplazar e ir al estado 96
+    OP_LIST  desplazar e ir al estado 97
+    OP_PM    desplazar e ir al estado 98
+
+
+State 54
+
+   56 expr: function_call .
+
+    $default  reduce usando la regla 56 (expr)
+
+
+State 55
+
+   23 header_subprogram: type . ID PL $@5 parameters PR
+   24                  | type . ID PL PR
+
+    ID  desplazar e ir al estado 99
+
+
+State 56
+
+   55 expr: const .
+
+    $default  reduce usando la regla 55 (expr)
+
+
+State 57
+
+   72 const: const_list .
+
+    $default  reduce usando la regla 72 (const)
+
+
+State 58
+
+   73 const_list: list_of_int .
+
+    $default  reduce usando la regla 73 (const_list)
+
+
+State 59
+
+   74 const_list: list_of_float .
+
+    $default  reduce usando la regla 74 (const_list)
+
+
+State 60
+
+   75 const_list: list_of_char .
+
+    $default  reduce usando la regla 75 (const_list)
+
+
+State 61
+
+   76 const_list: list_of_bool .
+
+    $default  reduce usando la regla 76 (const_list)
+
+
+State 62
+
+    9 local_var_dec: START_VAR_DEC $@3 local_var END_VAR_DEC .
+
+    $default  reduce usando la regla 9 (local_var_dec)
+
+
+State 63
+
+   14 local_var: local_var var_body .
+
+    $default  reduce usando la regla 14 (local_var)
+
+
+State 64
+
+   17 var_body: type $@4 . list_id SEMICOLON
+
+    error  desplazar e ir al estado 80
+    ID     desplazar e ir al estado 81
+
+    list_id  ir al estado 100
+
+
+State 65
+
+   42 sentence_if_then_else: IF PL . expr PR sentence
+   43                      | IF PL . expr PR sentence ELSE sentence
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 101
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 66
+
+   49 sentence_do_until: DO sentence . UNTIL PL expr PR SEMICOLON
+
+    UNTIL  desplazar e ir al estado 102
+
+
+State 67
+
+   59 expr: error .
+
+    $default  reduce usando la regla 59 (expr)
+
+
+State 68
+
+   54 expr: ID .
+   61 function_call: ID . PL $@6 list_expr PR
+   63              | ID . PL $@7 PR
+
+    PL  desplazar e ir al estado 89
+
+    $default  reduce usando la regla 54 (expr)
+
+
+State 69
+
+   51 sentence_list_start_cursor: OP_LIST_START_CURSOR expr . SEMICOLON
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN     desplazar e ir al estado 96
+    OP_PM      desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 103
+
+
+State 70
+
+   53 expr: OP_UNIT expr .
+   57     | expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_PM  desplazar e ir al estado 98
+
+    $default  reduce usando la regla 53 (expr)
+
+
+State 71
+
+   88 list_bool: BOOL .
+
+    $default  reduce usando la regla 88 (list_bool)
+
+
+State 72
+
+   79 list_int: INT .
+
+    $default  reduce usando la regla 79 (list_int)
+
+
+State 73
+
+   82 list_float: FLOAT .
+
+    $default  reduce usando la regla 82 (list_float)
+
+
+State 74
+
+   85 list_char: CHAR .
+
+    $default  reduce usando la regla 85 (list_char)
+
+
+State 75
+
+   77 list_of_int: BEGIN_LIST list_int . END_LIST
+   78 list_int: list_int . COMMA INT
+
+    END_LIST  desplazar e ir al estado 104
+    COMMA     desplazar e ir al estado 105
+
+
+State 76
+
+   80 list_of_float: BEGIN_LIST list_float . END_LIST
+   81 list_float: list_float . COMMA FLOAT
+
+    END_LIST  desplazar e ir al estado 106
+    COMMA     desplazar e ir al estado 107
+
+
+State 77
+
+   83 list_of_char: BEGIN_LIST list_char . END_LIST
+   84 list_char: list_char . COMMA CHAR
+
+    END_LIST  desplazar e ir al estado 108
+    COMMA     desplazar e ir al estado 109
+
+
+State 78
+
+   86 list_of_bool: BEGIN_LIST list_bool . END_LIST
+   87 list_bool: list_bool . COMMA BOOL
+
+    END_LIST  desplazar e ir al estado 110
+    COMMA     desplazar e ir al estado 111
+
+
+State 79
+
+   52 expr: PL expr . PR
+   57     | expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+    PR      desplazar e ir al estado 112
+
+
+State 80
+
+   21 list_id: error .
+
+    $default  reduce usando la regla 21 (list_id)
+
+
+State 81
+
+   20 list_id: ID .
+
+    $default  reduce usando la regla 20 (list_id)
+
+
+State 82
+
+   45 sentence_input: INPUT CAD . COMMA list_id SEMICOLON
+
+    COMMA  desplazar e ir al estado 113
+
+
+State 83
+
+   19 list_id: list_id . COMMA ID
+   46 sentence_input: INPUT list_id . SEMICOLON
+
+    COMMA      desplazar e ir al estado 114
+    SEMICOLON  desplazar e ir al estado 115
+
+
+State 84
+
+   92 expr_cad: CAD .
+
+    $default  reduce usando la regla 92 (expr_cad)
+
+
+State 85
+
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+   91 expr_cad: expr .
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+
+    $default  reduce usando la regla 91 (expr_cad)
+
+
+State 86
+
+   47 sentence_output: OUTPUT list_expr_cad . SEMICOLON
+   89 list_expr_cad: list_expr_cad . COMMA expr_cad
+
+    COMMA      desplazar e ir al estado 116
+    SEMICOLON  desplazar e ir al estado 117
+
+
+State 87
+
+   90 list_expr_cad: expr_cad .
+
+    $default  reduce usando la regla 90 (list_expr_cad)
+
+
+State 88
+
+   41 sentence_assign: ID ASSIGN . expr SEMICOLON
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 118
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 89
+
+   61 function_call: ID PL . $@6 list_expr PR
+   63              | ID PL . $@7 PR
+
+    PR        reduce usando la regla 62 ($@7)
+    $default  reduce usando la regla 60 ($@6)
+
+    $@6  ir al estado 119
+    $@7  ir al estado 120
+
+
+State 90
+
+   48 sentence_return: RETURN expr . SEMICOLON
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN     desplazar e ir al estado 96
+    OP_PM      desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 121
+
+
+State 91
+
+   44 sentence_while: WHILE PL . expr PR sentence
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 122
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 92
+
+    7 sub_prog: header_subprogram $@2 . block
+
+    BEGIN_P  desplazar e ir al estado 8
+
+    block        ir al estado 123
+    start_block  ir al estado 10
+
+
+State 93
+
+   13 end_block: END .
+
+    $default  reduce usando la regla 13 (end_block)
+
+
+State 94
+
+    3 block: start_block $@1 local_var_dec sub_progs sentences end_block .
+
+    $default  reduce usando la regla 3 (block)
+
+
+State 95
+
+   28 sentences: sentences sentence .
+
+    $default  reduce usando la regla 28 (sentences)
+
+
+State 96
+
+   57 expr: expr OP_BIN . expr
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 124
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 97
+
+   50 sentence_list_forward_back: expr OP_LIST . SEMICOLON
+
+    SEMICOLON  desplazar e ir al estado 125
+
+
+State 98
+
+   58 expr: expr OP_PM . expr
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 126
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 99
+
+   23 header_subprogram: type ID . PL $@5 parameters PR
+   24                  | type ID . PL PR
+
+    PL  desplazar e ir al estado 127
+
+
+State 100
+
+   17 var_body: type $@4 list_id . SEMICOLON
+   19 list_id: list_id . COMMA ID
+
+    COMMA      desplazar e ir al estado 114
+    SEMICOLON  desplazar e ir al estado 128
+
+
+State 101
+
+   42 sentence_if_then_else: IF PL expr . PR sentence
+   43                      | IF PL expr . PR sentence ELSE sentence
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+    PR      desplazar e ir al estado 129
+
+
+State 102
+
+   49 sentence_do_until: DO sentence UNTIL . PL expr PR SEMICOLON
+
+    PL  desplazar e ir al estado 130
+
+
+State 103
+
+   51 sentence_list_start_cursor: OP_LIST_START_CURSOR expr SEMICOLON .
+
+    $default  reduce usando la regla 51 (sentence_list_start_cursor)
+
+
+State 104
+
+   77 list_of_int: BEGIN_LIST list_int END_LIST .
+
+    $default  reduce usando la regla 77 (list_of_int)
+
+
+State 105
+
+   78 list_int: list_int COMMA . INT
+
+    INT  desplazar e ir al estado 131
+
+
+State 106
+
+   80 list_of_float: BEGIN_LIST list_float END_LIST .
+
+    $default  reduce usando la regla 80 (list_of_float)
+
+
+State 107
+
+   81 list_float: list_float COMMA . FLOAT
+
+    FLOAT  desplazar e ir al estado 132
+
+
+State 108
+
+   83 list_of_char: BEGIN_LIST list_char END_LIST .
+
+    $default  reduce usando la regla 83 (list_of_char)
+
+
+State 109
+
+   84 list_char: list_char COMMA . CHAR
+
+    CHAR  desplazar e ir al estado 133
+
+
+State 110
+
+   86 list_of_bool: BEGIN_LIST list_bool END_LIST .
+
+    $default  reduce usando la regla 86 (list_of_bool)
+
+
+State 111
+
+   87 list_bool: list_bool COMMA . BOOL
+
+    BOOL  desplazar e ir al estado 134
+
+
+State 112
+
+   52 expr: PL expr PR .
+
+    $default  reduce usando la regla 52 (expr)
+
+
+State 113
+
+   45 sentence_input: INPUT CAD COMMA . list_id SEMICOLON
+
+    error  desplazar e ir al estado 80
+    ID     desplazar e ir al estado 81
+
+    list_id  ir al estado 135
+
+
+State 114
+
+   19 list_id: list_id COMMA . ID
+
+    ID  desplazar e ir al estado 136
+
+
+State 115
+
+   46 sentence_input: INPUT list_id SEMICOLON .
+
+    $default  reduce usando la regla 46 (sentence_input)
+
+
+State 116
+
+   89 list_expr_cad: list_expr_cad COMMA . expr_cad
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+    CAD         desplazar e ir al estado 84
+
+    expr           ir al estado 85
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+    expr_cad       ir al estado 137
+
+
+State 117
+
+   47 sentence_output: OUTPUT list_expr_cad SEMICOLON .
+
+    $default  reduce usando la regla 47 (sentence_output)
+
+
+State 118
+
+   41 sentence_assign: ID ASSIGN expr . SEMICOLON
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN     desplazar e ir al estado 96
+    OP_PM      desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 138
+
+
+State 119
+
+   61 function_call: ID PL $@6 . list_expr PR
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 139
+    function_call  ir al estado 54
+    list_expr      ir al estado 140
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 120
+
+   63 function_call: ID PL $@7 . PR
+
+    PR  desplazar e ir al estado 141
+
+
+State 121
+
+   48 sentence_return: RETURN expr SEMICOLON .
+
+    $default  reduce usando la regla 48 (sentence_return)
+
+
+State 122
+
+   44 sentence_while: WHILE PL expr . PR sentence
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+    PR      desplazar e ir al estado 142
+
+
+State 123
+
+    7 sub_prog: header_subprogram $@2 block .
+
+    $default  reduce usando la regla 7 (sub_prog)
+
+
+State 124
+
+   57 expr: expr . OP_BIN expr
+   57     | expr OP_BIN expr .
+   58     | expr . OP_PM expr
+
+    OP_PM  desplazar e ir al estado 98
+
+    $default  reduce usando la regla 57 (expr)
+
+
+State 125
+
+   50 sentence_list_forward_back: expr OP_LIST SEMICOLON .
+
+    $default  reduce usando la regla 50 (sentence_list_forward_back)
+
+
+State 126
+
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+   58     | expr OP_PM expr .
+
+    $default  reduce usando la regla 58 (expr)
+
+
+State 127
+
+   23 header_subprogram: type ID PL . $@5 parameters PR
+   24                  | type ID PL . PR
+
+    PR  desplazar e ir al estado 143
+
+    $default  reduce usando la regla 22 ($@5)
+
+    $@5  ir al estado 144
+
+
+State 128
+
+   17 var_body: type $@4 list_id SEMICOLON .
+
+    $default  reduce usando la regla 17 (var_body)
+
+
+State 129
+
+   42 sentence_if_then_else: IF PL expr PR . sentence
+   43                      | IF PL expr PR . sentence ELSE sentence
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    start_block                 ir al estado 10
+    sentence                    ir al estado 145
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 130
+
+   49 sentence_do_until: DO sentence UNTIL PL . expr PR SEMICOLON
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 146
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 131
+
+   78 list_int: list_int COMMA INT .
+
+    $default  reduce usando la regla 78 (list_int)
+
+
+State 132
+
+   81 list_float: list_float COMMA FLOAT .
+
+    $default  reduce usando la regla 81 (list_float)
+
+
+State 133
+
+   84 list_char: list_char COMMA CHAR .
+
+    $default  reduce usando la regla 84 (list_char)
+
+
+State 134
+
+   87 list_bool: list_bool COMMA BOOL .
+
+    $default  reduce usando la regla 87 (list_bool)
+
+
+State 135
+
+   19 list_id: list_id . COMMA ID
+   45 sentence_input: INPUT CAD COMMA list_id . SEMICOLON
+
+    COMMA      desplazar e ir al estado 114
+    SEMICOLON  desplazar e ir al estado 147
+
+
+State 136
+
+   19 list_id: list_id COMMA ID .
+
+    $default  reduce usando la regla 19 (list_id)
+
+
+State 137
+
+   89 list_expr_cad: list_expr_cad COMMA expr_cad .
+
+    $default  reduce usando la regla 89 (list_expr_cad)
+
+
+State 138
+
+   41 sentence_assign: ID ASSIGN expr SEMICOLON .
+
+    $default  reduce usando la regla 41 (sentence_assign)
+
+
+State 139
+
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+   65 list_expr: expr .
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+
+    $default  reduce usando la regla 65 (list_expr)
+
+
+State 140
+
+   61 function_call: ID PL $@6 list_expr . PR
+   64 list_expr: list_expr . COMMA expr
+
+    PR     desplazar e ir al estado 148
+    COMMA  desplazar e ir al estado 149
+
+
+State 141
+
+   63 function_call: ID PL $@7 PR .
+
+    $default  reduce usando la regla 63 (function_call)
+
+
+State 142
+
+   44 sentence_while: WHILE PL expr PR . sentence
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    start_block                 ir al estado 10
+    sentence                    ir al estado 150
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 143
+
+   24 header_subprogram: type ID PL PR .
+
+    $default  reduce usando la regla 24 (header_subprogram)
+
+
+State 144
+
+   23 header_subprogram: type ID PL $@5 . parameters PR
+
+    error  desplazar e ir al estado 151
+    TYPE   desplazar e ir al estado 1
+    LIST   desplazar e ir al estado 2
+
+    parameters  ir al estado 152
+    type        ir al estado 153
+
+
+State 145
+
+   42 sentence_if_then_else: IF PL expr PR sentence .
+   43                      | IF PL expr PR sentence . ELSE sentence
+
+    ELSE  desplazar e ir al estado 154
+
+    ELSE      [reduce usando la regla 42 (sentence_if_then_else)]
+    $default  reduce usando la regla 42 (sentence_if_then_else)
+
+
+State 146
+
+   49 sentence_do_until: DO sentence UNTIL PL expr . PR SEMICOLON
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+    PR      desplazar e ir al estado 155
+
+
+State 147
+
+   45 sentence_input: INPUT CAD COMMA list_id SEMICOLON .
+
+    $default  reduce usando la regla 45 (sentence_input)
+
+
+State 148
+
+   61 function_call: ID PL $@6 list_expr PR .
+
+    $default  reduce usando la regla 61 (function_call)
+
+
+State 149
+
+   64 list_expr: list_expr COMMA . expr
+
+    error       desplazar e ir al estado 67
+    OP_UNIT     desplazar e ir al estado 27
+    BEGIN_LIST  desplazar e ir al estado 28
+    PL          desplazar e ir al estado 29
+    ID          desplazar e ir al estado 68
+    BOOL        desplazar e ir al estado 35
+    INT         desplazar e ir al estado 36
+    FLOAT       desplazar e ir al estado 37
+    CHAR        desplazar e ir al estado 38
+
+    expr           ir al estado 156
+    function_call  ir al estado 54
+    const          ir al estado 56
+    const_list     ir al estado 57
+    list_of_int    ir al estado 58
+    list_of_float  ir al estado 59
+    list_of_char   ir al estado 60
+    list_of_bool   ir al estado 61
+
+
+State 150
+
+   44 sentence_while: WHILE PL expr PR sentence .
+
+    $default  reduce usando la regla 44 (sentence_while)
+
+
+State 151
+
+   27 parameters: error .
+
+    $default  reduce usando la regla 27 (parameters)
+
+
+State 152
+
+   23 header_subprogram: type ID PL $@5 parameters . PR
+   25 parameters: parameters . COMMA type ID
+
+    PR     desplazar e ir al estado 157
+    COMMA  desplazar e ir al estado 158
+
+
+State 153
+
+   26 parameters: type . ID
+
+    ID  desplazar e ir al estado 159
+
+
+State 154
+
+   43 sentence_if_then_else: IF PL expr PR sentence ELSE . sentence
+
+    error                 desplazar e ir al estado 23
+    IF                    desplazar e ir al estado 24
+    DO                    desplazar e ir al estado 25
+    OP_LIST_START_CURSOR  desplazar e ir al estado 26
+    OP_UNIT               desplazar e ir al estado 27
+    BEGIN_LIST            desplazar e ir al estado 28
+    PL                    desplazar e ir al estado 29
+    BEGIN_P               desplazar e ir al estado 8
+    INPUT                 desplazar e ir al estado 30
+    OUTPUT                desplazar e ir al estado 31
+    ID                    desplazar e ir al estado 32
+    RETURN                desplazar e ir al estado 33
+    WHILE                 desplazar e ir al estado 34
+    BOOL                  desplazar e ir al estado 35
+    INT                   desplazar e ir al estado 36
+    FLOAT                 desplazar e ir al estado 37
+    CHAR                  desplazar e ir al estado 38
+
+    block                       ir al estado 39
+    start_block                 ir al estado 10
+    sentence                    ir al estado 160
+    sentence_assign             ir al estado 44
+    sentence_if_then_else       ir al estado 45
+    sentence_while              ir al estado 46
+    sentence_input              ir al estado 47
+    sentence_output             ir al estado 48
+    sentence_return             ir al estado 49
+    sentence_do_until           ir al estado 50
+    sentence_list_forward_back  ir al estado 51
+    sentence_list_start_cursor  ir al estado 52
+    expr                        ir al estado 53
+    function_call               ir al estado 54
+    const                       ir al estado 56
+    const_list                  ir al estado 57
+    list_of_int                 ir al estado 58
+    list_of_float               ir al estado 59
+    list_of_char                ir al estado 60
+    list_of_bool                ir al estado 61
+
+
+State 155
+
+   49 sentence_do_until: DO sentence UNTIL PL expr PR . SEMICOLON
+
+    SEMICOLON  desplazar e ir al estado 161
+
+
+State 156
+
+   57 expr: expr . OP_BIN expr
+   58     | expr . OP_PM expr
+   64 list_expr: list_expr COMMA expr .
+
+    OP_BIN  desplazar e ir al estado 96
+    OP_PM   desplazar e ir al estado 98
+
+    $default  reduce usando la regla 64 (list_expr)
+
+
+State 157
+
+   23 header_subprogram: type ID PL $@5 parameters PR .
+
+    $default  reduce usando la regla 23 (header_subprogram)
+
+
+State 158
+
+   25 parameters: parameters COMMA . type ID
+
+    TYPE  desplazar e ir al estado 1
+    LIST  desplazar e ir al estado 2
+
+    type  ir al estado 162
+
+
+State 159
+
+   26 parameters: type ID .
+
+    $default  reduce usando la regla 26 (parameters)
+
+
+State 160
+
+   43 sentence_if_then_else: IF PL expr PR sentence ELSE sentence .
+
+    $default  reduce usando la regla 43 (sentence_if_then_else)
+
+
+State 161
+
+   49 sentence_do_until: DO sentence UNTIL PL expr PR SEMICOLON .
+
+    $default  reduce usando la regla 49 (sentence_do_until)
+
+
+State 162
+
+   25 parameters: parameters COMMA type . ID
+
+    ID  desplazar e ir al estado 163
+
+
+State 163
+
+   25 parameters: parameters COMMA type ID .
+
+    $default  reduce usando la regla 25 (parameters)

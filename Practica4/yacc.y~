@@ -379,7 +379,7 @@ unsigned int checkType(atributos a,atributos op, atributos b)
 			{
 				b.type = integer;
 			}
-			//printf("%s, tipo = %d attrib = %d -- %s, tipo = %d attrib = %d\n",a.lexema,a.type,a.attrib, b.lexema,b.type, b.attrib);
+			printf("%s, tipo = %d attrib = %d -- %s, tipo = %d attrib = %d\n",a.lexema,a.type,a.attrib, b.lexema,b.type, b.attrib);
 		if(a.type != b.type)
 		{
 			fprintf(stderr,"[Linea %d]: tipos incompatible\n ",linea_actual);
