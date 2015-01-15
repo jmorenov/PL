@@ -13,7 +13,8 @@ principal()
 			end
 			entrada e1, e2 ;
 		}
-			si (e1 > 2)
+		funcionE('a', 'b', 1);
+			si (e1 + e2)
 			{	entrada e2;
 			}
 			sino
@@ -21,7 +22,8 @@ principal()
 			}
 		entrada d1;
 	}
-	d1 = 2+2;
+	funcionE('a', 'b');
+	valor = 2+2;
 	salida " ";
 }
 

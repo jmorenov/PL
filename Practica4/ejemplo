@@ -2,7 +2,7 @@ int main()
 {
 	START_VAR
 		int ve;
-		float vf;
+		float vf, ve;
 		char vc;
 		bool vl;
 		list of int pe, pe2;
@@ -14,7 +14,7 @@ int main()
 	int funcionA(int a1, float a2, char a3)
 	{
 		START_VAR
-			int x1, x2;
+			int x1, x2, a1;
 		END_VAR
 		
 		char funcionB(char b1, bool b2)
@@ -73,12 +73,12 @@ int main()
 				valor = valor *100;
 				d1 = 10.0 / 1000.0;
 				d1 = d1 / 1000;
-				d1 = 2 +2 ;
+				d1 = 2 + 2;
 			}
 			return d1;
 		}
 		vf = funcionD(1);
 	}
-	ve = funcionA(1, 2.2, 'c');
+	ve = 'a';
 }
 

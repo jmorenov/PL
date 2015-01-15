@@ -1,17 +1,17 @@
 int main()
 {
 	START_VAR
-		int ve;
-		float vf;
+		int ve a,b,c
+		float vf,h ,j k;
 		char vc;
-		bool vl;
+		bo·ol vl;
 		list of int pe, pe2;
 		list of float pf, pf2;
 		list of char pc, pc2;
 		list of bool pl;
 	END_VAR
 
-	int funcionA(int a1, float a2, char a3)
+	int funcionA(int a1 v, float a2, char a3)
 	{
 		START_VAR
 			int x1, x2;
@@ -30,8 +30,8 @@ int main()
 					END_VAR
 
 					x1 = 1.3;
-					if(c2>10)
-						c2 = c2 - 1;
+					if(c2>10+)
+						c2 = c2 - 1*;
 					else
 						x1 = 3.1;
 					return x1;

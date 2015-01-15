@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-void yyerror( char * msg ) ;
+void yyerror( const char * msg ) ;
 int linea_actual = 1 ;
 int linea_si;
 
@@ -128,8 +128,26 @@ void TS_InsertaSubprog(atributos a){
 	TP[top].nombre = a.lexema;
 	TP[top].parametros = 0;	
 }
-void TS_InsertaParam(atributos a){
 
+void existeVar(atributos a)
+{	
+	int topeTMP = TOPE ;
+	
+	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
+	{	
+		/*if(TS[topeTMP].entrada == variable)
+		{*/
+			if(strcmp(TS[topeTMP].nombre, a.lexema) == 0)
+			{
+				fprintf(stderr,"[Linea %d]: %s: existe.\n",linea_actual,a.lexema);
+			}
+		//}
+		topeTMP--;
+	}
+}
+
+void TS_InsertaParam(atributos a){
+	existeVar(a);
 	TOPE++;	
 	TS[TOPE].entrada = parametro_formal;
 	TS[TOPE].nombre = a.lexema;
@@ -189,22 +207,7 @@ void TS_InsertaIdent(atributos a){
 		
 	}
 }
-void existeVar(atributos a)
-{	
-	int topeTMP = TOPE ;
-	
-	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
-	{	
-		if(TS[topeTMP].entrada == parametro_formal)
-		{
-			if(strcmp(TS[topeTMP].nombre, a.lexema) == 0)
-			{
-				fprintf(stderr,"[Linea %d]: %s: existe.\n",linea_actual,a.lexema);
-			}
-		}
-		topeTMP--;
-	}
-}
+
 void existeProc(atributos a)
 {	
 	int topeTMP = TOPE ,existe=0;
@@ -661,7 +664,7 @@ se debe implementar la función yyerror. En este caso
 simplemente escribimos el mensaje de error en pantalla
 **/
 
-void yyerror( char *msg )
+void yyerror( const char *msg )
 {
 	fprintf(stderr,"[Linea %d]: %s\n", linea_actual, msg) ;
 }

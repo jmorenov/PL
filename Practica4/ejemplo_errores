@@ -78,10 +78,8 @@ int main()
 			}
 			return d1;
 		}
-		pe = pe--0;
-		pe = pe++10@0;
+		v3 = funcionD(1);
 	}
-	pf = pf++10.0@0;
-	pc = pc++'#'@0;
+	pe = pe--0;
 }
 

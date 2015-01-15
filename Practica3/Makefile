@@ -11,7 +11,7 @@ generated/y.tab.c: generated/lex.yy.c yacc.y
 generated/lex.yy.c: tokensLex.l
 	flex -o generated/lex.yy.c -ll tokensLex.l
 clean:
-	rm -R generated/*
+	rm -f -R generated/*
 all:
 	make clean
 	make generated/prueba

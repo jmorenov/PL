@@ -7,21 +7,21 @@ Gramática
 
     1 program: header_program block
 
-    2 $@1: %empty
+    2 $@1: /* vacío */
 
     3 block: start_block $@1 local_var_dec sub_progs sentences end_block
 
     4 sub_progs: sub_progs sub_prog
-    5          | %empty
+    5          | /* vacío */
 
-    6 $@2: %empty
+    6 $@2: /* vacío */
 
     7 sub_prog: header_subprogram $@2 block
 
-    8 $@3: %empty
+    8 $@3: /* vacío */
 
     9 local_var_dec: START_VAR_DEC $@3 local_var END_VAR_DEC
-   10              | %empty
+   10              | /* vacío */
 
    11 header_program: type MAIN PL PR
 
@@ -32,7 +32,7 @@ Gramática
    14 local_var: local_var var_body
    15          | var_body
 
-   16 $@4: %empty
+   16 $@4: /* vacío */
 
    17 var_body: type $@4 list_id SEMICOLON
    18         | error
@@ -41,7 +41,7 @@ Gramática
    20        | ID
    21        | error
 
-   22 $@5: %empty
+   22 $@5: /* vacío */
 
    23 header_subprogram: type ID PL $@5 parameters PR
    24                  | type ID PL PR
@@ -86,19 +86,19 @@ Gramática
    51 sentence_list_start_cursor: OP_LIST_START_CURSOR expr SEMICOLON
 
    52 expr: PL expr PR
-   53     | OP_UNIT expr
-   54     | ID
-   55     | const
-   56     | function_call
+   53     | ID
+   54     | const
+   55     | function_call
+   56     | OP_UNIT expr
    57     | expr OP_BIN expr
    58     | expr OP_PM expr
    59     | error
 
-   60 $@6: %empty
+   60 $@6: /* vacío */
 
    61 function_call: ID PL $@6 list_expr PR
 
-   62 $@7: %empty
+   62 $@7: /* vacío */
 
    63 function_call: ID PL $@7 PR
 
@@ -158,7 +158,7 @@ UNTIL (262) 49
 OP_BIN (263) 57
 OP_LIST (264) 50
 OP_LIST_START_CURSOR (265) 51
-OP_UNIT (266) 53
+OP_UNIT (266) 56
 OP_PM (267) 58
 TYPE (268) 66 67
 BEGIN_LIST (269) 77 80 83 86
@@ -175,7 +175,7 @@ OUTPUT (279) 47
 START_VAR_DEC (280) 9
 END_VAR_DEC (281) 9
 LIST (282) 67
-ID (283) 19 20 23 24 25 26 41 54 61 63
+ID (283) 19 20 23 24 25 26 41 53 61 63
 RETURN (284) 48
 WHILE (285) 44
 BOOL (286) 71 87 88
@@ -250,9 +250,9 @@ sentence_list_start_cursor (65)
     en la izquierda: 51, en la derecha: 39
 expr (66)
     en la izquierda: 52 53 54 55 56 57 58 59, en la derecha: 41 42
-    43 44 48 49 50 51 52 53 57 58 64 65 91
+    43 44 48 49 50 51 52 56 57 58 64 65 91
 function_call (67)
-    en la izquierda: 61 63, en la derecha: 56
+    en la izquierda: 61 63, en la derecha: 55
 $@6 (68)
     en la izquierda: 60, en la derecha: 61
 $@7 (69)
@@ -262,7 +262,7 @@ list_expr (70)
 type (71)
     en la izquierda: 66 67, en la derecha: 11 17 23 24 25 26
 const (72)
-    en la izquierda: 68 69 70 71 72, en la derecha: 55
+    en la izquierda: 68 69 70 71 72, en la derecha: 54
 const_list (73)
     en la izquierda: 73 74 75 76, en la derecha: 72
 list_of_int (74)
@@ -614,7 +614,7 @@ State 26
 
 State 27
 
-   53 expr: OP_UNIT . expr
+   56 expr: OP_UNIT . expr
 
     error       desplazar e ir al estado 67
     OP_UNIT     desplazar e ir al estado 27
@@ -720,14 +720,14 @@ State 31
 State 32
 
    41 sentence_assign: ID . ASSIGN expr SEMICOLON
-   54 expr: ID .
+   53 expr: ID .
    61 function_call: ID . PL $@6 list_expr PR
    63              | ID . PL $@7 PR
 
     ASSIGN  desplazar e ir al estado 88
     PL      desplazar e ir al estado 89
 
-    $default  reduce usando la regla 54 (expr)
+    $default  reduce usando la regla 53 (expr)
 
 
 State 33
@@ -942,9 +942,9 @@ State 53
 
 State 54
 
-   56 expr: function_call .
+   55 expr: function_call .
 
-    $default  reduce usando la regla 56 (expr)
+    $default  reduce usando la regla 55 (expr)
 
 
 State 55
@@ -957,9 +957,9 @@ State 55
 
 State 56
 
-   55 expr: const .
+   54 expr: const .
 
-    $default  reduce usando la regla 55 (expr)
+    $default  reduce usando la regla 54 (expr)
 
 
 State 57
@@ -1062,13 +1062,13 @@ State 67
 
 State 68
 
-   54 expr: ID .
+   53 expr: ID .
    61 function_call: ID . PL $@6 list_expr PR
    63              | ID . PL $@7 PR
 
     PL  desplazar e ir al estado 89
 
-    $default  reduce usando la regla 54 (expr)
+    $default  reduce usando la regla 53 (expr)
 
 
 State 69
@@ -1084,13 +1084,13 @@ State 69
 
 State 70
 
-   53 expr: OP_UNIT expr .
+   56 expr: OP_UNIT expr .
    57     | expr . OP_BIN expr
    58     | expr . OP_PM expr
 
     OP_PM  desplazar e ir al estado 98
 
-    $default  reduce usando la regla 53 (expr)
+    $default  reduce usando la regla 56 (expr)
 
 
 State 71

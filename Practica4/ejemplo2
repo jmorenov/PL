@@ -2,7 +2,18 @@ int main()
 {
 	START_VAR
 	float b;
+	int a, b;	
 	END_VAR
-
-	b = 2+2;
+	int funcionA(int b)
+	{
+		int funcionB()
+		{
+			return 0;
+		}
+			b = b+1;
+		return b;
+	}
+	a = funcionA(1, 2);
+	a = funcionA('a');
+	a = funcionB();
 }
