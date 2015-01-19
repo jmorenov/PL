@@ -196,7 +196,7 @@ void existeFuncion(atributos a)
 	
 	while(topeTMP >= 0 && existe == 0)
 	{	
-		if(TS[topeTMP].entrada == funcion && !strcmp(a.lexema,TS[topeTMP].nombre))
+		if(TS[topeTMP].entrada == funcion && !strcmp(a.lexema,TS[topeTMP].nombre) )
 		{
 			existe=1;
 		}
@@ -205,7 +205,6 @@ void existeFuncion(atributos a)
 	if(existe == 0)
 	{
 		fprintf(stderr,"[Linea %d]: %s: no existe o fuera de ambito.\n",linea_actual,a.lexema);
-		return topeTMP+1;
 	}
 }
 void verificaNumPar(unsigned int num)
@@ -436,7 +435,7 @@ local_var : local_var var_body | var_body;
 var_body : type {tipoTMP = $1.type;} list_id SEMICOLON | error;
 list_id : list_id COMMA ID {if(decVar){ existeVar($3);TS_InsertaIDENT($3);}}| 
 					ID {if(decVar){ existeVar($1);TS_InsertaIDENT($1);}}| error;
-header_subprogram : type ID PL {TS_InsertaSUBPROG($2);} parameters PR | type ID PL PR {TS_InsertaSUBPROG($2);};
+header_subprogram : type ID PL {TS_InsertaSUBPROG($1, $2);} parameters PR | type ID PL PR {TS_InsertaSUBPROG($1, $2);};
 parameters : parameters COMMA type ID {TS_InsertaPARAMF($4);} | type ID {TS_InsertaPARAMF($2);} | error;
 sentences : sentences sentence | sentence;
 sentence : block |
@@ -473,7 +472,7 @@ function_call |
 expr OP_BIN expr {	$$.type =  checkType($1,$2,$3);}|
 expr OP_PM expr {	$$.type =  checkType($1,$2,$3);}|
 error;
-function_call : ID PL { strcpy(idFuncion, $1.lexema); func =1; existeFuncion($1); } list_expr PR {func = 0; verificaNumPar(posParam); posParam=0;} | 
+function_call : ID PL { strcpy(idFuncion,$1.lexema); func =1; existeFuncion($1); } list_expr PR {func = 0; verificaNumPar(posParam); posParam=0;} | 
 							ID PL { strcpy(idFuncion,$1.lexema); func =1; existeFuncion($1); } PR {func = 0; verificaNumPar(posParam); posParam=0;};
 list_expr : list_expr COMMA expr {if(func == 1) {	posParam++; verificaParam($3,posParam);}} | 
 						expr {if(func == 1){ posParam++; verificaParam($1,posParam);}} ;

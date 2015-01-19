@@ -27,6 +27,7 @@ int linea_control;
 typedef enum
 {
 	marca,
+	marca_condicional,
 	funcion,
 	variable,
 	parametro_formal
@@ -77,10 +78,10 @@ typedef struct
 void TS_InsertaMARCA()
 {
 	TOPE++;
-	TS[TOPE].entrada = marca;
-	TS[TOPE].nombre = "MARCA_INICIAL";
 	if(subProg == 1)
 	{
+		TS[TOPE].entrada = marca;
+		TS[TOPE].nombre = "MARCA_INICIAL";
 		int topeTMP = TOPE;
 		while(TS[topeTMP].entrada != funcion && topeTMP > 0)
 		{
@@ -97,12 +98,15 @@ void TS_InsertaMARCA()
 		}
 	}
 	else
-	
+	{
+		TS[TOPE].entrada = marca_condicional;
+		TS[TOPE].nombre = "MARCA_CONDICIONAL";
+	}
 }
 
 void TS_VaciarENTRADAS()
 {	
-	while(TS[TOPE].entrada != marca)
+	while(TS[TOPE].entrada != marca && TS[TOPE].entrada != marca_condicional)
 	{
 		TOPE--;
 	}
@@ -112,7 +116,7 @@ void TS_VaciarENTRADAS()
 int existeVar(atributos a)
 {	
 	int topeTMP = TOPE ;
-	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
+	while(topeTMP >= 0)
 	{	
 		//printf("%s %s\n", TS[topeTMP].nombre, a.lexema);
 		if(TS[topeTMP].entrada == variable && strcmp(TS[topeTMP].nombre, a.lexema) == 0)
@@ -121,14 +125,13 @@ int existeVar(atributos a)
 		}
 		topeTMP--;
 	}
-	fprintf(stderr,"[Linea %d]: %s: no definida.\n",linea_actual,a.lexema);
 	return 0;
 }
 
 int existeID(atributos a)
 {	
 	int topeTMP = TOPE ;
-	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
+	while(TS[topeTMP].entrada != marca && TS[topeTMP].entrada != marca_condicional && topeTMP >= 0)
 	{	
 		if(strcmp(TS[topeTMP].nombre, a.lexema) == 0)
 		{
@@ -155,12 +158,13 @@ void TS_InsertaIDENT(atributos a)
 	//printf("ID: %s TIPO: %d\n", a.lexema, tipoTMP);
 }
 
-void TS_InsertaSUBPROG(atributos a)
+void TS_InsertaSUBPROG(atributos t, atributos a)
 {
 	TOPE++;
 	TS[TOPE].entrada = funcion;
 	TS[TOPE].nombre = a.lexema;
 	TS[TOPE].parametros = 0;
+	TS[TOPE].tipoDato = t.tipo;
 }
 
 void TS_InsertaPARAMF(atributos a)
@@ -184,20 +188,20 @@ void TS_InsertaPARAMF(atributos a)
 void comprobarExprLogica(atributos a)
 {
 	if(a.tipo != booleano)
-    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica. \n",linea_control);
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica.\n",linea_control);
 }
 
 void comprobarExprLista(atributos a)
 {
 	if(a.tipo != lista)
-    fprintf(stderr,"[Linea %d]: el argumento no es de tipo lista. \n",linea_actual);
+    fprintf(stderr,"[Linea %d]: el argumento no es de tipo lista.\n",linea_actual);
 }
 
 unsigned int asignaTipo(atributos a)
 {
 	int topeTMP = TOPE ;
 	int existe = 0;
-	unsigned int tipo = 0;
+	unsigned int tipo = desconocido;
 	if(existeVar(a))
 	{
 	while( existe == 0 && topeTMP>=0)
@@ -210,7 +214,9 @@ unsigned int asignaTipo(atributos a)
 		topeTMP--;
 	}
 	//printf("%s %d %d\n", a.lexema, a.tipo, tipo);
-	}	
+	}
+	else
+		fprintf(stderr,"[Linea %d]: %s: no definida.\n",linea_actual,a.lexema);	
 	return tipo;
 }
 
@@ -218,7 +224,7 @@ unsigned int asignaTipoLista(atributos a)
 {
 	int topeTMP = TOPE ;
 	int existe = 0;
-	unsigned int tipo;
+	unsigned int tipo = desconocido;
 	if(existeVar(a))
 	{
 	while( existe == 0 && topeTMP>=0)
@@ -237,9 +243,9 @@ unsigned int asignaTipoLista(atributos a)
 unsigned int comprobarTipoASSIGN(atributos a, atributos op, atributos b)
 {
 	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
-	unsigned int tipo = 0;
+	unsigned int tipo = desconocido;
 	int error = 0;	
-	if(existeVar(a))
+	if(existeVar(a) && b.tipo != desconocido)
 	{
 		tipo = asignaTipo(a);
 		if(tipo != b.tipo)
@@ -259,8 +265,8 @@ unsigned int comprobarTipoASSIGN(atributos a, atributos op, atributos b)
 		}
 	}
 	
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipos incompatibles.\n ",linea_actual);
+	if(error && b.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipos incompatibles al asignar.\n",linea_actual);
 
 	return tipo;
 }
@@ -283,7 +289,7 @@ unsigned int comprobarTipoBIN(atributos a, atributos op, atributos b)
 {
 	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
 	unsigned int tipo = op.tipo;
-	int error = 0;	
+	int error = 1;	
 
 	switch(op.atrib)
 	{
@@ -326,21 +332,62 @@ unsigned int comprobarTipoBIN(atributos a, atributos op, atributos b)
 			if(a.tipo == booleano && b.tipo == booleano)
 				error = 0;
 		break;
+
+		case 15: // %
+		case 16: // --
+		case 18: // @
+		
+			if(a.tipo == lista && b.tipo == entero)
+				error = 0;		
+		break;	
+
+		case 19: // ++
+			if(a.tipo == lista && (a.tipoLista == b.tipo || real_entero2(a.tipoLista, b.tipo)))
+				error = 0;
+		break;
+
+		case 17: // **
+			if(a.tipo == lista && b.tipo == lista)
+				error = 0;
+		break;
+
+		case 11: // ==
+		case 12: // !=
 		default:		
 			if(a.tipo != b.tipo)
 				{
 					error = !real_entero2(a.tipo, b.tipo);
 				}	
+			else
+				error = 0;
 	}
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipos incompatibles al operar \"%s\" con \"%s\".\n ",linea_actual, a.lexema, b.lexema);
+	if(error && a.tipo != desconocido && b.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipos incompatibles al operar.\n",linea_actual);
 
 	return tipo;
 }
 
+/*unsigned int comprobarTipoNEG(atributos op, atributos a)
+{
+	unsigned int tipo = desconocido;
+	unsigned int error = 1;
+	if(op.atrib == 0)
+	{
+		if(real_entero(a.tipo))
+		{
+			tipo = a.tipo;
+			error = 0;
+		}
+	}
+	
+	if(error && a.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: syntax error, unexpected OP_BIN.\n",linea_actual);
+	return tipo;
+}*/
+
 unsigned int comprobarTipoUNIT(atributos op, atributos a)
 {
-	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
+	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, a.tipo, op.lexema, op.tipo);
 	unsigned int tipo = 0;
 	int error = 1;	
 
@@ -379,8 +426,8 @@ unsigned int comprobarTipoUNIT(atributos op, atributos a)
 		break;
 	}
 	
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipo incompatible en la operacion sobre \"%s\".\n ",linea_actual, a.lexema);
+	if(error && a.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipo incompatible en la operacion sobre.\n ",linea_actual);
 
 	return tipo;
 }
@@ -405,6 +452,15 @@ void existeFuncion(atributos a)
 {	
 	if(!existeFuncionID(a.lexema))
 		fprintf(stderr,"[Linea %d]: %s: no existe o fuera de ambito.\n",linea_actual,a.lexema);
+}
+
+unsigned int asignaTipoFuncion(char *id)
+{
+	unsigned int tipo = desconocido;
+	//printf("%s, %d\n", TS[topeF].nombre, TS[topeF].tipoDato);
+	if(existeFuncionID(id))
+		tipo = TS[topeF].tipoDato;
+	return tipo;
 }
 
 void verificaNumPar(unsigned int num)
@@ -539,7 +595,7 @@ list_id : list_id COMMA ID {if(decVar)TS_InsertaIDENT($3);}|
 			ID {if(decVar)TS_InsertaIDENT($1);}| 
 			error;
 
-header_subprogram : type ID PL {TS_InsertaSUBPROG($2);} parameters PR | type ID PL PR {TS_InsertaSUBPROG($2);};
+header_subprogram : type ID PL {TS_InsertaSUBPROG($1, $2);} parameters PR | type ID PL PR {TS_InsertaSUBPROG($1, $2);};
 
 parameters : parameters COMMA type ID {TS_InsertaPARAMF($4);} | type ID {TS_InsertaPARAMF($2);} | error;
 
@@ -584,8 +640,8 @@ OP_UNIT expr { $$.tipo = comprobarTipoUNIT($1, $2);}|
 expr OP_BIN expr {$$.tipo = comprobarTipoBIN($1, $2, $3);}|
 error;
 
-function_call : ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1);} list_expr PR {func=0; verificaNumPar(posParam); posParam=0;} | 
-							ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1);} PR {func=0; verificaNumPar(posParam); posParam=0;};
+function_call : ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1); } list_expr PR {func=0; verificaNumPar(posParam); posParam=0;$$.tipo = asignaTipoFuncion(idFuncion);} | 
+							ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1);} PR {func=0; verificaNumPar(posParam); posParam=0;$$.tipo = asignaTipoFuncion(idFuncion);};
 
 list_expr : list_expr COMMA expr {if(func){	posParam++; verificaParam($3, posParam);}} | 
 						expr {if(func){ posParam++; verificaParam($1,posParam);}} ;

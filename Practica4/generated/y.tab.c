@@ -92,6 +92,7 @@ int linea_control;
 typedef enum
 {
 	marca,
+	marca_condicional,
 	funcion,
 	variable,
 	parametro_formal
@@ -142,10 +143,10 @@ typedef struct
 void TS_InsertaMARCA()
 {
 	TOPE++;
-	TS[TOPE].entrada = marca;
-	TS[TOPE].nombre = "MARCA_INICIAL";
 	if(subProg == 1)
 	{
+		TS[TOPE].entrada = marca;
+		TS[TOPE].nombre = "MARCA_INICIAL";
 		int topeTMP = TOPE;
 		while(TS[topeTMP].entrada != funcion && topeTMP > 0)
 		{
@@ -161,11 +162,16 @@ void TS_InsertaMARCA()
 			topeTMP--;
 		}
 	}
+	else
+	{
+		TS[TOPE].entrada = marca_condicional;
+		TS[TOPE].nombre = "MARCA_CONDICIONAL";
+	}
 }
 
 void TS_VaciarENTRADAS()
 {	
-	while(TS[TOPE].entrada != marca)
+	while(TS[TOPE].entrada != marca && TS[TOPE].entrada != marca_condicional)
 	{
 		TOPE--;
 	}
@@ -175,7 +181,7 @@ void TS_VaciarENTRADAS()
 int existeVar(atributos a)
 {	
 	int topeTMP = TOPE ;
-	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
+	while(topeTMP >= 0)
 	{	
 		//printf("%s %s\n", TS[topeTMP].nombre, a.lexema);
 		if(TS[topeTMP].entrada == variable && strcmp(TS[topeTMP].nombre, a.lexema) == 0)
@@ -184,14 +190,13 @@ int existeVar(atributos a)
 		}
 		topeTMP--;
 	}
-	fprintf(stderr,"[Linea %d]: %s: no definida.\n",linea_actual,a.lexema);
 	return 0;
 }
 
 int existeID(atributos a)
 {	
 	int topeTMP = TOPE ;
-	while(TS[topeTMP].entrada != marca && topeTMP >= 0)
+	while(TS[topeTMP].entrada != marca && TS[topeTMP].entrada != marca_condicional && topeTMP >= 0)
 	{	
 		if(strcmp(TS[topeTMP].nombre, a.lexema) == 0)
 		{
@@ -218,12 +223,13 @@ void TS_InsertaIDENT(atributos a)
 	//printf("ID: %s TIPO: %d\n", a.lexema, tipoTMP);
 }
 
-void TS_InsertaSUBPROG(atributos a)
+void TS_InsertaSUBPROG(atributos t, atributos a)
 {
 	TOPE++;
 	TS[TOPE].entrada = funcion;
 	TS[TOPE].nombre = a.lexema;
 	TS[TOPE].parametros = 0;
+	TS[TOPE].tipoDato = t.tipo;
 }
 
 void TS_InsertaPARAMF(atributos a)
@@ -247,20 +253,20 @@ void TS_InsertaPARAMF(atributos a)
 void comprobarExprLogica(atributos a)
 {
 	if(a.tipo != booleano)
-    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica. \n",linea_control);
+    fprintf(stderr,"[Linea %d]: no hay expresion tipo logica.\n",linea_control);
 }
 
 void comprobarExprLista(atributos a)
 {
 	if(a.tipo != lista)
-    fprintf(stderr,"[Linea %d]: el argumento no es de tipo lista. \n",linea_actual);
+    fprintf(stderr,"[Linea %d]: el argumento no es de tipo lista.\n",linea_actual);
 }
 
 unsigned int asignaTipo(atributos a)
 {
 	int topeTMP = TOPE ;
 	int existe = 0;
-	unsigned int tipo = 0;
+	unsigned int tipo = desconocido;
 	if(existeVar(a))
 	{
 	while( existe == 0 && topeTMP>=0)
@@ -273,7 +279,9 @@ unsigned int asignaTipo(atributos a)
 		topeTMP--;
 	}
 	//printf("%s %d %d\n", a.lexema, a.tipo, tipo);
-	}	
+	}
+	else
+		fprintf(stderr,"[Linea %d]: %s: no definida.\n",linea_actual,a.lexema);	
 	return tipo;
 }
 
@@ -281,7 +289,7 @@ unsigned int asignaTipoLista(atributos a)
 {
 	int topeTMP = TOPE ;
 	int existe = 0;
-	unsigned int tipo;
+	unsigned int tipo = desconocido;
 	if(existeVar(a))
 	{
 	while( existe == 0 && topeTMP>=0)
@@ -300,9 +308,9 @@ unsigned int asignaTipoLista(atributos a)
 unsigned int comprobarTipoASSIGN(atributos a, atributos op, atributos b)
 {
 	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
-	unsigned int tipo = 0;
+	unsigned int tipo = desconocido;
 	int error = 0;	
-	if(existeVar(a))
+	if(existeVar(a) && b.tipo != desconocido)
 	{
 		tipo = asignaTipo(a);
 		if(tipo != b.tipo)
@@ -322,8 +330,8 @@ unsigned int comprobarTipoASSIGN(atributos a, atributos op, atributos b)
 		}
 	}
 	
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipos incompatibles.\n ",linea_actual);
+	if(error && b.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipos incompatibles al asignar.\n",linea_actual);
 
 	return tipo;
 }
@@ -346,7 +354,7 @@ unsigned int comprobarTipoBIN(atributos a, atributos op, atributos b)
 {
 	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
 	unsigned int tipo = op.tipo;
-	int error = 0;	
+	int error = 1;	
 
 	switch(op.atrib)
 	{
@@ -389,21 +397,62 @@ unsigned int comprobarTipoBIN(atributos a, atributos op, atributos b)
 			if(a.tipo == booleano && b.tipo == booleano)
 				error = 0;
 		break;
+
+		case 15: // %
+		case 16: // --
+		case 18: // @
+		
+			if(a.tipo == lista && b.tipo == entero)
+				error = 0;		
+		break;	
+
+		case 19: // ++
+			if(a.tipo == lista && (a.tipoLista == b.tipo || real_entero2(a.tipoLista, b.tipo)))
+				error = 0;
+		break;
+
+		case 17: // **
+			if(a.tipo == lista && b.tipo == lista)
+				error = 0;
+		break;
+
+		case 11: // ==
+		case 12: // !=
 		default:		
 			if(a.tipo != b.tipo)
 				{
 					error = !real_entero2(a.tipo, b.tipo);
 				}	
+			else
+				error = 0;
 	}
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipos incompatibles al operar \"%s\" con \"%s\".\n ",linea_actual, a.lexema, b.lexema);
+	if(error && a.tipo != desconocido && b.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipos incompatibles al operar.\n",linea_actual);
 
 	return tipo;
 }
 
+/*unsigned int comprobarTipoNEG(atributos op, atributos a)
+{
+	unsigned int tipo = desconocido;
+	unsigned int error = 1;
+	if(op.atrib == 0)
+	{
+		if(real_entero(a.tipo))
+		{
+			tipo = a.tipo;
+			error = 0;
+		}
+	}
+	
+	if(error && a.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: syntax error, unexpected OP_BIN.\n",linea_actual);
+	return tipo;
+}*/
+
 unsigned int comprobarTipoUNIT(atributos op, atributos a)
 {
-	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, asignaTipo(a), b.lexema, b.tipo);
+	//printf("[Linea %d] %s %d | %s %d\n", linea_actual, a.lexema, a.tipo, op.lexema, op.tipo);
 	unsigned int tipo = 0;
 	int error = 1;	
 
@@ -442,8 +491,8 @@ unsigned int comprobarTipoUNIT(atributos op, atributos a)
 		break;
 	}
 	
-	if(error)
-		fprintf(stderr,"[Linea %d]: tipo incompatible en la operacion sobre \"%s\".\n ",linea_actual, a.lexema);
+	if(error && a.tipo != desconocido)
+		fprintf(stderr,"[Linea %d]: tipo incompatible en la operacion sobre.\n ",linea_actual);
 
 	return tipo;
 }
@@ -468,6 +517,15 @@ void existeFuncion(atributos a)
 {	
 	if(!existeFuncionID(a.lexema))
 		fprintf(stderr,"[Linea %d]: %s: no existe o fuera de ambito.\n",linea_actual,a.lexema);
+}
+
+unsigned int asignaTipoFuncion(char *id)
+{
+	unsigned int tipo = desconocido;
+	//printf("%s, %d\n", TS[topeF].nombre, TS[topeF].tipoDato);
+	if(existeFuncionID(id))
+		tipo = TS[topeF].tipoDato;
+	return tipo;
 }
 
 void verificaNumPar(unsigned int num)
@@ -501,14 +559,14 @@ void verificaParam(atributos a,unsigned int pos)
 			}
 			else if(TS[topeTMP+pos].tipoDato != a.tipo)
 			{
-					fprintf(stderr,"[Linea %d]:tipo del parametro %d incompatible.\n",linea_actual,pos);
+					fprintf(stderr,"[Linea %d]: tipo del parametro %d incompatible.\n",linea_actual,pos);
 			}
 		}
 	}
 }
 /* Fin de funciones y procedimientos para manejo de la TS */
 
-#line 512 "generated/y.tab.c" /* yacc.c:339  */
+#line 570 "generated/y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -624,7 +682,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 628 "generated/y.tab.c" /* yacc.c:358  */
+#line 686 "generated/y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -924,16 +982,16 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   516,   516,   518,   518,   520,   520,   522,   522,   524,
-     524,   524,   524,   526,   528,   530,   532,   532,   534,   534,
-     534,   536,   537,   538,   540,   540,   540,   542,   542,   542,
-     544,   544,   546,   547,   548,   549,   550,   551,   552,   553,
-     554,   555,   556,   558,   560,   561,   563,   565,   565,   567,
-     569,   571,   573,   575,   577,   578,   579,   580,   581,   582,
-     583,   585,   585,   586,   586,   588,   589,   591,   591,   593,
-     594,   595,   596,   597,   599,   600,   601,   602,   604,   605,
-     605,   607,   608,   608,   610,   611,   611,   613,   614,   614,
-     616,   616,   618,   618
+       0,   574,   574,   576,   576,   578,   578,   580,   580,   582,
+     582,   582,   582,   584,   586,   588,   590,   590,   592,   592,
+     592,   594,   595,   596,   598,   598,   598,   600,   600,   600,
+     602,   602,   604,   605,   606,   607,   608,   609,   610,   611,
+     612,   613,   614,   616,   618,   619,   621,   623,   623,   625,
+     627,   629,   631,   633,   635,   636,   637,   638,   639,   640,
+     641,   643,   643,   644,   644,   646,   647,   649,   649,   651,
+     652,   653,   654,   655,   657,   658,   659,   660,   662,   663,
+     663,   665,   666,   666,   668,   669,   669,   671,   672,   672,
+     674,   674,   676,   676
 };
 #endif
 
@@ -1828,229 +1886,229 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 518 "yacc.y" /* yacc.c:1646  */
+#line 576 "yacc.y" /* yacc.c:1646  */
     { TS_InsertaMARCA(); }
-#line 1834 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1892 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 518 "yacc.y" /* yacc.c:1646  */
+#line 576 "yacc.y" /* yacc.c:1646  */
     { TS_VaciarENTRADAS(); }
-#line 1840 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1898 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 522 "yacc.y" /* yacc.c:1646  */
+#line 580 "yacc.y" /* yacc.c:1646  */
     {subProg = 1;}
-#line 1846 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1904 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 522 "yacc.y" /* yacc.c:1646  */
+#line 580 "yacc.y" /* yacc.c:1646  */
     {subProg = 0;}
-#line 1852 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1910 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 524 "yacc.y" /* yacc.c:1646  */
+#line 582 "yacc.y" /* yacc.c:1646  */
     { decVar = 1; }
-#line 1858 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1916 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 524 "yacc.y" /* yacc.c:1646  */
+#line 582 "yacc.y" /* yacc.c:1646  */
     { decVar = 0; }
-#line 1864 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1922 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 534 "yacc.y" /* yacc.c:1646  */
+#line 592 "yacc.y" /* yacc.c:1646  */
     {tipoTMP = (yyvsp[0]).tipo; tipoListaTMP = (yyvsp[0]).tipoLista;}
-#line 1870 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1928 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 536 "yacc.y" /* yacc.c:1646  */
+#line 594 "yacc.y" /* yacc.c:1646  */
     {if(decVar)TS_InsertaIDENT((yyvsp[0]));}
-#line 1876 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1934 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 537 "yacc.y" /* yacc.c:1646  */
+#line 595 "yacc.y" /* yacc.c:1646  */
     {if(decVar)TS_InsertaIDENT((yyvsp[0]));}
-#line 1882 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1940 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 540 "yacc.y" /* yacc.c:1646  */
-    {TS_InsertaSUBPROG((yyvsp[-1]));}
-#line 1888 "generated/y.tab.c" /* yacc.c:1646  */
+#line 598 "yacc.y" /* yacc.c:1646  */
+    {TS_InsertaSUBPROG((yyvsp[-2]), (yyvsp[-1]));}
+#line 1946 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 540 "yacc.y" /* yacc.c:1646  */
-    {TS_InsertaSUBPROG((yyvsp[-2]));}
-#line 1894 "generated/y.tab.c" /* yacc.c:1646  */
+#line 598 "yacc.y" /* yacc.c:1646  */
+    {TS_InsertaSUBPROG((yyvsp[-3]), (yyvsp[-2]));}
+#line 1952 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 542 "yacc.y" /* yacc.c:1646  */
+#line 600 "yacc.y" /* yacc.c:1646  */
     {TS_InsertaPARAMF((yyvsp[0]));}
-#line 1900 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1958 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 542 "yacc.y" /* yacc.c:1646  */
+#line 600 "yacc.y" /* yacc.c:1646  */
     {TS_InsertaPARAMF((yyvsp[0]));}
-#line 1906 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1964 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 558 "yacc.y" /* yacc.c:1646  */
+#line 616 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = comprobarTipoASSIGN((yyvsp[-3]),(yyvsp[-2]),(yyvsp[-1]));}
-#line 1912 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1970 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 560 "yacc.y" /* yacc.c:1646  */
+#line 618 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLogica((yyvsp[-2]));}
-#line 1918 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1976 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 561 "yacc.y" /* yacc.c:1646  */
+#line 619 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLogica((yyvsp[-4]));}
-#line 1924 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1982 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 563 "yacc.y" /* yacc.c:1646  */
+#line 621 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLogica((yyvsp[-2]));}
-#line 1930 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1988 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 571 "yacc.y" /* yacc.c:1646  */
+#line 629 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLogica((yyvsp[-2]));}
-#line 1936 "generated/y.tab.c" /* yacc.c:1646  */
+#line 1994 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 573 "yacc.y" /* yacc.c:1646  */
+#line 631 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLista((yyvsp[-2]));}
-#line 1942 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2000 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 575 "yacc.y" /* yacc.c:1646  */
+#line 633 "yacc.y" /* yacc.c:1646  */
     {comprobarExprLista((yyvsp[-1]));}
-#line 1948 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2006 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 577 "yacc.y" /* yacc.c:1646  */
+#line 635 "yacc.y" /* yacc.c:1646  */
     {(yyval) = (yyvsp[-1]);}
-#line 1954 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2012 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 578 "yacc.y" /* yacc.c:1646  */
+#line 636 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = asignaTipo((yyvsp[0])); (yyval).tipoLista = asignaTipoLista((yyvsp[0])); strcpy((yyval).lexema,(yyvsp[0]).lexema);}
-#line 1960 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2018 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 579 "yacc.y" /* yacc.c:1646  */
+#line 637 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = (yyvsp[0]).tipo; if((yyval).tipo == lista)(yyval).tipoLista = (yyvsp[0]).tipoLista; }
-#line 1966 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2024 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 581 "yacc.y" /* yacc.c:1646  */
+#line 639 "yacc.y" /* yacc.c:1646  */
     { (yyval).tipo = comprobarTipoUNIT((yyvsp[-1]), (yyvsp[0]));}
-#line 1972 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2030 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 582 "yacc.y" /* yacc.c:1646  */
+#line 640 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = comprobarTipoBIN((yyvsp[-2]), (yyvsp[-1]), (yyvsp[0]));}
-#line 1978 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2036 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 585 "yacc.y" /* yacc.c:1646  */
-    {strcpy(idFuncion,(yyvsp[-1]).lexema); func=1; existeFuncion((yyvsp[-1]));}
-#line 1984 "generated/y.tab.c" /* yacc.c:1646  */
+#line 643 "yacc.y" /* yacc.c:1646  */
+    {strcpy(idFuncion,(yyvsp[-1]).lexema); func=1; existeFuncion((yyvsp[-1])); }
+#line 2042 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 585 "yacc.y" /* yacc.c:1646  */
-    {func=0; verificaNumPar(posParam); posParam=0;}
-#line 1990 "generated/y.tab.c" /* yacc.c:1646  */
+#line 643 "yacc.y" /* yacc.c:1646  */
+    {func=0; verificaNumPar(posParam); posParam=0;(yyval).tipo = asignaTipoFuncion(idFuncion);}
+#line 2048 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 586 "yacc.y" /* yacc.c:1646  */
+#line 644 "yacc.y" /* yacc.c:1646  */
     {strcpy(idFuncion,(yyvsp[-1]).lexema); func=1; existeFuncion((yyvsp[-1]));}
-#line 1996 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2054 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 586 "yacc.y" /* yacc.c:1646  */
-    {func=0; verificaNumPar(posParam); posParam=0;}
-#line 2002 "generated/y.tab.c" /* yacc.c:1646  */
+#line 644 "yacc.y" /* yacc.c:1646  */
+    {func=0; verificaNumPar(posParam); posParam=0;(yyval).tipo = asignaTipoFuncion(idFuncion);}
+#line 2060 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 588 "yacc.y" /* yacc.c:1646  */
+#line 646 "yacc.y" /* yacc.c:1646  */
     {if(func){	posParam++; verificaParam((yyvsp[0]), posParam);}}
-#line 2008 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2066 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 589 "yacc.y" /* yacc.c:1646  */
+#line 647 "yacc.y" /* yacc.c:1646  */
     {if(func){ posParam++; verificaParam((yyvsp[0]),posParam);}}
-#line 2014 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2072 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 591 "yacc.y" /* yacc.c:1646  */
+#line 649 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = lista; (yyval).tipoLista = (yyvsp[0]).tipo;}
-#line 2020 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2078 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 597 "yacc.y" /* yacc.c:1646  */
+#line 655 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = lista; (yyval).tipoLista = (yyvsp[0]).tipoLista;}
-#line 2026 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2084 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 599 "yacc.y" /* yacc.c:1646  */
+#line 657 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipoLista = entero;}
-#line 2032 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2090 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 600 "yacc.y" /* yacc.c:1646  */
+#line 658 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipoLista = real;}
-#line 2038 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2096 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 601 "yacc.y" /* yacc.c:1646  */
+#line 659 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipoLista = caracter;}
-#line 2044 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2102 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 602 "yacc.y" /* yacc.c:1646  */
+#line 660 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipoLista = booleano;}
-#line 2050 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2108 "generated/y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2054 "generated/y.tab.c" /* yacc.c:1646  */
+#line 2112 "generated/y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2278,7 +2336,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 619 "yacc.y" /* yacc.c:1906  */
+#line 677 "yacc.y" /* yacc.c:1906  */
 
 /** aqui incluimos el fichero generado por el ’lex’
 *** que implementa la función ’yylex’

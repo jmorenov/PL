@@ -74,19 +74,18 @@ symbol_cad		[^\"]
 "||"	{ yylval.atrib = 13; yylval.tipo = booleano; return	OP_BIN;}
 "&&"	{ yylval.atrib = 14; yylval.tipo = booleano; return	OP_BIN;}
 
-
-"@"	{ yylval.atrib = 15; yylval.tipo = lista; return 	OP_BIN;}
-"%"	{ yylval.atrib = 16; yylval.tipo = lista; return 	OP_BIN;}
+"%"	{ yylval.atrib = 15; yylval.tipo = lista; return 	OP_BIN;}
+"--" { yylval.atrib = 16; yylval.tipo = lista; return OP_BIN;}
 "**"	{ yylval.atrib = 17; yylval.tipo = lista; return 	OP_BIN;}
-"--" { yylval.atrib = 18; yylval.tipo = lista; return OP_BIN;}
-"++"	{ yylval.atrib = 19; yylval.tipo = lista; return 	OP_BIN;}
 
+"++"	{ yylval.atrib = 19; yylval.tipo = lista; return 	OP_BIN;}
+"@"	{ yylval.atrib = 18; yylval.tipo = lista; return 	OP_BIN;}
 
 
 "true"	{ yylval.lexema = strdup (yytext); yylval.atrib = 1; yylval.tipo = booleano; return 	BOOL;}
 "false"	{ yylval.lexema = strdup (yytext); yylval.atrib = 0; yylval.tipo = booleano; return 	BOOL;}
-{digit}+	{ yylval.lexema = strdup (yytext); yylval.atrib = INT; yylval.tipo = entero; return  INT;}
-{digit}+\.{digit}+	{ yylval.lexema = strdup (yytext); yylval.atrib = FLOAT; yylval.tipo = real; return  FLOAT;}
+"-"?{digit}+	{ yylval.lexema = strdup (yytext); yylval.atrib = INT; yylval.tipo = entero; return  INT;}
+"-"?{digit}+\.{digit}+	{ yylval.lexema = strdup (yytext); yylval.atrib = FLOAT; yylval.tipo = real; return  FLOAT;}
 "\'"{symbol_char}"\'"	{ yylval.lexema = strdup (yytext); yylval.atrib = CHAR; yylval.tipo = caracter; return  CHAR;}
 "\""{symbol_cad}+"\""	{ yylval.lexema = strdup (yytext); yylval.atrib = CAD; return CAD;}
 

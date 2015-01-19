@@ -37,7 +37,10 @@ int main()
 					return x1;
 				}
 			xf = funcionC(true, 10);
-				
+			x2 = xf * (funcionC(false, 1) - funcionC(true, 23))/10.0;
+	
+			while(x2*funcionC(false, 1)-xf<10.0)
+				x2 = x2*xf;
 		}
 		
 		float funcionD(float d1)
@@ -64,21 +67,25 @@ int main()
 				START_VAR
 					int dato;
 				END_VAR
-			
 				dato = 2;
 				dato = valor * 20 /dato;
 			}
 			else
 			{
 				valor = valor *100;
-				d1 = 10.0 / 1000.0;
-				d1 = d1 / 1000;
-				d1 = 2 + 2;
+				d1 = d1 / 1000.0;
 			}
 			return d1;
 		}
-		vf = funcionD(1);
-	}
-	ve = 'a';
+		pe = pe++10@0;
+		pf = pf++10.0@0;
+		pc = pc++'#'@0;
+		
+		if(?(pe++20@0) == 20)
+			ve = ?pe;
+		else
+			pe = pe**pe2;
+	}	
+	ve = -1;
 }
 
