@@ -12,6 +12,7 @@ generated/lex.yy.c: tokensLex.l
 	flex -o generated/lex.yy.c -ll tokensLex.l
 clean:
 	rm -R -f generated/*
+	rm -f *~
 all:
 	make clean
 	make generated/prueba
