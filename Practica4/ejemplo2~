@@ -1,8 +1,27 @@
 int main()
 {
 	START_VAR
-	int b;
+		float b, d;
+		int a;
+		list of int z;
+		bool c;
 	END_VAR
 
-	b = 2+2;
+	int funcionA(int a)
+	{
+		int funcionB(int b)
+		{
+			return 1;
+		}
+		return 0;
+	}
+
+	if(c == true || !c)
+		a = 0;
+	a = z-a;
+	a = funcionA(1);
+
+	b = ?z;
+
+	z = 
 }

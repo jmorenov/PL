@@ -473,7 +473,7 @@ function_call |
 expr OP_BIN expr {	$$.type =  checkType($1,$2,$3);}|
 expr OP_PM expr {	$$.type =  checkType($1,$2,$3);}|
 error;
-function_call : ID PL { strcpy(idFuncion, $1.lexema); func =1; existeFuncion($1); } list_expr PR {func = 0; verificaNumPar(posParam); posParam=0;} | 
+function_call : ID PL { strcpy(idFuncion,$1.lexema); func =1; existeFuncion($1); } list_expr PR {func = 0; verificaNumPar(posParam); posParam=0;} | 
 							ID PL { strcpy(idFuncion,$1.lexema); func =1; existeFuncion($1); } PR {func = 0; verificaNumPar(posParam); posParam=0;};
 list_expr : list_expr COMMA expr {if(func == 1) {	posParam++; verificaParam($3,posParam);}} | 
 						expr {if(func == 1){ posParam++; verificaParam($1,posParam);}} ;

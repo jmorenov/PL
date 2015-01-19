@@ -2,7 +2,7 @@ int main()
 {
 	START_VAR
 		int ve;
-		float vf, ve;
+		float vf;
 		char vc;
 		bool vl;
 		list of int pe, pe2;
@@ -14,7 +14,7 @@ int main()
 	int funcionA(int a1, float a2, char a3)
 	{
 		START_VAR
-			int x1, x2, a1;
+			int x1, x2;
 		END_VAR
 		
 		char funcionB(char b1, bool b2)

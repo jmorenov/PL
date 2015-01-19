@@ -1,19 +1,25 @@
 int main()
 {
 	START_VAR
-	float b;
-	int a, b;	
+		float b, d;
+		int a;
+		list of int z;
+		bool c;
 	END_VAR
-	int funcionA(int b)
+
+	int funcionA(int a)
 	{
-		int funcionB()
+		int funcionB(int b)
 		{
-			return 0;
+			return 1;
 		}
-			b = b+1;
-		return b;
+		return 0;
 	}
-	a = funcionA(1, 2);
-	a = funcionA('a');
-	a = funcionB();
+
+	if(c == true || !c)
+		a = 0;
+	a = z-a;
+	a = funcionA(1);
+
+	b = ?z;
 }
