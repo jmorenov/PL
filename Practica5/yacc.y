@@ -24,13 +24,22 @@ void yyerror( const char * msg ) ;
 int linea_actual = 1 ;
 int linea_control;
 
+typedef struct
+{
+	char *EtiquetaEntrada;
+	char *EtiquetaSalida;
+	char *EtiquetaElse;
+	char *NombreVarControl;
+} DescriptorDeInstrControl;
+
 typedef enum
 {
 	marca,
 	marca_condicional,
 	funcion,
 	variable,
-	parametro_formal
+	parametro_formal,
+	descriptor
 } tipoEntrada;
 
 typedef enum
@@ -51,6 +60,7 @@ typedef struct
 	dtipo tipoDato;
 	dtipo tipoDatoLista;
 	unsigned int parametros;
+	DescriptorDeInstrControl descriptor;
 } entradaTS;
 
 #define MAX_TS 500
@@ -59,6 +69,8 @@ unsigned int subProg = 0, decVar = 0; /* Indicador de comienzo de bloque de un s
 unsigned int func = 0, posParam = 0;
 char idFuncion[100];
 entradaTS TS[MAX_TS]; /* Pila de la tabla de símbolos */
+entradaTS TF[MAX_TS];
+int topeTF=-1;
 dtipo tipoTMP, tipoListaTMP;
 
 
@@ -68,6 +80,7 @@ typedef struct
 	char *lexema; /* Nombre del lexema */
 	dtipo tipo; /* Tipo del símbolo */
 	dtipo tipoLista; /* Si tipo es lista, tipo de la lista */
+	char *var;
 } atributos;
 
 #define YYSTYPE atributos /* A partir de ahora, cada símbolo tiene */
@@ -482,6 +495,224 @@ void verificaParam(atributos a,unsigned int pos)
 	}
 }
 /* Fin de funciones y procedimientos para manejo de la TS */
+
+/********************************************
+**************generacion codigo**************
+*********************************************/
+int temp = 0;
+int etiq = 0;
+int varPrinc=1;
+int decIF = 0,decElse=0;
+FILE * fi;
+int inp=0, out=0;
+
+char * temporal(){
+	char * cadena;
+	cadena = (char *) malloc(20);
+	sprintf(cadena, "temp%d",temp);
+	temp++;
+	return cadena;
+}
+char * etiqueta(){
+	char * cadena;
+	cadena = (char *) malloc(20);
+	sprintf(cadena, "etiqueta_%d",etiq);
+	etiq++;
+	return cadena;
+}
+/***
+tipo = 1.aritmetica o logica
+		 2. if then else
+		 3. bucle
+		 4. asignacion
+****/
+
+void generaFich(){
+	
+	fi = fopen("codigo.c","w");
+	
+	fputs("#include <stdio.h>\n",fi);
+
+}
+void generaDecVar(atributos a){
+	char * sent;
+	sent = (char *) malloc(1000);
+
+	if(tipoTMP == entero){
+		sprintf(sent,"int %s;\n",a.var);
+		fputs(sent,fi);
+	}
+	else if(tipoTMP == real){
+		sprintf(sent,"float %s;\n",a.var);
+		fputs(sent,fi);
+	}
+	else if(tipoTMP == caracter){
+		sprintf(sent,"char %s;\n",a.var);
+		fputs(sent,fi);
+	}
+	else if(tipoTMP == booleano){
+		TOPE++;
+		TS[TOPE].entrada = descriptor;
+		TS[TOPE].descriptor.EtiquetaSalida = etiqueta();
+		sprintf(sent,"int %s;\n",a.var);
+		fputs(sent,fi);
+	}
+	free(sent);
+}
+
+void genera(int tipo,atributos dest,atributos a, atributos op, atributos b){
+	char * sent;
+	sent = (char *) malloc(200);
+
+	if(tipo == 1){
+		
+		sprintf(sent,"int %s;\n%s = %s %s %s;\n",dest.var,dest.var,a.var,op.var,b.var);
+		fputs(sent,fi);
+	}
+	else if(tipo == 4 ){
+		sprintf(sent,"%s %s %s %s\n",dest.var,a.var,op.var,b.var);
+		fputs(sent,fi);
+	}
+	free(sent);
+}
+/*	1. else y salida
+	2. entrada y salida
+*/
+void insertaDesc(int tipo){
+	topeTF++;	
+	TF[topeTF].entrada = descriptor;
+	if(tipo == 1){
+		TF[topeTF].descriptor.EtiquetaElse = etiqueta();
+		TF[topeTF].descriptor.EtiquetaSalida = etiqueta();
+	}else if(tipo == 2){
+		TF[topeTF].descriptor.EtiquetaEntrada = etiqueta();
+		TF[topeTF].descriptor.EtiquetaSalida = etiqueta();
+	}
+}
+void eliminaDesc(){
+	topeTF--;
+}
+/*	1.if con else
+	2.while
+	3.if sin else
+*/
+void insertaCond(int tipo){
+	
+	char * cadena, *sent;
+	int topeTMP = topeTF;
+
+	cadena = (char *) malloc(20);
+	sent = (char *) malloc(150);
+	
+	
+	while(TF[topeTMP].entrada != descriptor){
+		topeTMP--;	
+	}
+	if(tipo == 1){
+		sprintf(cadena, "temp%d",temp-1);
+		TF[topeTMP].nombre = (char *) malloc(50);
+		strcpy(TF[topeTMP].nombre,cadena);
+		sprintf(sent,"if(!%s) goto %s;\n",cadena,TF[topeTMP].descriptor.EtiquetaElse);
+	}
+	else if(tipo == 2){
+				sprintf(cadena, "temp%d",temp-1);
+				sprintf(sent,"if(!%s) goto %s;\n",cadena,TF[topeTMP].descriptor.EtiquetaSalida);
+			}
+	
+
+	fputs(sent,fi);
+
+	free(sent);
+	free(cadena);
+}
+
+void insertaEtiqElse(){
+	int topeTMP = topeTF;
+	char * sent;
+	sent = (char *) malloc(200);
+
+	while(TF[topeTMP].entrada != descriptor){
+		topeTMP--;
+	}
+	if(decElse == 1){
+		sprintf(sent,"goto %s;\n%s:\n",TF[topeTMP].descriptor.EtiquetaSalida,TF[topeTMP].descriptor.EtiquetaElse);
+	}
+	else{
+		sprintf(sent,"%s:",TF[topeTMP].descriptor.EtiquetaElse);
+		}
+	fputs(sent,fi);
+}
+
+void insertaEtiqSalida(){
+	int topeTMP = topeTF;
+	char * sent;
+	sent = (char *) malloc(200);
+
+	while(TF[topeTMP].entrada != descriptor){
+		topeTMP--;
+	}
+	
+	sprintf(sent,"%s:\n",TF[topeTMP].descriptor.EtiquetaSalida);
+	
+	fputs(sent,fi);
+}
+void insertaEtiqEntrada(){
+	int topeTMP = topeTF;
+	char * sent;
+	sent = (char *) malloc(200);
+
+	while(TF[topeTMP].entrada != descriptor){
+		topeTMP--;
+	}
+	
+	sprintf(sent,"%s:\n",TF[topeTMP].descriptor.EtiquetaEntrada);
+	fputs(sent,fi);
+}
+void insertaGotoEntrada(){
+	int topeTMP = topeTF;
+	char * sent;
+	sent = (char *) malloc(200);
+
+	while(TF[topeTMP].entrada != descriptor){
+		topeTMP--;
+	}
+	
+	sprintf(sent,"goto %s;\n",TF[topeTMP].descriptor.EtiquetaEntrada);
+	fputs(sent,fi);
+}
+void generaEntSal(int tipo,atributos a){
+	
+	if(tipo == 1){
+		fputs("scanf(\"%",fi);
+		if(a.tipo == entero) fputs("d",fi);
+		else if(a.tipo == real) fputs("f",fi);
+		else if(a.tipo == caracter) fputs("c",fi);
+		else if(a.tipo == booleano) fputs("d",fi);
+		fputs("\",&",fi);
+		fputs(a.var,fi);
+		fputs(");",fi);
+		fputs("\n",fi);
+	}
+	else{
+		if(a.tipo != desconocido){		
+			fputs("printf(\"%",fi);
+			if(a.tipo == entero) fputs("d",fi);
+			else if(a.tipo == real) fputs("f",fi);
+			else if(a.tipo == caracter) fputs("c",fi);
+			else if(a.tipo == booleano) fputs("d",fi);		
+			fputs("\",",fi);
+			fputs(a.var,fi);
+			fputs(");",fi);
+		}else {
+			fputs("printf(",fi);
+			fputs(a.var,fi);
+			fputs(");",fi);
+		}
+		fputs("\n",fi);
+	}
+}
+
+
 %}
 
 /**
@@ -553,9 +784,13 @@ Sección de producciones que definen la gramática.
  * Definiciones básicas.
  */
 
-program : header_program block;
+program : header_program {generaFich();} block {fputs("\n}\n\n",fi);};
 
-block : start_block { TS_InsertaMARCA(); } local_var_dec sub_progs sentences end_block { TS_VaciarENTRADAS(); };
+block : start_block { TS_InsertaMARCA(); } local_var_dec {	if(varPrinc==1){ 
+					varPrinc=0; 
+					fputs("int main(){\n",fi);
+				}
+			} sub_progs sentences end_block { TS_VaciarENTRADAS(); };
 
 sub_progs : sub_progs sub_prog | ;
 
@@ -573,8 +808,20 @@ local_var : local_var var_body | var_body;
 
 var_body : type {tipoTMP = $1.tipo; tipoListaTMP = $1.tipoLista;} list_id SEMICOLON | error;
 
-list_id : list_id COMMA ID {if(decVar)TS_InsertaIDENT($3);}| 
-			ID {if(decVar)TS_InsertaIDENT($1);}| 
+list_id : list_id COMMA ID {if(decVar)TS_InsertaIDENT($3);if(subProg == 0){
+								generaDecVar($3);
+							}
+							if(inp){
+								generaEntSal(1,$3);
+							}
+							}| 
+			ID {if(decVar)TS_InsertaIDENT($1);if(subProg == 0){
+								generaDecVar($1);
+							}
+				if(inp){
+								generaEntSal(1,$1);
+							}			
+						}| 
 			error;
 
 header_subprogram : type ID PL {TS_InsertaSUBPROG($1, $2);} parameters PR | type ID PL PR {TS_InsertaSUBPROG($1, $2);};
@@ -583,26 +830,65 @@ parameters : parameters COMMA type ID {TS_InsertaPARAMF($4);} | type ID {TS_Inse
 
 sentences : sentences sentence | sentence;
 
-sentence : block |
+sentence : {if(decIF==1){ 
+						{insertaCond(1);} 
+						fputs("{\n",fi);
+						decIF++;
+					}} block |
 sentence_assign |
-sentence_if_then_else |
-sentence_while |
-sentence_input |
-sentence_output |
+{ decIF=1;insertaDesc(1);} sentence_if_then_else {decIF = 0;eliminaDesc();}|
+{	if(decIF==1){ 
+							insertaCond(1);
+							fputs("{\n",fi);
+							decIF++;	
+						}
+						insertaDesc(2);
+						insertaEtiqEntrada();
+						fputs("{\n",fi);
+					}sentence_while |
+{	if(decIF==1){ 
+							insertaCond(1);
+							fputs("{\n",fi);
+							decIF++;
+						}
+					inp=1;} sentence_input {inp=0;}|
+{	if(decIF==1){ 
+							insertaCond(1);
+							fputs("{\n",fi);
+							decIF++;
+						}
+					out=1;} sentence_output {out=0;} |
 sentence_return |
-sentence_do_until |
+{	if(decIF==1){ 
+							insertaCond(1);
+							fputs("{\n",fi);
+							decIF++;
+						}
+					} sentence_do_until |
 sentence_list_forward_back |
 sentence_list_start_cursor |
 error;
 
-sentence_assign : ID ASSIGN expr SEMICOLON {$$.tipo = comprobarTipoASSIGN($1,$2,$3);};
+sentence_assign : ID ASSIGN expr SEMICOLON {$$.tipo = comprobarTipoASSIGN($1,$2,$3);if(decIF==1){ 
+										insertaCond(1);
+										fputs("{\n",fi);
+										decIF++;
+									}
+									genera(4,$1,$2,$3,$4);};
 
-sentence_if_then_else : IF PL expr PR sentence {comprobarExprLogica($3);}
-| IF PL expr PR sentence ELSE sentence {comprobarExprLogica($3);};
+sentence_if_then_else : IF PL expr PR sentence {comprobarExprLogica($3);$$.var = $3.var;
+						fputs("}\n",fi);
+						insertaEtiqElse();
+						fputs("{}\n",fi);}
+| IF PL expr PR sentence ELSE {decElse=1;fputs("}\n",fi);insertaEtiqElse();fputs("{\n",fi);decElse=0;} sentence {fputs("}\n",fi);insertaEtiqSalida();fputs("{}\n",fi);} {comprobarExprLogica($3);$$.var = $3.var;};
 
-sentence_while : WHILE PL expr PR sentence {comprobarExprLogica($3);};
+sentence_while : WHILE PL expr PR {insertaCond(2);} sentence {comprobarExprLogica($3);$$.var = $3.var;
+							fputs("}\n",fi);
+							insertaGotoEntrada();
+							insertaEtiqSalida();
+							fputs("{}\n",fi);};
 
-sentence_input : INPUT CAD COMMA list_id SEMICOLON | INPUT list_id SEMICOLON;
+sentence_input : INPUT CAD { $2.tipo = desconocido; generaEntSal(2,$2);} COMMA list_id SEMICOLON | INPUT list_id SEMICOLON;
 
 sentence_output : OUTPUT list_expr_cad SEMICOLON;
 
@@ -618,8 +904,14 @@ expr : PL expr PR {$$ = $2;} |
 ID {$$.tipo = asignaTipo($1); $$.tipoLista = asignaTipoLista($1); strcpy($$.lexema,$1.lexema);} |
 const {$$.tipo = $1.tipo; if($$.tipo == lista)$$.tipoLista = $1.tipoLista; }|
 function_call |
-OP_UNIT expr { $$.tipo = comprobarTipoUNIT($1, $2);}|
-expr OP_BIN expr {$$.tipo = comprobarTipoBIN($1, $2, $3);}|
+OP_UNIT expr { $$.tipo = comprobarTipoUNIT($1, $2);$$.var = (char*) malloc(100);
+						sprintf($$.var,"%s",temporal());
+						fputs($1.var,fi);
+						fputs($$.var,fi);
+						fputs("\n",fi);}|
+expr OP_BIN expr {$$.tipo = comprobarTipoBIN($1, $2, $3);$$.var = (char*) malloc(100);
+						sprintf($$.var,"%s",temporal());
+						genera(1,$$,$1,$2,$3);}|
 error;
 
 function_call : ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1); } list_expr PR {func=0; verificaNumPar(posParam); posParam=0;$$.tipo = asignaTipoFuncion(idFuncion);} | 
@@ -653,9 +945,17 @@ list_char : list_char COMMA CHAR | CHAR;
 list_of_bool : BEGIN_LIST list_bool END_LIST;
 list_bool : list_bool COMMA BOOL | BOOL;
 
-list_expr_cad : list_expr_cad COMMA expr_cad | expr_cad;
+list_expr_cad : list_expr_cad COMMA expr_cad {
+				if(out)
+				{
+					generaEntSal(2,$3);
+				}				
+				} | expr_cad {if(out)
+				{
+					generaEntSal(2,$1);
+				}};
 
-expr_cad : expr | CAD;
+expr_cad : expr | CAD {$$.tipo = desconocido;};
 %%
 /** aqui incluimos el fichero generado por el ’lex’
 *** que implementa la función ’yylex’
