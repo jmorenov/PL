@@ -9,6 +9,6 @@ main.o: main.c
 lex.yy.c: tokensLex.l
 	flex -ll tokensLex.l
 limpia:
-	rm -f prueba main.o lex.yy.o lex.yy.c
+	rm -f prueba main.o lex.yy.o lex.yy.c *~
 todo:
 	make prueba

@@ -1,0 +1,13 @@
+int main()
+{
+	START_VAR
+		in·t ve;
+		int ve1;
+		float vf;
+		char vc;
+		bool vl;
+	END_VAR
+
+	ve = -1;
+}
+

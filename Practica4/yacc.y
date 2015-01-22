@@ -144,6 +144,7 @@ int existeID(atributos a)
 
 void TS_InsertaIDENT(atributos a)
 {
+	//printf("%d\n", a.tipo);
 	if(existeID(a))
 		fprintf(stderr,"[Linea %d]: %s: existe.\n",linea_actual,a.lexema);
 	else
@@ -202,6 +203,7 @@ unsigned int asignaTipo(atributos a)
 	int topeTMP = TOPE ;
 	int existe = 0;
 	unsigned int tipo = desconocido;
+	//printf("tipo=%d",a.tipo);	
 	if(existeVar(a))
 	{
 	while( existe == 0 && topeTMP>=0)
@@ -306,12 +308,12 @@ unsigned int comprobarTipoBIN(atributos a, atributos op, atributos b)
 			if(a.tipo == lista && real_entero(b.tipo))
 			{				
 				error = 0;
-				tipo = entero;
+				tipo = lista;
 			}
 			else if(real_entero(a.tipo) && b.tipo == lista)
 			{
 				error = 0;
-				tipo = lista;
+				tipo = entero;
 			}
 			else
 				error = !real_entero2(a.tipo, b.tipo);			
@@ -595,7 +597,7 @@ sentence_list_forward_back |
 sentence_list_start_cursor |
 error;
 
-sentence_assign : ID ASSIGN expr SEMICOLON {$$.tipo = comprobarTipoASSIGN($1,$2,$3);};
+sentence_assign : ID ASSIGN expr SEMICOLON {$1.tipo = asignaTipo($1); $1.tipoLista = asignaTipoLista($1); strcpy($1.lexema,$1.lexema); $$.tipo = comprobarTipoASSIGN($1,$2,$3);};
 
 sentence_if_then_else : IF PL expr PR sentence {comprobarExprLogica($3);}
 | IF PL expr PR sentence ELSE sentence {comprobarExprLogica($3);};
@@ -628,7 +630,7 @@ function_call : ID PL {strcpy(idFuncion,$1.lexema); func=1; existeFuncion($1); }
 list_expr : list_expr COMMA expr {if(func){	posParam++; verificaParam($3, posParam);}} | 
 						expr {if(func){ posParam++; verificaParam($1,posParam);}} ;
 
-type : TYPE | LIST TYPE {$$.tipo = lista; $$.tipoLista = $2.tipo;};
+type : TYPE{$$.tipo = $1.tipo;} | LIST TYPE {$$.tipo = lista; $$.tipoLista = $2.tipo;};
 
 const : INT |
 FLOAT |
