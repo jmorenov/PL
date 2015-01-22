@@ -1,7 +1,7 @@
 .SUFFIXES:
 
-generated/prueba: generated/main.o generated/y.tab.o
-	gcc -o generated/prueba generated/main.o generated/y.tab.o
+generated/prog: generated/main.o generated/y.tab.o
+	gcc -o generated/prog generated/main.o generated/y.tab.o
 generated/y.tab.o: generated/y.tab.c
 	gcc -c generated/y.tab.c -o generated/y.tab.o
 generated/main.o: main.c

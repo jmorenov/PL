@@ -62,7 +62,7 @@ int main()
 			}
 			
 			input "introduzca un valor entero: ", valor;
-			if(d1 >* 0.0)
+			if(d1 + 'a')
 			{
 				START_VAR
 					int dato;
